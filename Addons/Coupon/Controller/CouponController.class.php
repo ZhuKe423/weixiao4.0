@@ -9,9 +9,7 @@ class CouponController extends ManageBaseController {
 		parent::_initialize ();
 		
 		$res ['title'] = '优惠券';
-		$res ['url'] = addons_url ( 'Coupon://Coupon/lists', array (
-				'mdm' => $_GET ['mdm'] 
-		) );
+		$res ['url'] = addons_url ( 'Coupon://Coupon/lists' );
 		$res ['class'] = 'current';
 		$nav [] = $res;
 		
@@ -46,32 +44,38 @@ class CouponController extends ManageBaseController {
 		$map = $this->_search_map ( $model, $list_data ['fields'] );
 		$row = empty ( $model ['list_row'] ) ? 20 : $model ['list_row'];
 		$map ['is_del'] = 0;
-		// 读取模型数据列表
-		$list = $dao->field ( 'id' )->where ( $map )->order ( $order )->page ( $page, $row )->select ();
-		$snDao = D ( 'Common/SnCode' );
-		foreach ( $list as $d ) {
-			$coupon = $dao->getInfo ( $d ['id'] );
-			$useMap ['target_id'] = $snMap ['target_id'] = $d ['id'];
-			$useMap ['addon'] = $snMap ['addon'] = "Coupon";
-			$snMap ['can_use'] = 1;
-			$coupon ['collect_count'] = $snDao->where ( $snMap )->count ();
-			
-			$useMap ['is_use'] = 1;
-			$coupon ['use_count'] = $snDao->where ( $useMap )->count ();
-			
-			$datas [] = $coupon;
-		}
+		
 		/* 查询记录总数 */
 		$count = $dao->where ( $map )->count ();
-		$dataTable = D ( 'Common/Model' )->getFileInfo ( $model );
-		$datas = $this->parseData ( $datas, $dataTable->fields, $dataTable->list_grid, $dataTable->config );
-		$list_data ['list_data'] = $datas;
-		// 分页
-		if ($count > $row) {
-			$page = new \Think\Page ( $count, $row );
-			$page->setConfig ( 'theme', '%FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END% %HEADER%' );
-			$list_data ['_page'] = $page->show ();
+		$datas = [ ];
+		if ($count > 0) {
+			// 读取模型数据列表
+			$list = $dao->field ( 'id' )->where ( $map )->order ( $order )->page ( $page, $row )->select ();
+			$snDao = D ( 'Common/SnCode' );
+			foreach ( $list as $d ) {
+				$coupon = $dao->getInfo ( $d ['id'] );
+				$useMap ['target_id'] = $snMap ['target_id'] = $d ['id'];
+				$useMap ['addon'] = $snMap ['addon'] = "Coupon";
+				$snMap ['can_use'] = 1;
+				$coupon ['collect_count'] = $snDao->where ( $snMap )->count ();
+				
+				$useMap ['is_use'] = 1;
+				$coupon ['use_count'] = $snDao->where ( $useMap )->count ();
+				
+				$datas [] = $coupon;
+			}
+			
+			$dataTable = D ( 'Common/Model' )->getFileInfo ( $model );
+			$datas = $this->parseData ( $datas, $dataTable->fields, $dataTable->list_grid, $dataTable->config );
+			
+			// 分页
+			if ($count > $row) {
+				$page = new \Think\Page ( $count, $row );
+				$page->setConfig ( 'theme', '%FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END% %HEADER%' );
+				$list_data ['_page'] = $page->show ();
+			}
 		}
+		$list_data ['list_data'] = $datas;
 		
 		if ($isAjax) {
 			$this->assign ( 'isRadio', $isRadio );
@@ -109,7 +113,7 @@ class CouponController extends ManageBaseController {
 			$Model = D ( parse_name ( get_table_name ( $model ['id'] ), 1 ) );
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $model ['id'] );
-			if ($Model->create () && $Model->save ()) {
+			if ($Model->create () && false !== $Model->save ()) {
 				D ( 'Coupon' )->getInfo ( $id, true );
 				$this->_saveKeyword ( $model, $id );
 			}
@@ -132,22 +136,21 @@ class CouponController extends ManageBaseController {
 			$maps ['coupon_id'] = $id;
 			$list = M ( 'coupon_shop_link' )->where ( $maps )->select ();
 			$shop_ids = getSubByKey ( $list, 'shop_id' );
+			$shop_list = [ ];
 			if (! empty ( $shop_ids )) {
 				$map_shop ['id'] = array (
 						'in',
 						$shop_ids 
 				);
 				$shop_list = M ( 'coupon_shop' )->where ( $map_shop )->select ();
-				$this->assign ( 'shop_list', $shop_list );
 			}
+			$this->assign ( 'shop_list', $shop_list );
 			$data ['member'] = explode ( ',', $data ['member'] );
 			$levelData = $this->get_card_level ();
 			$this->assign ( 'level', $levelData );
 			$this->assign ( 'fields', $fields );
 			$this->assign ( 'data', $data );
 			$this->meta_title = '编辑' . $model ['title'];
-			
-			$this->_deal_data ();
 			
 			$this->display ();
 		}
@@ -177,7 +180,6 @@ class CouponController extends ManageBaseController {
 			$this->assign ( 'level', $levelData );
 			
 			$this->assign ( 'fields', $fields );
-			$this->_deal_data ();
 			
 			$this->display ();
 		}
@@ -193,17 +195,6 @@ class CouponController extends ManageBaseController {
 			
 			M ( 'coupon_shop_link' )->add ( $map );
 		}
-	}
-	
-	// 增加或者编辑时公共部分
-	function _deal_data() {
-		return false;
-		$normal_tips = '插件场景限制参数说明：格式：[插件名:id],如<br/>
-				[投票:10]，表示对ID为10的投票投完对能领取<br/>
-				[投票:*]，表示只要投过票就可以领取<br/>
-				[微调研:15]，表示完成ID为15的调研就能领取<br/>
-				[微考试:10]，表示完成ID为10的考试就能领取<br/>';
-		$this->assign ( 'normal_tips', $normal_tips );
 	}
 	function checkPostData() {
 		if ($_POST ['member']) {

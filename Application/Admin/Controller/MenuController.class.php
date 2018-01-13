@@ -100,7 +100,7 @@ class MenuController extends AdminController {
 			$Model = D ( parse_name ( get_table_name ( $model ['id'] ), 1 ) );
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $model ['id'] );
-			if ($Model->create () && $Model->save ()) {
+			if ($Model->create () && false !== $Model->save ()) {
 				$this->success ( '保存成功！', U ( 'lists', [ 
 						'place' => I ( 'place' ) 
 				] ) );

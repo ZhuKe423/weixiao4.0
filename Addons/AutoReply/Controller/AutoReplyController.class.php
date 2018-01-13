@@ -10,37 +10,27 @@ class AutoReplyController extends ManageBaseController {
 		$type = I ( 'type' );
 		
 		$res ['title'] = '文本消息';
-		$res ['url'] = addons_url ( 'AutoReply://AutoReply/lists', array (
-				'mdm' => $_GET ['mdm'] 
-		) );
+		$res ['url'] = addons_url ( 'AutoReply://AutoReply/lists' );
 		$res ['class'] = $act == 'lists' || $type == 'text' ? 'current' : '';
 		$nav [] = $res;
 		
 		$res ['title'] = '图文消息';
-		$res ['url'] = addons_url ( 'AutoReply://AutoReply/news', array (
-				'mdm' => $_GET ['mdm'] 
-		) );
+		$res ['url'] = addons_url ( 'AutoReply://AutoReply/news' );
 		$res ['class'] = $act == 'news' || $type == 'news' ? 'current' : '';
 		$nav [] = $res;
 		
 		$res ['title'] = '图片消息';
-		$res ['url'] = addons_url ( 'AutoReply://AutoReply/image', array (
-				'mdm' => $_GET ['mdm'] 
-		) );
+		$res ['url'] = addons_url ( 'AutoReply://AutoReply/image' );
 		$res ['class'] = $act == 'image' || $type == 'image' ? 'current' : '';
 		$nav [] = $res;
 		
 		$res ['title'] = '语音消息';
-		$res ['url'] = addons_url ( 'AutoReply://AutoReply/voice', array (
-				'mdm' => $_GET ['mdm'] 
-		) );
+		$res ['url'] = addons_url ( 'AutoReply://AutoReply/voice' );
 		$res ['class'] = $act == 'voice' || $type == 'voice' ? 'current' : '';
 		$nav [] = $res;
 		
 		$res ['title'] = '视频消息';
-		$res ['url'] = addons_url ( 'AutoReply://AutoReply/video', array (
-				'mdm' => $_GET ['mdm'] 
-		) );
+		$res ['url'] = addons_url ( 'AutoReply://AutoReply/video' );
 		$res ['class'] = $act == 'video' || $type == 'video' ? 'current' : '';
 		$nav [] = $res;
 		$this->assign ( 'nav', $nav );
@@ -175,7 +165,7 @@ class AutoReplyController extends ManageBaseController {
 			$Model = $this->checkAttr ( $Model, $model ['id'] );
 			// 检测内容是否为空
 			$this->checkPostData ();
-			if ($Model->create () && $Model->save ()) {
+			if ($Model->create () && false !== $Model->save ()) {
 				$this->_saveKeyword ( $model, $id );
 				$url = U ( 'lists' );
 				if ($data ['msg_type'] == 'news') {
@@ -246,6 +236,11 @@ class AutoReplyController extends ManageBaseController {
 			$fields = get_model_attribute ( $model ['id'] );
 			$fields = $this->_deal_fields ( $fields, $type );
 			$this->assign ( 'fields', $fields );
+			$data ['cover_url'] = '';
+			foreach ( $fields as $f => $vo ) {
+				$data [$f] = $vo ['value'];
+			}
+			$this->assign ( 'data', $data );
 			$postUrl = U ( 'add', array (
 					'model' => $model ['id'],
 					'type' => $type 

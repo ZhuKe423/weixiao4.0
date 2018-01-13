@@ -1,6 +1,6 @@
 <div class="pic_category">
 	<volist name="cateList" id="ca">
-		<a <if condition="$ca['current']">class="current"<else/>onclick="switchPicCate(this,2);"</if> data-href="{:U('Home/File/systemPics',array('dir'=>$ca['dir']))}">{$ca.cate}</a>
+		<a <if condition="$ca['current'] eq 1">class="current"<else/>onclick="switchPicCate(this,2);"</if> data-href="{:U('Home/File/systemPics',array('dir'=>$ca['dir']))}">{$ca.cate}</a>
     </volist>
 </div>
 <ul class="upload_piclist">

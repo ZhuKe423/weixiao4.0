@@ -28,7 +28,7 @@ class CategoryController extends BaseController {
 		$placeholder = isset ( $keyArr [1] ) ? $keyArr [1] : '请输入关键字';
 		$this->assign ( 'placeholder', $placeholder );
 		$this->assign ( 'search_key', $key );
-		$this->assign('search_url',U('lists',array('mdm'=>$_GET['mdm'])));
+		$this->assign('search_url',U('lists'));
 		if (isset ( $_REQUEST [$key] ) && ! isset ( $map [$key] )) {
 			$map [$key] = array (
 					'like',

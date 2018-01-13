@@ -20,6 +20,7 @@ class AskQuestionModel extends Model {
 			unset ( $list2 );
 			S ( $key, $list, 86400 );
 		}
+		$list = ( array ) $list;
 		
 		return empty ( $question_id ) ? $list : $list [$question_id];
 	}
@@ -57,31 +58,30 @@ class AskQuestionModel extends Model {
 		
 		return $_getQuestionTitle [$id];
 	}
-	function getQuestionAnswer($id,$ask_id){
+	function getQuestionAnswer($id, $ask_id) {
 		static $_getQuestionAnswer;
-		if(!isset($_getQuestionAnswer[$id])){
-			$question=$this->getQuestionsByAskid($ask_id,$id);
-			$answer=$question['answer'];
-			$_getQuestionAnswer[$id]=$this->getQuestionAnswerExtra($id,$ask_id,$answer);
+		if (! isset ( $_getQuestionAnswer [$id] )) {
+			$question = $this->getQuestionsByAskid ( $ask_id, $id );
+			$answer = $question ['answer'];
+			$_getQuestionAnswer [$id] = $this->getQuestionAnswerExtra ( $id, $ask_id, $answer );
 		}
-		return $_getQuestionAnswer[$id];
+		return $_getQuestionAnswer [$id];
 	}
-
-	function getQuestionAnswerExtra($id,$ask_id,$answer){
-		$_getQuestionAnswerExtra='';
-		if(empty($_getQuestionAnswerExtra)){
-			$question=$this->getQuestionsByAskid($ask_id,$id);
-			$extra=preg_split('/[;\r\n]+/s', $question['extra']);
-			foreach ($extra as $key => $value) {
-				$ex=explode(':',$value);
-				$e[$ex[0]]=$ex[1];
+	function getQuestionAnswerExtra($id, $ask_id, $answer) {
+		$_getQuestionAnswerExtra = '';
+		if (empty ( $_getQuestionAnswerExtra )) {
+			$question = $this->getQuestionsByAskid ( $ask_id, $id );
+			$extra = preg_split ( '/[;\r\n]+/s', $question ['extra'] );
+			foreach ( $extra as $key => $value ) {
+				$ex = explode ( ':', $value );
+				$e [$ex [0]] = $ex [1];
 			}
-			if(!empty($answer)){
-				//echo $answer.'<>';
-				foreach ($e as $k => $v) {
-				//	echo $k.'<br/>';
-					if($k==$answer){
-						$_getQuestionAnswerExtra=$k.':'.$v;
+			if (! empty ( $answer )) {
+				// echo $answer.'<>';
+				foreach ( $e as $k => $v ) {
+					// echo $k.'<br/>';
+					if ($k == $answer) {
+						$_getQuestionAnswerExtra = $k . ':' . $v;
 					}
 				}
 			}

@@ -43,7 +43,7 @@
                             <input type="file" id="upload_picture_prize_image">
                             <input type="hidden" name="prize_image" id="cover_id_prize_image" value="{$data.prize_image}"/>
                             <div class="upload-img-box">
-                              <notempty name="data[prize_image]">
+                              <notempty name="data['prize_image']">
                                 <div class="upload-pre-item2"><img width="100" height="100" src="{$data.prize_image|get_cover_url}"/></div>
                                 <em class="edit_img_icon">&nbsp;</em>
                               </notempty>
@@ -56,7 +56,7 @@
                 			<volist name=":parse_field_attr($fields['prize_type']['extra'])" id="vo">
                           	<div class="check-item">
 								  <input type="radio" class="regular-radio toggle-data" value="{$key}" id="prize_type_{$key}" name="prize_type" toggle-data="{$vo|get_hide_attr}"
-								  <eq name="data[prize_type]" value="$key">checked="checked"</eq> />
+								  <eq name="data['prize_type']" value="$key">checked="checked"</eq> />
 								  <label for="prize_type_{$key}"></label>{$vo|clean_hide_attr} 
 							  </div>
                           </volist>        

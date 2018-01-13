@@ -18,7 +18,7 @@ class MemberController extends BaseController {
 		$btn [2] ['url'] = addons_url ( 'Card://Member/export_member', $this->get_param );
 		$this->assign ( 'top_more_button', $btn );
 		
-		$phone = $_REQUEST ['phone'];
+		$phone = I ( 'phone' );
 		if ($phone) {
 			$map ['phone'] = array (
 					'like',
@@ -26,7 +26,7 @@ class MemberController extends BaseController {
 			);
 			unset ( $_REQUEST ['phone'] );
 		}
-		$number = $_REQUEST ['number'];
+		$number = I ( 'number' );
 		if ($number) {
 			$map ['number'] = array (
 					'like',
@@ -43,12 +43,12 @@ class MemberController extends BaseController {
 		$map ['token'] = get_token ();
 		session ( 'common_condition', $map );
 		$list_data = $this->_get_model_list ( $this->model );
+		
 		foreach ( $list_data ['list_data'] as &$vo ) {
 			$uInfo = getUserInfo ( $vo ['uid'] );
 			$levelInfo = D ( 'CardLevel' )->getCardMemberLevel ( $vo ['uid'] );
 			$vo ['score'] = $uInfo ['score'];
 			$vo ['level'] = $levelInfo ? $levelInfo ['level'] : "体验卡";
-			$vo ['status'] = $vo ['status'] == 1 ? '正常' : '冻结';
 		}
 		unset ( $list_data ['list_grids'] ['uid'] );
 		
@@ -78,7 +78,7 @@ class MemberController extends BaseController {
 	}
 	// 会员充值
 	function do_recharge() {
-		$param ['mdm'] = $_GET ['mdm'];
+		$param ['mdm'] = I ( 'mdm' );
 		$res ['title'] = '会员管理';
 		$res ['url'] = addons_url ( 'Card://Member/lists', $param );
 		$res ['class'] = ACTION_NAME == 'lists' ? 'current' : '';
@@ -125,6 +125,7 @@ class MemberController extends BaseController {
 				$allNumber = M ( 'card_member' )->where ( $map2 )->getFields ( 'id,number' );
 				$this->assign ( 'all_number', $allNumber );
 			}
+			$data ['operator'] = $GLOBALS ['myinfo'] ['nickname'];
 			$this->assign ( 'data', $data );
 			$this->assign ( 'shop', $branch );
 		}
@@ -185,7 +186,7 @@ class MemberController extends BaseController {
 	
 	// 会员消费
 	function do_buy() {
-		$param ['mdm'] = $_GET ['mdm'];
+		$param ['mdm'] = I ( 'mdm' );
 		$res ['title'] = '会员管理';
 		$res ['url'] = addons_url ( 'Card://Member/lists', $param );
 		$res ['class'] = ACTION_NAME == 'lists' ? 'current' : '';
@@ -261,13 +262,12 @@ class MemberController extends BaseController {
 				}
 				
 				$this->assign ( 'coupon', $couponData );
+				$this->assign ( 'shop', $branch );
 			}
-			$this->assign ( 'shop', $branch );
 			
 			$this->assign ( 'data', $data );
+			$this->display ();
 		}
-		
-		$this->display ();
 	}
 	function getSnCode() {
 		$targetId = I ( 'target_id' );
@@ -286,7 +286,7 @@ class MemberController extends BaseController {
 	
 	// 手动添加积分
 	function update_score() {
-		$param ['mdm'] = $_GET ['mdm'];
+		$param ['mdm'] = I ( 'mdm' );
 		$res ['title'] = '会员管理';
 		$res ['url'] = addons_url ( 'Card://Member/lists', $param );
 		$res ['class'] = ACTION_NAME == 'lists' ? 'current' : '';
@@ -337,6 +337,7 @@ class MemberController extends BaseController {
 				$this->assign ( 'all_number', $allNumber );
 			}
 			
+			$data ['operator'] = $GLOBALS ['myinfo'] ['nickname'];
 			$this->assign ( 'data', $data );
 			$this->assign ( 'shop', $branch );
 		}
@@ -362,7 +363,7 @@ class MemberController extends BaseController {
 			$Model = D ( parse_name ( get_table_name ( $model ['id'] ), 1 ) );
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $model ['id'] );
-			if ($Model->create () && $Model->save ()) {
+			if ($Model->create () && false !== $Model->save ()) {
 				// $this->_saveKeyword ( $model, $id );
 				D ( 'Addons://Card/Card' )->updateERPMember ( $_POST, $data ['uid'] );
 				// 清空缓存

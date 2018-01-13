@@ -268,8 +268,9 @@ class ReserveController extends ManageBaseController {
 			
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $this->model ['id'], $fields );
-			
-			if ($Model->create () && $res = $Model->$act ()) {
+			$res = false;
+			$Model->create () && $res = $Model->$act ();
+			if ($res !== false ) {
 				// 增加积分
 				add_credit ( 'Reserve' );
 				

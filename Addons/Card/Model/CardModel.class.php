@@ -141,7 +141,7 @@ class CardModel extends Model {
 		// 对接erp
 		$managerId = session ( 'manager_id' );
 		$userInfo = get_userinfo ( $managerId );
-		if ($userInfo ['secretID'] && $userInfo ['secretKey']) {
+		if (isset ( $userInfo ['secretID'] ) && isset ( $userInfo ['secretKey'] ) && ! empty ( $userInfo ['secretID'] ) && ! empty ( $userInfo ['secretKey'] )) {
 			if ($uid == 0) {
 				$uid = $cardInfo ['uid'];
 			}

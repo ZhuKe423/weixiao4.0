@@ -1,4 +1,5 @@
 <?php
+
 // +----------------------------------------------------------------------
 // | OneThink [ WE CAN DO IT JUST THINK IT ]
 // +----------------------------------------------------------------------
@@ -15,21 +16,21 @@ namespace Home\Controller;
 class MessageController extends HomeController {
 	function _initialize() {
 		parent::_initialize ();
-		$param['mdm'] =I('mdm');
+		$param ['mdm'] = I ( 'mdm' );
 		$act = strtolower ( ACTION_NAME );
 		
 		$res ['title'] = '高级群发';
-		$res ['url'] = U ( 'add',$param );
+		$res ['url'] = U ( 'add', $param );
 		$res ['class'] = $act == 'add' ? 'current' : '';
 		$nav [] = $res;
 		
 		$res ['title'] = '客服群发';
-		$res ['url'] = U ( 'custom_sendall',$param );
+		$res ['url'] = U ( 'custom_sendall', $param );
 		$res ['class'] = $act == 'custom_sendall' ? 'current' : '';
 		$nav [] = $res;
 		
 		$res ['title'] = '消息管理';
-		$res ['url'] = U ( 'sendall_lists',$param );
+		$res ['url'] = U ( 'sendall_lists', $param );
 		$res ['class'] = $act == 'sendall_lists' ? 'current' : '';
 		$nav [] = $res;
 		$this->assign ( 'nav', $nav );
@@ -62,9 +63,9 @@ class MessageController extends HomeController {
 				// 清空缓存
 				method_exists ( $Model, 'clear' ) && $Model->clear ( $id, 'edit' );
 				
-				$this->success ( '添加' . $model ['title'] . '成功！', U ( 'add',$this->get_param ) );
+				$this->success ( '添加' . $model ['title'] . '成功！', U ( 'add', $this->get_param ) );
 			} else {
-				$this->error ( '110141:'.$Model->getError () );
+				$this->error ( '110141:' . $Model->getError () );
 			}
 		} else {
 			$fields = get_model_attribute ( $model ['id'] );
@@ -74,7 +75,7 @@ class MessageController extends HomeController {
 			! C ( 'SEND_GROUP_MSG' ) && $this->assign ( 'normal_tips', '温馨提示：目前微信仅开放认证公众号的群发消息权限，未认证公众号无法使用此功能' );
 			$this->assign ( 'normal_tips', '注意：1、对于认证订阅号，群发接口每天可成功调用1次，此次群发可选择发送给全部用户或某个分组；<br/>
 2、对于认证服务号虽然使用高级群发接口的每日调用限制为100次，但是用户每月只能接收4条，无论在公众平台网站上，还是使用接口群发，用户每月只能接收4条群发消息，多于4条的群发将对该用户发送失败；' );
-				
+			
 			$map ['token'] = get_token ();
 			$map ['manager_id'] = $this->mid;
 			$map ['is_del'] = 0;
@@ -106,26 +107,25 @@ class MessageController extends HomeController {
 			$param ['voice'] ['media_id'] = $info ['media_id'];
 		} else if ($info ['msgtype'] == 'mpvideo') {
 			$param ['mpvideo'] ['media_id'] = $info ['media_id'];
-		}else if ($info ['msgtype'] == 'image'){
-		    $param ['image'] ['media_id'] = $info ['media_id'];
+		} else if ($info ['msgtype'] == 'image') {
+			$param ['image'] ['media_id'] = $info ['media_id'];
 		}
 		$param ['msgtype'] = $info ['msgtype'];
 		
 		$url = 'https://api.weixin.qq.com/cgi-bin/message/mass/preview?access_token=' . get_access_token ();
-		$count=0;
+		$count = 0;
 		foreach ( $openids as $openid ) {
 			$param ['touser'] = $openid;
 			$res = post_data ( $url, $param );
-			if ($res['errcode']>0){
-			    $count++;
+			if ($res ['errcode'] > 0) {
+				$count ++;
 			}
 		}
-		if ($count==0){
-		    $this->success ( '发送成功~' );
-		}else{
-		    $this->error ( '110144:有 '.$count.'条信息发送失败');
+		if ($count == 0) {
+			$this->success ( '发送成功~' );
+		} else {
+			$this->error ( '110144:有 ' . $count . '条信息发送失败' );
 		}
-		
 	}
 	// 按用户组发送
 	function _send_by_group($group_id) {
@@ -169,7 +169,7 @@ class MessageController extends HomeController {
 		
 		$res = post_data ( $url, $paramStr );
 		if ($res ['errcode'] != 0) {
-			$this->error ( '110145:'.error_msg ( $res ) );
+			$this->error ( '110145:' . error_msg ( $res ) );
 		} else {
 			return $res ['msg_id'];
 		}
@@ -196,14 +196,13 @@ class MessageController extends HomeController {
 			$param ['mpnews'] ['media_id'] = $info ['media_id'];
 			$param ['msgtype'] = $info ['msgtype'];
 			$param ['send_ignore_reprint'] = 1;
-			
 		} else if ($info ['msgtype'] == 'voice') {
 			$param ['voice'] ['media_id'] = $info ['media_id'];
 			$param ['msgtype'] = $info ['msgtype'];
 		} else if ($info ['msgtype'] == 'mpvideo') {
 			$param ['video'] ['media_id'] = $info ['media_id'];
 			$param ['msgtype'] = $info ['msgtype'];
-		}else if ($info ['msgtype'] == 'image') {
+		} else if ($info ['msgtype'] == 'image') {
 			$param ['image'] ['media_id'] = $info ['media_id'];
 			$param ['msgtype'] = $info ['msgtype'];
 		}
@@ -211,7 +210,7 @@ class MessageController extends HomeController {
 		$param = JSON ( $param );
 		$res = post_data ( $url, $param );
 		if ($res ['errcode'] != 0) {
-			$this->error ( '110148:'.error_msg ( $res ) );
+			$this->error ( '110148:' . error_msg ( $res ) );
 		} else {
 			return $res ['msg_id'];
 		}
@@ -231,29 +230,29 @@ class MessageController extends HomeController {
 			$res ['msgtype'] = 'text';
 			$_POST ['content'] = $content;
 		} else if ($type == 'image') {
-		    // 图片
-		    $image_material = $_POST ['image_material'];
-		    $image_cover_id = $_POST ['image'];
-		    if (empty($image_material) && empty($image_cover_id)) {
-		    	# code...
-		    	$this->error ( '110150:发送图片不能为空' );
-		    }
-		    if ($image_cover_id) {
-		       $_POST ['media_id'] =  $res ['media_id'] = D ( 'Common/Custom' )->get_image_media_id ( $image_cover_id );
-		    } else if ($image_material) {
-		        $imageMaterial = M ( 'material_image' )->find ( $image_material );
-// 		        $data ['image_id'] = $imageMaterial ['cover_id'];
-		        if ($imageMaterial ['media_id']) {
-		            $_POST ['media_id'] =  $res ['media_id'] = $imageMaterial ['media_id'];
-		        } else {
-		            $_POST ['media_id'] =  $res ['media_id'] = D ( 'Common/Custom' )->get_image_media_id ( $imageMaterial ['cover_id'] );
-		        }
-		    }
-		    $res ['msgtype'] = 'image';
+			// 图片
+			$image_material = $_POST ['image_material'];
+			$image_cover_id = $_POST ['image'];
+			if (empty ( $image_material ) && empty ( $image_cover_id )) {
+				// code...
+				$this->error ( '110150:发送图片不能为空' );
+			}
+			if ($image_cover_id) {
+				$_POST ['media_id'] = $res ['media_id'] = D ( 'Common/Custom' )->get_image_media_id ( $image_cover_id );
+			} else if ($image_material) {
+				$imageMaterial = M ( 'material_image' )->find ( $image_material );
+				// $data ['image_id'] = $imageMaterial ['cover_id'];
+				if ($imageMaterial ['media_id']) {
+					$_POST ['media_id'] = $res ['media_id'] = $imageMaterial ['media_id'];
+				} else {
+					$_POST ['media_id'] = $res ['media_id'] = D ( 'Common/Custom' )->get_image_media_id ( $imageMaterial ['cover_id'] );
+				}
+			}
+			$res ['msgtype'] = 'image';
 		} else if ($type == 'appmsg') {
 			if (empty ( $appmsg_id ))
 				$this->error ( '110151:图文素材不能为空' );
-			$res ['media_id'] = D ( 'Home/Material' )->getMediaIdByGroupId ( $appmsg_id ,'sendall');
+			$res ['media_id'] = D ( 'Home/Material' )->getMediaIdByGroupId ( $appmsg_id, 'sendall' );
 			$_POST ['media_id'] = $res ['media_id'];
 			$res ['msgtype'] = 'mpnews';
 		} else if ($type == 'voice') {
@@ -289,9 +288,9 @@ class MessageController extends HomeController {
 		return $res;
 	}
 	function custom_sendall() {
-	    $this->assign ( 'normal_tips', '温馨提示<br/>客服群发接口是指：管理者可以给 在48小时内主动发消息给公众号的用户群发消息 ，发送次数没有限制；如果没有成功接收到消息的用户，则在他主动发消息给公众号时，再重新发给该用户。' );
-	    	
-// 		$this->assign ( 'noraml_tips', '当用户发消息给认证公众号时，管理员可以在48小时内给用户回复信息' );
+		$this->assign ( 'normal_tips', '温馨提示<br/>客服群发接口是指：管理者可以给 在48小时内主动发消息给公众号的用户群发消息 ，发送次数没有限制；如果没有成功接收到消息的用户，则在他主动发消息给公众号时，再重新发给该用户。' );
+		
+		// $this->assign ( 'noraml_tips', '当用户发消息给认证公众号时，管理员可以在48小时内给用户回复信息' );
 		if (IS_POST) {
 			$data ['ToUserName'] = get_token ();
 			$data ['cTime'] = time ();
@@ -304,8 +303,8 @@ class MessageController extends HomeController {
 			if ($sendType == 1 && $sendOpenid == '') {
 				$this->error ( '110154:指定的Openid值不能为空' );
 			}
-			if ($data['msgType']=='appmsg'){
-			    $data['msgType']='news';
+			if ($data ['msgType'] == 'appmsg') {
+				$data ['msgType'] = 'news';
 			}
 			$map1 ['ToUserName'] = get_token ();
 			$diff = M ( 'custom_sendall' )->where ( $map1 )->getField ( "max(diff) as diff" );
@@ -315,7 +314,7 @@ class MessageController extends HomeController {
 			foreach ( $openidArr as $k => $v ) {
 				if ($data ['msgType'] == 'text') {
 					if (! $data ['content']) {
-						$this->error ( '110155:文本内容不能为空');
+						$this->error ( '110155:文本内容不能为空' );
 					}
 					// 文本
 					$result = D ( 'Common/Custom' )->replyText ( $k, $data ['content'] );
@@ -331,8 +330,8 @@ class MessageController extends HomeController {
 					// 图片
 					$image_material = $_POST ['image_material'];
 					$image_cover_id = $_POST ['image'];
-					if (empty($image_material) && empty($image_cover_id)) {
-						$this->error ( '110157:发送图片不能为空');
+					if (empty ( $image_material ) && empty ( $image_cover_id )) {
+						$this->error ( '110157:发送图片不能为空' );
 					}
 					if ($image_cover_id) {
 						$data ['image_id'] = $image_cover_id;
@@ -344,7 +343,7 @@ class MessageController extends HomeController {
 						if ($imageMaterial ['media_id']) {
 							$data ['media_id'] = $imageMaterial ['media_id'];
 						} else {
-							$data ['media_id'] = D ( 'Common/Custom' )->get_image_media_id (  $imageMaterial ['cover_id'] );
+							$data ['media_id'] = D ( 'Common/Custom' )->get_image_media_id ( $imageMaterial ['cover_id'] );
 						}
 						$result = D ( 'Common/Custom' )->replyImage ( $k, $data ['media_id'], '' );
 					} else {
@@ -477,7 +476,7 @@ class MessageController extends HomeController {
 					'in',
 					$uidArr 
 			);
-			$map1['group_id']=$groupId;
+			$map1 ['group_id'] = $groupId;
 			$groupData = M ( 'auth_group_access' )->where ( $map1 )->select ();
 			foreach ( $groupData as $gr ) {
 				$data [$gr ['uid']] = $allUser [$gr ['uid']];
@@ -502,16 +501,16 @@ class MessageController extends HomeController {
 	
 	// 客服群发消息管理
 	function custom_sendall_lists() {
-		$param['mdm'] =I('mdm');
+		$param ['mdm'] = I ( 'mdm' );
 		$act = strtolower ( ACTION_NAME );
 		
 		$res ['title'] = '高级群发消息';
-		$res ['url'] = U ( 'sendall_lists',$param );
+		$res ['url'] = U ( 'sendall_lists', $param );
 		$res ['class'] = $act == 'sendall_lists' ? 'current' : '';
 		$nav [] = $res;
 		
 		$res ['title'] = '客服接口群发消息';
-		$res ['url'] = U ( 'custom_sendall_lists',$param );
+		$res ['url'] = U ( 'custom_sendall_lists', $param );
 		$res ['class'] = $act == 'custom_sendall_lists' ? 'current' : '';
 		$nav [] = $res;
 		$this->assign ( 'nav', $nav );
@@ -560,73 +559,77 @@ class MessageController extends HomeController {
 		// $map ['FromUserName'] = I ( 'openid' );
 		$map ['ToUserName'] = get_token ();
 		$map ['manager_id'] = $this->mid;
-// 		$list = M ( 'custom_sendall' )->where ( $map )->order ( 'id desc' )->group ( 'diff' )->selectPage ();
+		// $list = M ( 'custom_sendall' )->where ( $map )->order ( 'id desc' )->group ( 'diff' )->selectPage ();
 		// dump($shibai);
 		// dump($chenggong);
 		$page = I ( 'p', 1, 'intval' );
 		$row = 20;
-		$ids= M ( 'custom_sendall' )->where ( $map )->field('MAX(id) as mid')->group('diff')->page($page,$row)->select();
-		foreach ($ids as $vv){
-		    $arr[]=$vv['mid'];
+		$ids = M ( 'custom_sendall' )->where ( $map )->field ( 'MAX(id) as mid' )->group ( 'diff' )->page ( $page, $row )->select ();
+		foreach ( $ids as $vv ) {
+			$arr [] = $vv ['mid'];
 		}
-		if (!empty($arr)){
-		    $map['id']=array('in',$arr);
-		    // 		    $list ['list_data'] = M('weixin_message')->where($map)->order('is_read ASC,id DESC')->page($page,$row)->select();
-		    $list = M ( 'custom_sendall' )->where ( $map )->order ( 'id desc' )->selectPage ();
+		if (! empty ( $arr )) {
+			$map ['id'] = array (
+					'in',
+					$arr 
+			);
+			$list = M ( 'custom_sendall' )->where ( $map )->order ( 'id desc' )->selectPage ();
 		}
 		$dao = D ( 'Common/User' );
-		foreach ( $list ['list_data'] as &$v ) {
-			$countData = M ( 'custom_sendall' )->where ( array (
-					'diff' => $v ['diff'],
-					'is_send' => 1 
-			) )->order ( 'id desc' )->field ( 'count(uid) count,diff' )->select ();
-			$v ['chenggong'] = $countData [0] ['count'];
-			$countData = M ( 'custom_sendall' )->where ( array (
-					'diff' => $v ['diff'],
-					'is_send' => 0 
-			) )->order ( 'id desc' )->field ( 'count(uid) count,diff' )->select ();
-			$v ['shibai'] = $countData [0] ['count'];
-			
-			if ($v ['send_type'] == 0 && $v ['group_id'] == 0) {
-				$v ['send_tip'] = '所有用户';
-			} else if ($v ['send_type'] == 0 && $v ['group_id'] != 0) {
-				$v ['send_tip'] = M ( 'auth_group' )->where ( array (
-						'id' => $v ['group_id'] 
-				) )->getField ( 'title' );
-			} else {
-				$v ['send_tip'] = '指定用户';
-			}
-			if ($v ['msgType'] == 'text') {
-				$v ['Content'] = '[文字] ' . $v ['content'];
-			} else if ($v ['msgType'] == 'news') {
-				$map ['group_id'] = $v ['news_group_id'];
-				$appMsgData = M ( 'material_news' )->where ( $map )->select ();
-				foreach ( $appMsgData as $vo ) {
-					// $art ['description'] = $vo ['intro'];
-					if (empty ( $vo ['url'] )) {
-						$art_url = U('Home/Wap/news_detail', array (
-								'id' => $vo ['id'] 
-						) );
-						// 文章内容
-						$v ['Content'] = '<a href="' . $art_url . '" >[图文] ' . $vo ['title'] . '</a>';
-					} else {
-						$art_url = $vo ['url'];
-						$v ['Content'] = '<a href="' . $art_url . '" >[图文] ' . $vo ['title'] . '</a>';
-					}
-					$v ['image_url'] = get_cover_url ( $vo ['cover_id'] );
+		if (! empty ( $list )) {
+			foreach ( $list ['list_data'] as &$v ) {
+				$countData = M ( 'custom_sendall' )->where ( array (
+						'diff' => $v ['diff'],
+						'is_send' => 1 
+				) )->order ( 'id desc' )->field ( 'count(uid) count,diff' )->select ();
+				$v ['chenggong'] = $countData [0] ['count'];
+				$countData = M ( 'custom_sendall' )->where ( array (
+						'diff' => $v ['diff'],
+						'is_send' => 0 
+				) )->order ( 'id desc' )->field ( 'count(uid) count,diff' )->select ();
+				$v ['shibai'] = $countData [0] ['count'];
+				
+				if ($v ['send_type'] == 0 && $v ['group_id'] == 0) {
+					$v ['send_tip'] = '所有用户';
+				} else if ($v ['send_type'] == 0 && $v ['group_id'] != 0) {
+					$v ['send_tip'] = M ( 'auth_group' )->where ( array (
+							'id' => $v ['group_id'] 
+					) )->getField ( 'title' );
+				} else {
+					$v ['send_tip'] = '指定用户';
 				}
-			} else if ($v ['msgType'] == 'video') {
-				$videoMaterial = M ( 'material_file' )->find ( $vo ['video_id'] );
-				$v ['Content'] = '[语音] ' . $videoMaterial ['title'];
-			} else if ($v ['msgType'] == 'voice') {
-				$voiceMaterial = M ( 'material_file' )->find ( $vo ['voice_id'] );
-				$v ['Content'] = '[视频] ' . $voiceMaterial ['title'];
-			} else if ($v ['msgType'] == 'image') {
-				$v ['Content'] = '[图片] ' . '<img src="' . get_cover_url ( $v ['image_id'] ) . '"/>';
-				$v ['image_url'] = get_cover_url ( $v ['image_id'] );
+				if ($v ['msgType'] == 'text') {
+					$v ['Content'] = '[文字] ' . $v ['content'];
+				} else if ($v ['msgType'] == 'news') {
+					$map ['group_id'] = $v ['news_group_id'];
+					$appMsgData = M ( 'material_news' )->where ( $map )->select ();
+					foreach ( $appMsgData as $vo ) {
+						// $art ['description'] = $vo ['intro'];
+						if (empty ( $vo ['url'] )) {
+							$art_url = U ( 'Home/Wap/news_detail', array (
+									'id' => $vo ['id'] 
+							) );
+							// 文章内容
+							$v ['Content'] = '<a href="' . $art_url . '" >[图文] ' . $vo ['title'] . '</a>';
+						} else {
+							$art_url = $vo ['url'];
+							$v ['Content'] = '<a href="' . $art_url . '" >[图文] ' . $vo ['title'] . '</a>';
+						}
+						$v ['image_url'] = get_cover_url ( $vo ['cover_id'] );
+					}
+				} else if ($v ['msgType'] == 'video') {
+					$videoMaterial = M ( 'material_file' )->find ( $vo ['video_id'] );
+					$v ['Content'] = '[语音] ' . $videoMaterial ['title'];
+				} else if ($v ['msgType'] == 'voice') {
+					$voiceMaterial = M ( 'material_file' )->find ( $vo ['voice_id'] );
+					$v ['Content'] = '[视频] ' . $voiceMaterial ['title'];
+				} else if ($v ['msgType'] == 'image') {
+					$v ['Content'] = '[图片] ' . '<img src="' . get_cover_url ( $v ['image_id'] ) . '"/>';
+					$v ['image_url'] = get_cover_url ( $v ['image_id'] );
+				}
 			}
 		}
-		$url = U ( 'custom_sendall_lists',$this->get_param );
+		$url = U ( 'custom_sendall_lists', $this->get_param );
 		$this->assign ( 'searchUrl', $url );
 		$this->assign ( $list );
 		$this->assign ( 'noraml_tips', '当用户发消息给认证公众号时，管理员可以在48小时内给用户回复信息' );
@@ -635,16 +638,16 @@ class MessageController extends HomeController {
 	}
 	// 群发消息管理
 	function sendall_lists() {
-		$param['mdm'] =I('mdm');
+		$param ['mdm'] = I ( 'mdm' );
 		$act = strtolower ( ACTION_NAME );
 		
 		$res ['title'] = '高级群发消息';
-		$res ['url'] = U ( 'sendall_lists',$param );
+		$res ['url'] = U ( 'sendall_lists', $param );
 		$res ['class'] = $act == 'sendall_lists' ? 'current' : '';
 		$nav [] = $res;
 		
 		$res ['title'] = '客服接口群发消息';
-		$res ['url'] = U ( 'custom_sendall_lists',$param );
+		$res ['url'] = U ( 'custom_sendall_lists', $param );
 		$res ['class'] = $act == 'custom_sendall_lists' ? 'current' : '';
 		$nav [] = $res;
 		$this->assign ( 'nav', $nav );
@@ -715,7 +718,7 @@ class MessageController extends HomeController {
 				foreach ( $appMsgData as $vo ) {
 					// $art ['description'] = $vo ['intro'];
 					if (empty ( $vo ['url'] )) {
-						$art_url = U('Home/Wap/news_detail', array (
+						$art_url = U ( 'Home/Wap/news_detail', array (
 								'id' => $vo ['id'] 
 						) );
 						// 文章内容
@@ -737,7 +740,7 @@ class MessageController extends HomeController {
 				$v ['image_url'] = get_cover_url ( $v ['image_id'] );
 			}
 		}
-		$url = U ( 'sendall_lists',$this->get_param );
+		$url = U ( 'sendall_lists', $this->get_param );
 		$this->assign ( 'searchUrl', $url );
 		$this->assign ( $list );
 		$this->assign ( 'noraml_tips', '当用户发消息给认证公众号时，管理员可以在48小时内给用户回复信息' );
@@ -749,144 +752,144 @@ class MessageController extends HomeController {
 		$map ['id'] = I ( 'id' );
 		$field = I ( 'field' );
 		$val = I ( 'val' );
-	
+		
 		$res = M ( 'weixin_message' )->where ( $map )->setField ( $field, $val );
 		echo $res;
 	}
-	//设置为文本素材
-	function set_meterial(){
-		$id=I('id');
-		$type=I('type');
-		$set_sucai=I('set_sucai');
-		$message=M('weixin_message')->find($id);
-		$res=0;
-		if ($type=='text' && $message['Content']){
-			$map['token']=get_token();
-			$map['uid']=$this->mid;
-			$map['aim_id']=$id;
-			$map['aim_table']='weixin_message';
-			$material=M('material_text')->where($map)->field('id,is_use')->find();
-			if (!empty($material)){
-				$saveUse['is_use']=$set_sucai;
-				$res1 = M('material_text')->where($map)->save($saveUse);
-			}else{
-				$data['token']=get_token();
-				$data['uid']=$this->mid;
-				$data['aim_id']=$id;
-				$data['aim_table']='weixin_message';
-				$data['content']=$message['Content'];
-				$data['is_use']=$set_sucai;
-				$res1=M('material_text')->add($data);
+	// 设置为文本素材
+	function set_meterial() {
+		$id = I ( 'id' );
+		$type = I ( 'type' );
+		$set_sucai = I ( 'set_sucai' );
+		$message = M ( 'weixin_message' )->find ( $id );
+		$res = 0;
+		if ($type == 'text' && $message ['Content']) {
+			$map ['token'] = get_token ();
+			$map ['uid'] = $this->mid;
+			$map ['aim_id'] = $id;
+			$map ['aim_table'] = 'weixin_message';
+			$material = M ( 'material_text' )->where ( $map )->field ( 'id,is_use' )->find ();
+			if (! empty ( $material )) {
+				$saveUse ['is_use'] = $set_sucai;
+				$res1 = M ( 'material_text' )->where ( $map )->save ( $saveUse );
+			} else {
+				$data ['token'] = get_token ();
+				$data ['uid'] = $this->mid;
+				$data ['aim_id'] = $id;
+				$data ['aim_table'] = 'weixin_message';
+				$data ['content'] = $message ['Content'];
+				$data ['is_use'] = $set_sucai;
+				$res1 = M ( 'material_text' )->add ( $data );
 			}
-		}else if($type == 'image' ){
-			$content=json_decode($message['Content'],true);
-			$imagemap['media_id']=$content['image']['media_id'];
-			if (!$imagemap['media_id']){
-				$imagemap['media_id']=$message['MediaId'];
+		} else if ($type == 'image') {
+			$content = json_decode ( $message ['Content'], true );
+			$imagemap ['media_id'] = $content ['image'] ['media_id'];
+			if (! $imagemap ['media_id']) {
+				$imagemap ['media_id'] = $message ['MediaId'];
 			}
-			$imagemap['token']=get_token();
-			$image=M('material_image')->where($imagemap)->find();
-			if ($image){
-				//保存
-				$save['is_use']=$set_sucai;
-				$save['aim_id']=$id;
-				$save['aim_table']='weixin_message';
-				if (!$image['cover_id']){
-					$save['cover_id']=down_media($imagemap['media_id']);
-					if (!$save['cover_id']){
-						$save['cover_id']=do_down_image($imagemap['media_id']);
+			$imagemap ['token'] = get_token ();
+			$image = M ( 'material_image' )->where ( $imagemap )->find ();
+			if ($image) {
+				// 保存
+				$save ['is_use'] = $set_sucai;
+				$save ['aim_id'] = $id;
+				$save ['aim_table'] = 'weixin_message';
+				if (! $image ['cover_id']) {
+					$save ['cover_id'] = down_media ( $imagemap ['media_id'] );
+					if (! $save ['cover_id']) {
+						$save ['cover_id'] = do_down_image ( $imagemap ['media_id'] );
 					}
-					 
-					if (!$image['cover_url']){
-						$save['cover_url']=get_cover_url($save['cover_id']);
+					
+					if (! $image ['cover_url']) {
+						$save ['cover_url'] = get_cover_url ( $save ['cover_id'] );
 					}
 				}
-				$res1=M('material_image')->where($imagemap)->save($save);
-				// 	            $dd['url']=$image['cover_url'];
-			}else{
-				$save['is_use']=$set_sucai;
-				$save['aim_id']=$id;
-				$save['aim_table']='weixin_message';
-				$save['media_id']=$imagemap['media_id'];
-				$save['cTime']=time();
-				$save['manager_id']=$this->mid;
-				$save['token']=get_token();
-				$save['cover_id']=down_media($imagemap['media_id']);
-				if (!$save['cover_id']){
-					$save['cover_id']=do_down_image($imagemap['media_id']);
+				$res1 = M ( 'material_image' )->where ( $imagemap )->save ( $save );
+				// $dd['url']=$image['cover_url'];
+			} else {
+				$save ['is_use'] = $set_sucai;
+				$save ['aim_id'] = $id;
+				$save ['aim_table'] = 'weixin_message';
+				$save ['media_id'] = $imagemap ['media_id'];
+				$save ['cTime'] = time ();
+				$save ['manager_id'] = $this->mid;
+				$save ['token'] = get_token ();
+				$save ['cover_id'] = down_media ( $imagemap ['media_id'] );
+				if (! $save ['cover_id']) {
+					$save ['cover_id'] = do_down_image ( $imagemap ['media_id'] );
 				}
-				if (!$image['cover_url']){
-					$save['cover_url']=get_cover_url($save['cover_id']);
+				if (! $image ['cover_url']) {
+					$save ['cover_url'] = get_cover_url ( $save ['cover_id'] );
 				}
-				$res1=M('material_image')->add($save);
+				$res1 = M ( 'material_image' )->add ( $save );
 			}
-			 
-			 
-		}else if($type == 'voice'){
-			$content=json_decode($message['Content'],true);
-			$voicemap['media_id']=$content['voice']['media_id'];
-			if (!$voicemap['media_id']){
-				$voicemap['media_id']=$message['MediaId'];
+		} else if ($type == 'voice') {
+			$content = json_decode ( $message ['Content'], true );
+			$voicemap ['media_id'] = $content ['voice'] ['media_id'];
+			if (! $voicemap ['media_id']) {
+				$voicemap ['media_id'] = $message ['MediaId'];
 			}
-			$voicemap['token']=get_token();
-			$voicemap['manager_id']=$this->mid;
-			$voicemap['type']=1;
-			$voice=M('material_file')->where($voicemap)->find();
-			if ($voice){
-				//保存
-				$save['is_use']=$set_sucai;
-				$save['aim_id']=$id;
-				$save['aim_table']='weixin_message';
-				$res1=M('material_file')->where($voicemap)->save($save);
-				// 	            $dd['url']=$image['cover_url'];
-			}else{
-				$save['is_use']=$set_sucai;
-				$save['aim_id']=$id;
-				$save['aim_table']='weixin_message';
-				$save['media_id']=$voicemap['media_id'];
-				$save['cTime']=time();
-				$save['manager_id']=$this->mid;
-				$save['type']=1;
-				$save['token']=get_token();
-				$save['file_id']=down_file_media($voicemap['media_id'],'voice');
-				$res1=M('material_file')->add($save);
+			$voicemap ['token'] = get_token ();
+			$voicemap ['manager_id'] = $this->mid;
+			$voicemap ['type'] = 1;
+			$voice = M ( 'material_file' )->where ( $voicemap )->find ();
+			if ($voice) {
+				// 保存
+				$save ['is_use'] = $set_sucai;
+				$save ['aim_id'] = $id;
+				$save ['aim_table'] = 'weixin_message';
+				$res1 = M ( 'material_file' )->where ( $voicemap )->save ( $save );
+				// $dd['url']=$image['cover_url'];
+			} else {
+				$save ['is_use'] = $set_sucai;
+				$save ['aim_id'] = $id;
+				$save ['aim_table'] = 'weixin_message';
+				$save ['media_id'] = $voicemap ['media_id'];
+				$save ['cTime'] = time ();
+				$save ['manager_id'] = $this->mid;
+				$save ['type'] = 1;
+				$save ['token'] = get_token ();
+				$save ['file_id'] = down_file_media ( $voicemap ['media_id'], 'voice' );
+				$res1 = M ( 'material_file' )->add ( $save );
 			}
-		}else if($type == 'video'){
-			$content=json_decode($message['Content'],true);
-			$videomap['media_id']=$content['video']['media_id'];
-			if (!$videomap['media_id']){
-				$videomap['media_id']=$message['MediaId'];
+		} else if ($type == 'video') {
+			$content = json_decode ( $message ['Content'], true );
+			$videomap ['media_id'] = $content ['video'] ['media_id'];
+			if (! $videomap ['media_id']) {
+				$videomap ['media_id'] = $message ['MediaId'];
 			}
-			$videomap['token']=get_token();
-			$videomap['manager_id']=$this->mid;
-			$videomap['type']=2;
-			$video=M('material_file')->where($videomap)->find();
-			if ($video){
-				//保存
-				$save['is_use']=$set_sucai;
-				$save['aim_id']=$id;
-				$save['aim_table']='weixin_message';
-				$res1=M('material_file')->where($videomap)->save($save);
-				// 	            $dd['url']=$image['cover_url'];
-			}else{
-				$save['is_use']=$set_sucai;
-				$save['aim_id']=$id;
-				$save['aim_table']='weixin_message';
-				$save['media_id']=$videomap['media_id'];
-				$save['cTime']=time();
-				$save['manager_id']=$this->mid;
-				$save['type']=2;
-				$save['token']=get_token();
-				$save['file_id']=down_file_media($videomap['media_id'],'video');
-				$res1=M('material_file')->add($save);
+			$videomap ['token'] = get_token ();
+			$videomap ['manager_id'] = $this->mid;
+			$videomap ['type'] = 2;
+			$video = M ( 'material_file' )->where ( $videomap )->find ();
+			if ($video) {
+				// 保存
+				$save ['is_use'] = $set_sucai;
+				$save ['aim_id'] = $id;
+				$save ['aim_table'] = 'weixin_message';
+				$res1 = M ( 'material_file' )->where ( $videomap )->save ( $save );
+				// $dd['url']=$image['cover_url'];
+			} else {
+				$save ['is_use'] = $set_sucai;
+				$save ['aim_id'] = $id;
+				$save ['aim_table'] = 'weixin_message';
+				$save ['media_id'] = $videomap ['media_id'];
+				$save ['cTime'] = time ();
+				$save ['manager_id'] = $this->mid;
+				$save ['type'] = 2;
+				$save ['token'] = get_token ();
+				$save ['file_id'] = down_file_media ( $videomap ['media_id'], 'video' );
+				$res1 = M ( 'material_file' )->add ( $save );
 			}
 		}
-		if ($res1){
-			// 	        $isMaterial=$message['is_material'];
-			$save['is_material']=$set_sucai;
-			$res=M('weixin_message')->where(['id' => $id ])->save($save);
+		if ($res1) {
+			// $isMaterial=$message['is_material'];
+			$save ['is_material'] = $set_sucai;
+			$res = M ( 'weixin_message' )->where ( [ 
+					'id' => $id 
+			] )->save ( $save );
 		}
-	
+		
 		echo $res;
 	}
 }

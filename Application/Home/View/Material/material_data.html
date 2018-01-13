@@ -8,10 +8,9 @@
 <div class="empty_container"><p>您的图文素材库为空，<a target="_blank" href="{:U('Home/Material/material_lists')}">请先增加素材</a></p></div>
 <else /><div class="data_container"><ul class="material_list">
       <volist name="list_data" id="vo">
-      <if condition="$vo[count]==1"><li class="appmsg_li" data-id="{$vo.id}" data-group_id="{$vo.group_id}" style="overflow:hidden">
+      <if condition="$vo['count']==1"><li class="appmsg_li" data-id="{$vo.id}" data-group_id="{$vo.group_id}" style="overflow:hidden">
             <div class="appmsg_item">
                 <h6 class="ellipsis"">{$vo.title}</h6>
-                <p class="title">{$vo.cTime|time_format}</p>
                 <div class="main_img">
                     <img src="{$vo.cover_id|get_cover_url}"/>
                 </div>
@@ -20,7 +19,6 @@
             <div class="hover_area"></div>
         </li><else /><li class="appmsg_li" data-id="{$vo.id}" data-group_id="{$vo.group_id}" style="overflow:hidden">
             <div class="appmsg_item">
-                <p class="title">{$vo.cTime|time_format}</p>
                 <div class="main_img">
                     <img src="{$vo.cover_id|get_cover_url}"/>
                     <h6>{$vo.title}</h6>

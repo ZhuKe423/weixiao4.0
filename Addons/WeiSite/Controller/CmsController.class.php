@@ -44,10 +44,10 @@ class CmsController extends BaseController {
 			$Model = $this->checkAttr ( $Model, $model ['id'] );
 			
 			// dump($Model);exit;
-			if ($Model->create () && $Model->save ()) {
+			if ($Model->create () && false !== $Model->save ()) {
 				D ( 'Common/Keyword' )->set ( $_POST ['keyword'], MODULE_NAME, $id, $_POST ['keyword_type'], 'custom_reply_news' );
 				
-				$this->success ( '保存' . $model ['title'] . '成功！', U ( 'lists?model=' . $model ['name'],array('mdm'=>$_GET['mdm']) ) );
+				$this->success ( '保存' . $model ['title'] . '成功！', U ( 'lists?model=' . $model ['name'] ) );
 			} else {
 				$this->error ( '400483:' . $Model->getError () );
 			}
@@ -94,7 +94,7 @@ class CmsController extends BaseController {
 			if ($Model->create () && $id = $Model->add ()) {
 				D ( 'Common/Keyword' )->set ( $_POST ['keyword'], MODULE_NAME, $id, $_POST ['keyword_type'], 'custom_reply_news' );
 				
-				$this->success ( '添加' . $model ['title'] . '成功！', U ( 'lists?model=' . $model ['name'], array('mdm'=>$_GET['mdm'])) );
+				$this->success ( '添加' . $model ['title'] . '成功！', U ( 'lists?model=' . $model ['name']) );
 			} else {
 				$this->error ( '400486:' . $Model->getError () );
 			}

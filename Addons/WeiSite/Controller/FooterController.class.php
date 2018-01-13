@@ -79,7 +79,7 @@ class FooterController extends BaseController {
 		if (IS_POST) {
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $this->model ['id'] );
-			if ($Model->create () && $Model->save ()) {
+			if ($Model->create () && false !== $Model->save ()) {
 				$this->success ( '保存' . $this->model ['title'] . '成功！', U ( 'lists?model=' . $this->model ['name'], $this->get_param ) );
 			} else {
 				$this->error( '400488:'. $Model->getError () );

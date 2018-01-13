@@ -11,7 +11,7 @@ class QuestionController extends ManageBaseController {
 		parent::_initialize ();
 
 		$this->model = $this->getModel ( 'ask_question' );
-		$param['mdm']=$_GET['mdm'];
+		$param ['mdm'] =  I( 'mdm' );
 		$param ['ask_id'] = $this->ask_id = intval ( $_REQUEST ['ask_id'] );
 
 		$res ['title'] = '微抢答';
@@ -28,7 +28,7 @@ class QuestionController extends ManageBaseController {
 	}
 	// 通用插件的列表模型
 	public function lists() {
-	    $param['mdm']=$_GET['mdm'];
+	    $param ['mdm'] =  I( 'mdm' );
 		$param ['ask_id'] = $this->ask_id;
 		$param ['model'] = $this->model ['id'];
 		$add_url = U ( 'add', $param );
@@ -47,11 +47,11 @@ class QuestionController extends ManageBaseController {
 			$Model = D ( parse_name ( get_table_name ( $this->model ['id'] ), 1 ) );
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $this->model ['id'] );
-			if ($Model->create () && $Model->save ()) {
+			if ($Model->create () && false !== $Model->save ()) {
 				D ( 'AskQuestion' )->setLastQuestion ( $this->ask_id );
 				$param ['ask_id'] = $this->ask_id;
 				$param ['model'] = $this->model ['id'];
-				$param['mdm']=$_GET['mdm'];
+				$param ['mdm'] =  I( 'mdm' );
 				$url = U ( 'lists', $param );
 				$this->success ( '保存' . $this->model ['title'] . '成功！', $url );
 			} else {
@@ -73,7 +73,7 @@ class QuestionController extends ManageBaseController {
 				D ( 'AskQuestion' )->setLastQuestion ( $this->ask_id );
 				$param ['ask_id'] = $this->ask_id;
 				$param ['model'] = $this->model ['id'];
-				$param['mdm']=$_GET['mdm'];
+				$param ['mdm'] =  I( 'mdm' );
 				$url = U ( 'lists', $param );
 				$this->success ( '添加' . $this->model ['title'] . '成功！', $url );
 			} else {

@@ -181,7 +181,7 @@ class WapController extends WapBaseController {
 		$this->display ( 'over' );
 		exit ();
 	}
-	function show() {
+	function showIndex() {
 		$id = I ( 'id', 0, 'intval' );
 		
 		$sn_id = I ( 'sn_id', 0, 'intval' );
@@ -366,7 +366,7 @@ class WapController extends WapBaseController {
 		if (isset ( $_GET ['is_stree'] ))
 			return false;
 		
-		redirect ( U ( 'show', $param ) );
+		redirect ( U ( 'showIndex', $param ) );
 	}
 	function coupon_detail() {
 		$id = $param ['id'] = I ( 'id', 0, 'intval' );
@@ -405,7 +405,7 @@ class WapController extends WapBaseController {
 		$mylist = D ( 'Common/SnCode' )->getMyList ( $this->mid, $id );
 		if (! empty ( $mylist [0] )) {
 			$param ['sn_id'] = $mylist [0] ['id'];
-			redirect ( U ( 'show', $param ) );
+			redirect ( U ( 'showIndex', $param ) );
 		}
 		
 		$info = $public_info = get_token_appinfo ();
@@ -536,6 +536,7 @@ class WapController extends WapBaseController {
 		
 		$map = $dao->getUnCollectWhere ( $this->mid, 0 );
 		$list = $dao->field ( 'id' )->where ( $map )->order ( $order )->page ( $page, $row )->select ();
+		$datas = [ ];
 		foreach ( $list as $d ) {
 			$datas [] = $dao->getInfo ( $d ['id'] );
 		}

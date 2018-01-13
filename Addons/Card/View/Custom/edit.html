@@ -50,25 +50,25 @@
 <label class="item-label">
                        适用人群
                 </label>
-                <div class="check-item"> <input type="checkbox" class="regular-checkbox toggle-data" value="0" id="member_0" name="member[]" toggle-data=""
+                <div class="check-item"> <input type="checkbox" class="regular-checkbox toggle-data" value="0" id="member_0" name="member[]"
                  <php>if(in_array(0,$data['member']) || empty($data['member'])){echo ' checked="checked"';}</php>                   >
                         <label for="member_0"></label>所有用户 </div>
                         
-                 <div class="check-item"> <input type="checkbox" class="regular-checkbox toggle-data" value="-2" id="member_-2" name="member[]" toggle-data=""
+                 <div class="check-item"> <input type="checkbox" class="regular-checkbox toggle-data" value="-2" id="member_-2" name="member[]"
                  <php>if(in_array('-2',$data['member'])){echo ' checked="checked"';}</php>                   >
                         <label for="member_-2"></label>女性用户 </div>
                         
-                  <div class="check-item"> <input type="checkbox" class="regular-checkbox toggle-data" value="-3" id="member_-3" name="member[]" toggle-data=""
+                  <div class="check-item"> <input type="checkbox" class="regular-checkbox toggle-data" value="-3" id="member_-3" name="member[]"
                  <php>if(in_array('-3',$data['member'])){echo ' checked="checked"';}</php>                   >
                         <label for="member_-3"></label>男性用户 </div>
                         
-                <div class="check-item"> <input type="checkbox" class="regular-checkbox toggle-data" value="-1" id="member_-1" name="member[]" toggle-data=""
+                <div class="check-item"> <input type="checkbox" class="regular-checkbox toggle-data" value="-1" id="member_-1" name="member[]"
                            <php>if(in_array(-1,$data['member'])){echo ' checked="checked"';}</php>                        >
                         <label for="member_-1"></label>所有会员 </div>
                         
                 <notempty name='card_level'>
                 	<volist name='card_level' id='vo'>
-                	<div class="check-item"> <input type="checkbox" class="regular-checkbox toggle-data" value="{$vo.id}" id="member_{$vo.id}" name="member[]" toggle-data=""
+                	<div class="check-item"> <input type="checkbox" class="regular-checkbox toggle-data" value="{$vo.id}" id="member_{$vo.id}" name="member[]"
                       <php>if(in_array($vo['id'],$data['member'])){echo ' checked="checked"';}</php>                                    >
                         <label for="member_{$vo.id}"></label>
                        {$vo.level} </div> 

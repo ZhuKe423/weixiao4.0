@@ -11,18 +11,6 @@
         <php> $post_url || $post_url = U('edit?model='.$model['id'], $get_param);</php>
         <form id="form" action="{$post_url}" method="post" class="form-horizontal form-center">
         	<ul id="tab" class="tab-pane in">
-<!--             	 <li class="form-item cf"> -->
-<!--                     <label class="item-label"><span class="need_flag">*</span>商户号<span class="check-tips">（微信支付分配的商户号）</span></label> -->
-<!--                     <div class="controls"> -->
-<!--                       <input type="text" class="text input-large" name="mch_id" value="{$data.mch_id}"> -->
-<!--                     </div> -->
-<!--                   </li>  -->
-<!--                   <li class="form-item cf"> -->
-<!--                     <label class="item-label"><span class="need_flag">*</span> 公众账号appid <span class="check-tips">（商户appid）</span></label> -->
-<!--                     <div class="controls"> -->
-<!--                       <input type="text" class="text input-large" name="wxappid" value="{$data.wxappid}"> -->
-<!--                     </div> -->
-<!--                   </li>   -->
                  <li class="form-item cf">
                     <label class="item-label"><span class="need_flag">*</span>活动名称 <span class="check-tips">（如：猜灯谜抢红包活动）(不超过25个字)</span></label>
                     <div class="controls">
@@ -79,30 +67,12 @@
                       <input type="number" class="text input-large" name="collect_limit" value="{$data.collect_limit}">
                     </div>
                   </li> 
-<!--                    <li class="form-item cf"> -->
-<!--                     <label class="item-label"><span class="need_flag">*</span>  商户API密钥        <span class="check-tips">（用户生成支付签名）</span></label> -->
-<!--                     <div class="controls"> -->
-<!--                       <input type="text" class="text input-large" name="partner_key" value="{$data.partner_key}"> -->
-<!--                     </div> -->
-<!--                   </li>   -->
                    <li class="form-item cf">
                     <label class="item-label"> 活动备注      </label>
                     <div class="controls">
                       <input type="text" class="text input-large" name="act_remark" value="{$data.act_remark}">
                     </div>
                   </li>  
-                  <!-- 选择模板 -->
-<!--                  <li class="form-item"> -->
-<!--                     <label class="item-label"> -->
-<!--                            模板选择 -->
-<!--                     </label> -->
-<!--                     <div class="controls"> -->
-<!--                         <select id="template" name="template" data-url="{:U('addons/get_package_template?addons=RedBag')}"> -->
-<!--                             <option value="{$data.template}">{:get_sucai_template_info($data[template],'RedBag')[title]}</option> -->
-<!--                         </select> -->
-<!--                     </div> -->
-<!--                  </li> -->
-                  
             </ul>
           	<div class="form-item form_bh">
             	<notempty name="data.id"><input type="hidden" name="id" value="{$data.id}"></notempty>

@@ -12,7 +12,6 @@
 <div class="data_container">
 	<ul class="material_list">
       <volist name="list_data" id="vo">
-       <if condition="$vo[count]==1">
        		<li class="appmsg_li" data-id="{$vo.id}" style="overflow:hidden">
             <div class="appmsg_item">
                 <div class="main_img">
@@ -21,16 +20,6 @@
             </div>
             <div class="hover_area"></div>
         	</li>
-        <else />
-        	<li class="appmsg_li" data-id="{$vo.id}" style="overflow:hidden">
-            <div class="appmsg_item">
-                <div class="main_img">
-                    <img src="{$vo.cover_url}" width='100px' height='100px'/>
-                </div>
-            </div>
-            <div class="hover_area"></div>
-        	</li>
-        </if>
        </volist>
      </ul>
  </div>

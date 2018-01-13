@@ -4,7 +4,7 @@
     <section id="contents"> <include file="Home@Addons/_nav" />
       <div class="tab-content"> 
         <!-- 表单 -->
-        <php> $post_url || $post_url = U('edit?model='.$model['id'], $get_param);</php>
+        <php> $post_url = U('edit?model='.$model['id'], $get_param);</php>
         <form class="form-horizontal form-center" method="post" action="{$post_url}" id="form">
           <div class="form-item cf toggle-name">
             <label class="item-label"> <span class="need_flag">*</span> 店名 </label>
@@ -16,19 +16,6 @@
             <label class="item-label"> 联系电话 </label>
             <div class="controls">
               <input type="text" value="{$data.phone}" name="phone" class="text input-large">
-            </div>
-          </div>
-          <!--<div class="form-item cf toggle-password">
-            <label class="item-label"><span class="need_flag">*</span> 确认收款密码 </label>
-            <div class="controls">
-              <input type="text" value="{$data.password}" name="password" class="text input-large">
-            </div>
-          </div>-->
-          
-           <div class="form-item cf toggle-shop_code">
-           <label class="item-label"><span class="need_flag"><eq name='is_erp' value='1'>*</eq></span>地点编码<span class="check-tips"><eq name='is_erp' value='1'> （由ERP提供，请正确填写）</eq> </span></label>
-             <div class="controls">
-              <input type="text" value="{$data.shop_code}" name="shop_code" class="text input-large">
             </div>
           </div>
           <div class="form-item cf toggle-img">

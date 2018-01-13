@@ -32,8 +32,7 @@ class CustomReplyController extends BaseController {
 		$this->assign ( $list_data );
 		// dump ( $list_data );
 		
-		$templateFile = $this->model ['template_list'] ? $this->model ['template_list'] : '';
-		$this->display ( $templateFile );
+		$this->display ( );
 	}
 	// 通用插件的编辑模型
 	public function edit() {
@@ -44,7 +43,7 @@ class CustomReplyController extends BaseController {
 			$Model = D ( parse_name ( get_table_name ( $model ['id'] ), 1 ) );
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $model ['id'] );
-			if ($Model->create () && $Model->save ()) {
+			if ($Model->create () && false !== $Model->save ()) {
 				$this->_saveKeyword ( $model, $id, 'custom_reply_news' );
 				
 				// 清空缓存

@@ -442,6 +442,14 @@ abstract class Controller {
 		// 初始化一些公共变量
 		$this->assign ( 'tongji_code', '' );
 		$this->assign ( 'UploadFileExts', C ( 'DOWNLOAD_UPLOAD' ) ['exts'] );
+		$this->assign ( 'placeholder', '' );
+		$this->assign ( 'search_key', '' );
+		
+		$this->assign ( 'add_url', '' );
+		$this->assign ( 'del_url', '' );
+		$this->assign ( 'search_url', '' );
+		$this->assign ( 'post_url', '' );
+		$this->assign ( 'more_button_arr', [ ] );
 	}
 	
 	// ***************************通用的模型数据操作 begin 凡星********************************/
@@ -475,8 +483,7 @@ abstract class Controller {
 		$list_data = $this->_get_model_list ( $model, $page, $order );
 		$this->assign ( $list_data );
 		
-		$templateFile || $templateFile = $model ['template_list'] ? $model ['template_list'] : '';
-		$this->display ( $templateFile );
+		$this->display ();
 	}
 	public function common_export($model = null, $order = 'id desc', $return = false) {
 		set_time_limit ( 0 );
@@ -520,7 +527,7 @@ abstract class Controller {
 		if ($return)
 			return $dataArr;
 		else
-			outExcel ( $dataArr, $map ['module'] );
+			outExcel ( $dataArr );
 	}
 	public function common_del($model = null, $ids = null) {
 		is_array ( $model ) || $model = $this->getModel ( $model );
@@ -582,8 +589,7 @@ abstract class Controller {
 			$this->assign ( 'fields', $fields );
 			$this->assign ( 'data', $data );
 			
-			$templateFile || $templateFile = $model ['template_edit'] ? $model ['template_edit'] : '';
-			$this->display ( $templateFile );
+			$this->display ();
 		}
 	}
 	public function common_add($model = null, $templateFile = '') {
@@ -595,6 +601,7 @@ abstract class Controller {
 			$Model = $this->checkAttr ( $Model, $model ['id'] );
 			$Model->create ();
 			$Model->getError () || $id = $Model->add ();
+			
 			if ($id) {
 				$this->_saveKeyword ( $model, $id );
 				
@@ -609,15 +616,15 @@ abstract class Controller {
 			$fields = get_model_attribute ( $model ['id'] );
 			$this->assign ( 'fields', $fields );
 			
-			$templateFile || $templateFile = $model ['template_add'] ? $model ['template_add'] : '';
-			$this->display ( $templateFile );
+			$this->display ();
 		}
 	}
 	
 	// 通用的保存关键词方法
 	public function _saveKeyword($model, $id) {
 		if (isset ( $_POST ['keyword'] ) && $model ['name'] != 'keyword' && defined ( 'MODULE_NAME' ) && ! isset ( $_REQUEST ['keyword_no_deal'] )) {
-			D ( 'Common/Keyword' )->set ( $_POST ['keyword'], MODULE_NAME, $id, $_POST ['keyword_type'] );
+			$keyword_type = isset ( $_POST ['keyword_type'] ) ? $_POST ['keyword_type'] : '';
+			D ( 'Common/Keyword' )->set ( $_POST ['keyword'], MODULE_NAME, $id, $keyword_type );
 		}
 	}
 	// 判断奖品库选择器 数量是否大于库存
@@ -676,10 +683,10 @@ abstract class Controller {
 		$validate = $auto = array ();
 		$pk = $Model->getPk ();
 		foreach ( $fields as $key => $attr ) {
-			
-			if ($attr ['type'] == 'prize' && $_POST [$key]) {
+			$val = I ( $key );
+			if ($attr ['type'] == 'prize' && $val) {
 				// 判断奖品库选择器 数量是否大于库存
-				$this->checkPriceNum ( $_POST [$key] );
+				$this->checkPriceNum ( $val );
 			}
 			if ($pk != $key && $attr ['is_must']) { // 必填字段,表单不存在字段也要验证
 				$validate [] = array (
@@ -708,35 +715,37 @@ abstract class Controller {
 						$attr ['auto_time'],
 						$attr ['auto_type'] 
 				);
-			} elseif ('checkbox' == $attr ['type'] || 'dynamic_checkbox' == $attr ['type']) { // 多选型
-				$auto [] = array (
-						$attr ['name'],
-						'arr2str',
-						3,
-						'function' 
-				);
-			} elseif ('datetime' == $attr ['type']) { // 时间型
-				$auto [] = array (
-						$attr ['name'],
-						'strtotime',
-						3,
-						'function' 
-				);
-			} elseif ('date' == $attr ['type']) { // 日期型
-				$auto [] = array (
-						$attr ['name'],
-						'strtotime',
-						3,
-						'function' 
-				);
-			} elseif ('mult_picture' == $attr ['type']) { // 多图片
-				$_POST [$key] = array_filter ( $_POST [$key] ); // 去除数组中空的值
-				$auto [] = array (
-						$attr ['name'],
-						'arr2str',
-						3,
-						'function' 
-				);
+			} elseif (! empty ( $val )) {
+				if ('checkbox' == $attr ['type'] || 'dynamic_checkbox' == $attr ['type']) { // 多选型
+					$auto [] = array (
+							$attr ['name'],
+							'arr2str',
+							3,
+							'function' 
+					);
+				} elseif ('datetime' == $attr ['type']) { // 时间型
+					$auto [] = array (
+							$attr ['name'],
+							'strtotime',
+							3,
+							'function' 
+					);
+				} elseif ('date' == $attr ['type']) { // 日期型
+					$auto [] = array (
+							$attr ['name'],
+							'strtotime',
+							3,
+							'function' 
+					);
+				} elseif ('mult_picture' == $attr ['type']) { // 多图片
+					$_POST [$key] = array_filter ( $val ); // 去除数组中空的值
+					$auto [] = array (
+							$attr ['name'],
+							'arr2str',
+							3,
+							'function' 
+					);
+				}
 			}
 		}
 		return $Model->validate ( $validate )->auto ( $auto );

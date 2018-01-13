@@ -55,7 +55,7 @@ class GuessController extends ManageBaseController {
 			$res = D ( 'GuessOption' )->set ( I ( 'post.id' ), I ( 'post.' ) );
 			D ( 'GuessOption' )->getGuessOption ( $id, true );
 			
-			if ($Model->create () && $Model->save () || $res) {
+			if ($Model->create () && false !== $Model->save () || $res) {
 				D ( 'Guess' )->getInfo ( $id, true );
 				$this->success ( '保存' . $this->model ['title'] . '成功！', U ( 'lists?model=' . $this->model ['name'] ) );
 			} else {

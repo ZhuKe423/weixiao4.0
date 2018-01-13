@@ -23,14 +23,14 @@ class LeafletsController extends ManageBaseController {
 			if ($flag !== false) {
 				$this->success ( '保存成功', Cookie ( '__forward__' ) );
 			} else {
-				$this->error( '400297:保存失败' );
+				$this->error ( '400297:保存失败' );
 			}
 		}
 		
 		$map ['name'] = MODULE_NAME;
 		$addon = M ( 'addons' )->where ( $map )->find ();
 		if (! $addon)
-			$this->error( '400298:插件未安装' );
+			$this->error ( '400298:插件未安装' );
 		$addon_class = get_addon_class ( $addon ['name'] );
 		if (! class_exists ( $addon_class ))
 			trace ( "插件{$addon['name']}无法实例化,", 'ADDONS', 'ERR' );
@@ -56,9 +56,6 @@ class LeafletsController extends ManageBaseController {
 		}
 		$this->assign ( 'data', $addon );
 		
-		$this->display ();
-	}
-	function show() {
 		$this->display ();
 	}
 }

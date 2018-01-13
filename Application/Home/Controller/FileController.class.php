@@ -1,4 +1,5 @@
 <?php
+
 // +----------------------------------------------------------------------
 // | OneThink [ WE CAN DO IT JUST THINK IT ]
 // +----------------------------------------------------------------------
@@ -44,34 +45,33 @@ class FileController extends HomeController {
 	}
 	/* 文件上传 到根目录 */
 	public function upload_root() {
-	    $return = array (
-	        'status' => 1,
-	        'info' => '上传成功',
-	        'data' => ''
-	    );
-	    /* 调用文件上传组件上传文件 */
-	    $File = D ( 'File' );
-	    $file_driver = C ( 'DOWNLOAD_UPLOAD_DRIVER' );
-	    $setting = array (
+		$return = array (
+				'status' => 1,
+				'info' => '上传成功',
+				'data' => '' 
+		);
+		/* 调用文件上传组件上传文件 */
+		$File = D ( 'File' );
+		$file_driver = C ( 'DOWNLOAD_UPLOAD_DRIVER' );
+		$setting = array (
 				'maxSize' => 50242880, // 5M 上传的文件大小限制 (0-不做限制)
 				'exts' => 'jpg,gif,png,jpeg,zip,rar,tar,gz,7z,doc,docx,txt,xml,xls,xlsx,csv,pem,amr,mp3,mp4', // 允许上传的文件后缀
-				'rootPath' => './' ,
-	            'name_nochange'=>1
+				'rootPath' => './',
+				'name_nochange' => 1 
 		);
-	    $info = $File->upload ( $_FILES, $setting , C ( 'DOWNLOAD_UPLOAD_DRIVER' ), C ( "UPLOAD_{$file_driver}_CONFIG" ) );
-	    /* 记录附件信息 */
-	    if ($info) {
-	        $return ['status'] = 1;
-	        $return = array_merge ( $info ['download'], $return );
-	    } else {
-	        $return ['status'] = 0;
-	        $return ['info'] = $File->getError ();
-	    }
-	
-	    /* 返回JSON数据 */
-	    $this->ajaxReturn ( $return );
+		$info = $File->upload ( $_FILES, $setting, C ( 'DOWNLOAD_UPLOAD_DRIVER' ), C ( "UPLOAD_{$file_driver}_CONFIG" ) );
+		/* 记录附件信息 */
+		if ($info) {
+			$return ['status'] = 1;
+			$return = array_merge ( $info ['download'], $return );
+		} else {
+			$return ['status'] = 0;
+			$return ['info'] = $File->getError ();
+		}
+		
+		/* 返回JSON数据 */
+		$this->ajaxReturn ( $return );
 	}
-	
 	
 	/* 下载文件 */
 	public function download($id = null) {
@@ -81,13 +81,13 @@ class FileController extends HomeController {
 		
 		$logic = D ( 'Download', 'Logic' );
 		if (! $logic->download ( $id )) {
-			$this->error ( '110090:'.$logic->getError () );
+			$this->error ( '110090:' . $logic->getError () );
 		}
 	}
 	
 	/**
 	 * 上传图片
-	 * 
+	 *
 	 * @author huajie <banhuajie@163.com>
 	 */
 	public function uploadPicture() {
@@ -123,6 +123,7 @@ class FileController extends HomeController {
 	}
 	// 图片选择器
 	function uploadDialog() {
+		$this->assign ( 'dir', '' );
 		$this->display ();
 	}
 	function userPics() {
@@ -133,7 +134,7 @@ class FileController extends HomeController {
 	}
 	// 系统图标
 	function systemPics() {
-		$dir = $_GET ['dir'];
+		$dir = isset ( $_GET ['dir'] ) ? $_GET ['dir'] : '';
 		$cateList = $this->_getLocalCate ();
 		if (! $dir) {
 			$dir = $cateList [0] ['dir'];
@@ -141,7 +142,8 @@ class FileController extends HomeController {
 		foreach ( $cateList as &$ca ) {
 			if ($dir == $ca ['dir']) {
 				$ca ['current'] = 1;
-				break;
+			} else {
+				$ca ['current'] = 0;
 			}
 		}
 		$picList = $this->_getCatePicList ( $dir );
@@ -187,15 +189,15 @@ class FileController extends HomeController {
 			$cateList [] = $res;
 			unset ( $res );
 		}
-		closedir ( $dir );
+		closedir ( $dirObj );
 		return $cateList;
 	}
 	function _getCatePicList($dirName) {
 		$dir = SITE_PATH . '/Public/static/icon/' . $dirName;
 		$dirObj = opendir ( $dir );
 		while ( $file = readdir ( $dirObj ) ) {
-		    $fArr = explode('_', $file);
-			if ($file === '.' || $file == '..' || $file == '.svn' || $file == 'info.php' || $fArr[1]) {
+			$fArr = explode ( '_', $file );
+			if ($file === '.' || $file == '..' || $file == '.svn' || $file == 'info.php' || isset ( $fArr [1] )) {
 				continue;
 			}
 			$res ['path'] = '/Public/static/icon/' . $dirName . '/' . $file;
@@ -204,7 +206,7 @@ class FileController extends HomeController {
 			
 			unset ( $res );
 		}
-		closedir ( $dir );
+		closedir ( $dirObj );
 		return $picList;
 	}
 	// 图片管理
@@ -265,7 +267,7 @@ class FileController extends HomeController {
 		);
 		$res = D ( 'picture' )->where ( $map )->delete ();
 		if ($res) {
-			$this->success ( '删除成功', U('Home/File/picLists' ) );
+			$this->success ( '删除成功', U ( 'Home/File/picLists' ) );
 		} else {
 			$this->success ( '删除失败' );
 		}
@@ -294,13 +296,13 @@ class FileController extends HomeController {
 					'id' => $data ['id'] 
 			) )->save ( $data );
 			if ($res) {
-				$this->success ( '保存成功', U('Home/File/picLists' ) );
+				$this->success ( '保存成功', U ( 'Home/File/picLists' ) );
 			} else {
 				$this->success ( '保存失败' );
 			}
 		}
 		$this->assign ( 'fields', $fields );
-		$this->assign ( 'post_url', U('Home/File/editPic', array (
+		$this->assign ( 'post_url', U ( 'Home/File/editPic', array (
 				'id' => $id,
 				'mdm' => I ( 'mdm' ) 
 		) ) );
@@ -359,16 +361,18 @@ class FileController extends HomeController {
 				$data ['ctime'] = time ();
 				$res = D ( 'picture_category' )->add ( $data );
 			} else {
-				$res = D ( 'picture_category' )->where ( ['id' => $id ] )->save ( $data );
+				$res = D ( 'picture_category' )->where ( [ 
+						'id' => $id 
+				] )->save ( $data );
 			}
 			if ($res) {
-				$this->success ( '保存成功', U('Home/File/categoryList' ) );
+				$this->success ( '保存成功', U ( 'Home/File/categoryList' ) );
 			} else {
 				$this->success ( '保存失败' );
 			}
 		}
 		$this->assign ( 'fields', $fields );
-		$this->assign ( 'post_url', U('Home/File/editCategory', array (
+		$this->assign ( 'post_url', U ( 'Home/File/editCategory', array (
 				'id' => $id,
 				'mdm' => I ( 'mdm' ) 
 		) ) );
@@ -385,7 +389,7 @@ class FileController extends HomeController {
 		);
 		$res = D ( 'picture_category' )->where ( $map )->delete ();
 		if ($res) {
-			$this->success ( '删除成功', U('Home/File/categoryList' ) );
+			$this->success ( '删除成功', U ( 'Home/File/categoryList' ) );
 		} else {
 			$this->success ( '删除失败' );
 		}

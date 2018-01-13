@@ -2,7 +2,7 @@
 
 namespace Addons\Card\Controller;
 
-use Addons\Card\Controller\BaseController;
+use Addons\Card\Controller\CardSetController;
 
 class CardPrivilegeController extends CardSetController {
 	var $model;
@@ -12,7 +12,7 @@ class CardPrivilegeController extends CardSetController {
 	}
 	function lists() {
 		$list_data = $this->_get_model_list ( $this->model );
-		$levels = M ( 'card_level' )->where ( $levelMap )->select ();
+		$levels = M ( 'card_level' )->select ();
 		foreach ( $list_data ['list_data'] as &$vo ) {
 			$ids = explode ( ',', $vo ['grade'] );
 			$gradeArr = array ();
@@ -73,7 +73,6 @@ class CardPrivilegeController extends CardSetController {
 			}
 			$fields ['grade'] ['extra'] = $extraStr;
 			$this->assign ( 'fields', $fields );
-			// $templateFile || $templateFile = $model ['template_add'] ? $model ['template_add'] : '';
 			$this->display ();
 		}
 	}
@@ -113,7 +112,6 @@ class CardPrivilegeController extends CardSetController {
 			$this->assign ( 'fields', $fields );
 			$this->assign ( 'data', $data );
 			
-			// $templateFile || $templateFile = $model ['template_add'] ? $model ['template_add'] : '';
 			$this->display ();
 		}
 	}

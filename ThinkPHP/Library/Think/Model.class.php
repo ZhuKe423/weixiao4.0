@@ -1,4 +1,5 @@
 <?php
+
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
 // +----------------------------------------------------------------------
@@ -127,7 +128,7 @@ class Model {
 		if (empty ( $this->fields )) {
 			// 如果数据表字段没有定义则自动获取
 			if (C ( 'DB_FIELDS_CACHE' )) {
-                $db   =  $this->dbName?$this->dbName:C('DB_NAME');
+				$db = $this->dbName ? $this->dbName : C ( 'DB_NAME' );
 				$fields = F ( '_fields/' . strtolower ( $db . '.' . $this->tablePrefix . $this->name ) );
 				if ($fields) {
 					$this->fields = $fields;
@@ -185,7 +186,7 @@ class Model {
 		// 2008-3-7 增加缓存开关控制
 		if (C ( 'DB_FIELDS_CACHE' )) {
 			// 永久缓存数据表信息
-			$db = $this->dbName ?  : C ( 'DB_NAME' );
+			$db = $this->dbName ?: C ( 'DB_NAME' );
 			F ( '_fields/' . strtolower ( $db . '.' . $this->tablePrefix . $this->name ), $this->fields );
 		}
 	}
@@ -470,7 +471,7 @@ class Model {
 		// 分析表达式
 		$options = $this->_parseOptions ( $options );
 		// 写入数据到数据库
-		if (false === $result = $this->db->selectInsert ( $fields ?  : $options ['field'], $table ?  : $this->getTableName (), $options )) {
+		if (false === $result = $this->db->selectInsert ( $fields ?: $options ['field'], $table ?: $this->getTableName (), $options )) {
 			// 数据库插入操作失败
 			$this->error = L ( '_OPERATION_WRONG_' );
 			return false;
@@ -539,7 +540,7 @@ class Model {
 			}
 		}
 		
-		if (is_array ( $options ['where'] ) && isset ( $options ['where'] [$pk] )) {
+		if (is_array ( $options ['where'] ) && is_string ( $pk ) && isset ( $options ['where'] [$pk] )) {
 			$pkValue = $options ['where'] [$pk];
 		}
 		if (false === $this->_before_update ( $data, $options )) {
@@ -699,7 +700,7 @@ class Model {
 			return false;
 		}
 		if (empty ( $resultSet )) { // 查询结果为空
-			return null;
+			return [ ];
 		}
 		
 		if (is_string ( $resultSet )) {
@@ -1165,7 +1166,7 @@ class Model {
 		}
 		
 		// 状态
-		$type = $type ?  : (! empty ( $data [$this->getPk ()] ) ? self::MODEL_UPDATE : self::MODEL_INSERT);
+		$type = $type ?: (! empty ( $data [$this->getPk ()] ) ? self::MODEL_UPDATE : self::MODEL_INSERT);
 		
 		// 检查字段映射
 		if (! empty ( $this->_map )) {
@@ -1203,8 +1204,8 @@ class Model {
 		// 数据自动验证
 		if (! $this->autoValidation ( $data, $type ))
 			return false;
-			
-			// 表单令牌验证
+		
+		// 表单令牌验证
 		if (! $this->autoCheckToken ( $data )) {
 			$this->error = L ( '_TOKEN_ERROR_' );
 			return false;
@@ -1616,7 +1617,7 @@ class Model {
 					'__PREFIX__' => $this->tablePrefix 
 			) );
 			$prefix = $this->tablePrefix;
-			$sql = preg_replace_callback ( "/__([A-Z_-]+)__/sU", function ($match) use($prefix) {
+			$sql = preg_replace_callback ( "/__([A-Z_-]+)__/sU", function ($match) use ($prefix) {
 				return $prefix . strtolower ( $match [1] );
 			}, $sql );
 		}
@@ -1849,7 +1850,7 @@ class Model {
 			$this->options ['table'] = $table;
 		} elseif (! empty ( $table )) {
 			// 将__TABLE_NAME__替换成带前缀的表名
-			$table = preg_replace_callback ( "/__([A-Z_-]+)__/sU", function ($match) use($prefix) {
+			$table = preg_replace_callback ( "/__([A-Z_-]+)__/sU", function ($match) use ($prefix) {
 				return $prefix . strtolower ( $match [1] );
 			}, $table );
 			$this->options ['table'] = $table;
@@ -1870,7 +1871,7 @@ class Model {
 			$this->options ['using'] = $using;
 		} elseif (! empty ( $using )) {
 			// 将__TABLE_NAME__替换成带前缀的表名
-			$using = preg_replace_callback ( "/__([A-Z_-]+)__/sU", function ($match) use($prefix) {
+			$using = preg_replace_callback ( "/__([A-Z_-]+)__/sU", function ($match) use ($prefix) {
 				return $prefix . strtolower ( $match [1] );
 			}, $using );
 			$this->options ['using'] = $using;
@@ -1891,7 +1892,7 @@ class Model {
 		$prefix = $this->tablePrefix;
 		if (is_array ( $join )) {
 			foreach ( $join as $key => &$_join ) {
-				$_join = preg_replace_callback ( "/__([A-Z_-]+)__/sU", function ($match) use($prefix) {
+				$_join = preg_replace_callback ( "/__([A-Z_-]+)__/sU", function ($match) use ($prefix) {
 					return $prefix . strtolower ( $match [1] );
 				}, $_join );
 				$_join = false !== stripos ( $_join, 'JOIN' ) ? $_join : $type . ' JOIN ' . $_join;
@@ -1899,7 +1900,7 @@ class Model {
 			$this->options ['join'] = $join;
 		} elseif (! empty ( $join )) {
 			// 将__TABLE_NAME__字符串替换成带前缀的表名
-			$join = preg_replace_callback ( "/__([A-Z_-]+)__/sU", function ($match) use($prefix) {
+			$join = preg_replace_callback ( "/__([A-Z_-]+)__/sU", function ($match) use ($prefix) {
 				return $prefix . strtolower ( $match [1] );
 			}, $join );
 			$this->options ['join'] [] = false !== stripos ( $join, 'JOIN' ) ? $join : $type . ' JOIN ' . $join;
@@ -1928,7 +1929,7 @@ class Model {
 		if (is_string ( $union )) {
 			$prefix = $this->tablePrefix;
 			// 将__TABLE_NAME__字符串替换成带前缀的表名
-			$options = preg_replace_callback ( "/__([A-Z_-]+)__/sU", function ($match) use($prefix) {
+			$options = preg_replace_callback ( "/__([A-Z_-]+)__/sU", function ($match) use ($prefix) {
 				return $prefix . strtolower ( $match [1] );
 			}, $union );
 		} elseif (is_array ( $union )) {
@@ -1976,7 +1977,7 @@ class Model {
 	public function field($field, $except = false) {
 		if (true === $field) { // 获取全部字段
 			$fields = $this->getDbFields ();
-			$field = $fields ?  : '*';
+			$field = $fields ?: '*';
 		} elseif ($except) { // 字段排除
 			if (is_string ( $field )) {
 				$field = explode ( ',', $field );
@@ -2216,14 +2217,15 @@ class Model {
 		C ( 'VAR_PAGE' ) && $p = C ( 'VAR_PAGE' );
 		$page = I ( $p, 1, 'intval' );
 		
-		if ($options ['page']) {
-			$pageArr = explode ( ',', $options ['page'] );
+		if (isset ( $options ['page'] ) && $options ['page']) {
+			$pageArr = is_array ( $options ['page'] ) ? $options ['page'] : explode ( ',', $options ['page'] );
 			empty ( $pageArr [0] ) || $page = $pageArr [0];
 			empty ( $pageArr [1] ) || $row = $pageArr [1];
 		}
 		
 		$list_data ['count'] = $count;
 		$list_data ['list_data'] = $this->page ( $page, $row )->select ( $options );
+		empty ( $list_data ['list_data'] ) && $list_data ['list_data'] = [ ];
 		
 		// 分页
 		if ($count > $row) {
@@ -2235,57 +2237,8 @@ class Model {
 	}
 	// 获取多个记录的便捷方法，weiphp增加
 	public function getFields($field) {
-		return $this->getField ( $field, true );
+		$res = $this->getField ( $field, true );
+		empty ( $res ) && $res = [ ];
+		return $res;
 	}
-	/**
-	 * 通用的清缓存的方法
-	 *
-	 * @access public
-	 * @param string|array $ids
-	 *        	ID值
-	 * @param string $type
-	 *        	清除类型，扩展使用，目前还用不上
-	 * @return Model
-	 */
-// 	function clear($ids, $type = '', $uid = '') {
-// 		is_array ( $ids ) || $ids = explode ( ',', $ids );
-// 		$class = get_called_class ();
-// 		$arr1 = get_class_methods ( $class );
-// 		$arr2 = get_class_methods ( __CLASS__ );
-// 		$methods = array_diff ( $arr1, $arr2 );
-// 		$methods [] = 'getInfo';
-		
-// 		foreach ( $methods as $m ) {
-// 			$key = $class . '::' . $m;
-// 			S ( $key, null );
-			
-// 			foreach ( $ids as $id ) {
-// 				$key_id = $key . '_' . $id;
-// 				S ( $key_id, null );
-// 			}
-// 		}
-// 	}
-	/**
-	 * 通用的获取单记录带缓存的方法
-	 *
-	 * @access public
-	 * @param string $id
-	 *        	ID
-	 * @param boolean $update
-	 *        	是否需要更新缓存
-	 * @param array $data
-	 *        	带此参数后不需要重复从数据库取数据更新缓存
-	 * @return Model
-	 */
-// 	function getInfo($id, $update = false, $data = array()) {
-// 		$class = get_called_class ();
-// 		$key = $class . '::getInfo_' . $id;
-// 		$info = S ( $key );
-// 		if ($info === false || $update) {
-// 			$info = ( array ) (empty ( $data ) ? $this->find ( $id ) : $data);
-// 			S ( $key, $info );
-// 		}
-		
-// 		return $info;
-// 	}
 }

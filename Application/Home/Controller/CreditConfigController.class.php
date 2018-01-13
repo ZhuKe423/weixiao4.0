@@ -70,7 +70,9 @@ class CreditConfigController extends HomeController {
 			$Model = D ( parse_name ( get_table_name ( $model ['id'] ), 1 ) );
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $model ['id'] );
-			if ($Model->create () && $Model->$act ()) {
+			$res = false;
+			$Model->create () && $res = $Model->$act ();
+			if ($res !== false ) {
 				if ($_POST ['name'] == 'subscribe') {
 					$credit ['score'] = I ( 'score' );
 					$credit ['experience'] = I ( 'experience' );

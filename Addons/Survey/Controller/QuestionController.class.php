@@ -47,7 +47,7 @@ class QuestionController extends ManageBaseController {
 			$Model = D ( parse_name ( get_table_name ( $this->model ['id'] ), 1 ) );
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $this->model ['id'] );
-			if ($Model->create () && $Model->save ()) {
+			if ($Model->create () && false !== $Model->save ()) {
 				$param ['survey_id'] = $this->survey_id;
 				$param ['model'] = $this->model ['id'];
 				$url = U ( 'lists', $param );

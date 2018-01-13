@@ -7,7 +7,7 @@ use Think\WapBaseController;
 class WapController extends WapBaseController {
 	function index() {
 		$info = $public_info = get_token_appinfo ();
-		$param ['mdm'] = $_GET ['mdm'];
+		$param ['mdm'] =  I( 'mdm' );
 		$param ['publicid'] = $info ['id'];
 		$param ['ask_id'] = $ask_id = I ( 'id' );
 		
@@ -23,7 +23,7 @@ class WapController extends WapBaseController {
 		$this->assign ( 'public_info', $public_info );
 		$this->display ();
 	}
-	function show() {
+	function showIndex() {
 		$ask_id = intval ( $_REQUEST ['ask_id'] );
 		$ask = D ( 'Ask' )->getAskInfo ( $ask_id );
 		
@@ -39,7 +39,7 @@ class WapController extends WapBaseController {
 		$this->display ();
 	}
 	function ask() {
-		$param ['mdm'] = $_GET ['mdm'];
+		$param ['mdm'] =  I( 'mdm' );
 		$param ['ask_id'] = $ask_id = intval ( $_REQUEST ['ask_id'] );
 		$ask = D ( 'Ask' )->getAskInfo ( $ask_id );
 		$question_list = D ( 'AskQuestion' )->getQuestionsByAskid ( $ask_id );
@@ -124,7 +124,7 @@ class WapController extends WapBaseController {
 		$this->display ();
 	}
 	function doAsk() {
-		$param ['mdm'] = $_GET ['mdm'];
+		$param ['mdm'] =  I( 'mdm' );
 		$dao = D ( 'AskAnswer' );
 		$ask_id = $param ['ask_id'] = I ( 'get.ask_id' );
 		$question_id = I ( 'post.question_id', 0, 'intval' );

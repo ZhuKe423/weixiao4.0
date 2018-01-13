@@ -3,7 +3,7 @@
 <body class="result_page">
 	<div id="container" class="container">
     	<div class="result_top">
-    		<if condition="$res[result] eq 'success'">
+    		<if condition="$res['result'] eq 'success'">
             	<img src="__IMG__/jump_success.png"/>
             <else/>
             	<img src="__IMG__/jump_err.png"/>
@@ -12,7 +12,7 @@
             {$res.msg}
         </div>
         <div class="m_15">
-        	<if condition="$res[result] eq 'success'">
+        	<if condition="$res['result'] eq 'success'">
                 <div class="result_content">
                     <p><strong>奖品：</strong><br/>{$data.prize_title}</p>
                     <notempty name="address">

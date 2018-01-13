@@ -125,7 +125,7 @@ class AdminController extends HomeController {
 			$Model = D ( parse_name ( get_table_name ( $model ['id'] ), 1 ) );
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $model ['id'] );
-			if ($Model->create () && $Model->save ()) {
+			if ($Model->create () && false !== $Model->save ()) {
 				$this->editPublicLink ( $_POST ['uid'], $_POST ['public_ids'] );
 				$this->success ( '保存' . $model ['title'] . '成功！', U ( 'lists?model=' . $model ['name'], $this->get_param ) );
 			} else {
@@ -162,7 +162,7 @@ class AdminController extends HomeController {
 			}
 		} else {
 			$this->_getField ( $model );
-			$this->_display ( $templateFile );
+			$this->_display ();
 		}
 	}
 	function editPublicLink($uid, $ids) {

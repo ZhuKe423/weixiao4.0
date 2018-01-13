@@ -166,7 +166,9 @@ class CreditDataController extends HomeController {
 			$Model = D ( parse_name ( get_table_name ( $model ['id'] ), 1 ) );
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $model ['id'] );
-			if ($Model->create () && $Model->$act ()) {
+			$res = false;
+			$Model->create () && $res = $Model->$act ();
+			if ($res !== false ) {
 				// dump($Model->getLastSql());
 				$this->success ( '保存' . $model ['title'] . '成功！', U ( 'lists?model=' . $model ['name'] ) );
 			} else {

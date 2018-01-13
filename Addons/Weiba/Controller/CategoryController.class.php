@@ -42,7 +42,7 @@ class CategoryController extends ManageBaseController {
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $model ['id'] );
 			$this->checkTitle ( $_POST ['name'], $id );
-			if ($Model->create () && $Model->save ()) {
+			if ($Model->create () && false !== $Model->save ()) {
 				$this->_saveKeyword ( $model, $id );
 				
 				// 清空缓存

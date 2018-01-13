@@ -56,7 +56,7 @@ C:我从来没运动<br/><br/>
 			$Model = D ( parse_name ( get_table_name ( $this->model ['id'] ), 1 ) );
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $this->model ['id'] );
-			if ($Model->create () && $Model->save ()) {
+			if ($Model->create () && false !== $Model->save ()) {
 				$param ['test_id'] = $this->test_id;
 				$param ['model'] = $this->model ['id'];
 				$url = U ( 'lists', $param );

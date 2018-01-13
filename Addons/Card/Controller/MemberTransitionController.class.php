@@ -19,12 +19,6 @@ class MemberTransitionController extends BaseController {
 	function recharge_lists() {
 		$this->_navShow ( '充值查询', 'recharge_lists' );
 		
-		$this->assign ( 'add_button', false );
-		$this->assign ( 'del_button', false );
-		$this->assign ( 'check_all', false );
-		$this->assign ( 'search_url', addons_url ( "Card://MemberTransition/recharge_lists", array (
-				'mdm' => $_GET ['mdm'] 
-		) ) );
 		// $map ['manager_id'] = $this->mid;
 		$map ['token'] = get_token ();
 		$branch = M ( 'coupon_shop' )->where ( $map )->getFields ( 'id,name' );
@@ -81,7 +75,7 @@ class MemberTransitionController extends BaseController {
 						'egt',
 						$minVal 
 				);
-			} else if (! empty ( $maxVal ) || $maxVal == 0) {
+			} else if (! empty ( $maxVal )) {
 				$map ['recharge'] = array (
 						'elt',
 						$maxVal 
@@ -140,8 +134,10 @@ class MemberTransitionController extends BaseController {
 			$vo ['branch_id'] = $vo ['branch_id'] == 0 ? '商店总部' : $branch [$vo ['branch_id']];
 		}
 		
-		// dump($uInfo);
-		// dump($list_data);
+		$this->assign ( 'add_button', false );
+		$this->assign ( 'del_button', false );
+		$this->assign ( 'check_all', false );
+		$this->assign ( 'search_url', addons_url ( "Card://MemberTransition/recharge_lists" ) );
 		$this->assign ( $list_data );
 		$this->display ();
 	}
@@ -149,12 +145,6 @@ class MemberTransitionController extends BaseController {
 	function buy_lists() {
 		$this->_navShow ( '消费查询', 'buy_lists' );
 		
-		$this->assign ( 'add_button', false );
-		$this->assign ( 'del_button', false );
-		$this->assign ( 'check_all', false );
-		$this->assign ( 'search_url', addons_url ( "Card://MemberTransition/buy_lists", array (
-				'mdm' => $_GET ['mdm'] 
-		) ) );
 		// $map ['manager_id'] = $this->mid;
 		$map ['token'] = get_token ();
 		$branch = M ( 'coupon_shop' )->where ( $map )->getFields ( 'id,name' );
@@ -207,7 +197,7 @@ class MemberTransitionController extends BaseController {
 						'egt',
 						$minVal 
 				);
-			} else if (! empty ( $maxVal ) || $maxVal == 0) {
+			} else if (! empty ( $maxVal )) {
 				$map ['pay'] = array (
 						'elt',
 						$maxVal 
@@ -294,11 +284,11 @@ class MemberTransitionController extends BaseController {
 			
 			foreach ( $list_data ['list_data'] as &$vo ) {
 				$cardMember = $cardMemberDao->find ( $vo ['member_id'] );
-				
+				$branch = isset ( $branch [$vo ['branch_id']] ) ? $branch [$vo ['branch_id']] : '';
 				$data [0] = $vo ['member_id'] = $cardMember ['username'];
 				$data [1] = $vo ['phone'] = $cardMember ['phone'];
 				$data [2] = $is_export ? time_format ( $vo ['cTime'] ) : $vo ['cTime'];
-				$data [3] = $vo ['branch_id'] = $vo ['branch_id'] == 0 ? '商店总部' : $branch [$vo ['branch_id']];
+				$data [3] = $vo ['branch_id'] = $vo ['branch_id'] == 0 ? '商店总部' : $branch;
 				$data [4] = $vo ['pay'];
 				$data [5] = $vo ['sn_id'] = floatval ( $prizeData [$vo ['sn_id']] );
 				$data [6] = $is_export ? $pay_type [$vo ['pay_type']] : $vo ['pay_type'];
@@ -318,22 +308,17 @@ class MemberTransitionController extends BaseController {
 		$this->assign ( 'export_url', U ( 'buy_lists', $get_param ) );
 		
 		$this->assign ( $list_data );
+		
+		$this->assign ( 'add_button', false );
+		$this->assign ( 'del_button', false );
+		$this->assign ( 'check_all', false );
+		$this->assign ( 'search_url', addons_url ( "Card://MemberTransition/buy_lists" ) );
 		$this->display ();
 	}
 	
 	// 积分查询
 	function score_lists() {
 		$this->_navShow ( '积分查询', 'score_lists' );
-		
-		$this->assign ( 'add_button', false );
-		$this->assign ( 'del_button', false );
-		// $this->assign ( 'search_button', false );
-		$this->assign ( 'check_all', false );
-		$this->assign ( 'search_url', addons_url ( "Card://MemberTransition/score_lists", array (
-				'mdm' => $_GET ['mdm'] 
-		) ) );
-		$this->assign ( 'search_key', 'username' );
-		$this->assign ( 'placeholder', '请输入用户名或手机号' );
 		
 		$list_data ['list_grids'] = [ 
 				'credit_name' => [ 
@@ -367,6 +352,7 @@ class MemberTransitionController extends BaseController {
 		
 		// 交易方式查询
 		$creditType = I ( 'credit_type' );
+		$this->assign ( 'credit_type', $creditType );
 		if ($creditType) {
 			foreach ( $creditTitle as $key => $cr ) {
 				if ($creditType == $key) {
@@ -439,6 +425,7 @@ class MemberTransitionController extends BaseController {
 		
 		foreach ( $list_data ['list_data'] as &$vo ) {
 			$vo ['cTime'] = time_format ( $vo ['cTime'] );
+			$vo ['operator'] = '';
 			if ($vo ['credit_name'] == 'card_member_update_score') {
 				if ($vo ['score'] > 0) {
 					$vo ['credit_name'] = '手动增加';
@@ -467,12 +454,19 @@ class MemberTransitionController extends BaseController {
 				$vo ['credit_name'] = $vo ['credit_title'];
 			}
 		}
-		
+		$this->assign ( 'add_button', false );
+		$this->assign ( 'del_button', false );
+		// $this->assign ( 'search_button', false );
+		$this->assign ( 'check_all', false );
+		$this->assign ( 'search_url', addons_url ( "Card://MemberTransition/score_lists" ) );
+		$this->assign ( 'search_key', 'username' );
+		$this->assign ( 'placeholder', '请输入用户名或手机号' );
 		$this->assign ( $list_data );
+
 		$this->display ();
 	}
 	private function _navShow($title, $act) {
-		$param ['mdm'] = $_GET ['mdm'];
+		$param ['mdm'] = I ( 'mdm' );
 		$res ['title'] = '会员交易';
 		$res ['url'] = addons_url ( 'Card://MemberTransition/lists', $param );
 		$res ['class'] = '';
@@ -486,15 +480,6 @@ class MemberTransitionController extends BaseController {
 	}
 	function sncode_lists() {
 		$this->_navShow ( '优惠券核销查询', 'sncode_lists' );
-		
-		$this->assign ( 'add_button', false );
-		$this->assign ( 'del_button', false );
-		$this->assign ( 'check_all', false );
-		$this->assign ( 'search_url', addons_url ( "Card://MemberTransition/sncode_lists", array (
-				'mdm' => $_GET ['mdm'] 
-		) ) );
-		$this->assign ( 'search_key', 'username' );
-		$this->assign ( 'placeholder', '请输入用户名或手机号' );
 		
 		$list_data ['list_grids'] = [ 
 				'username' => [ 
@@ -524,7 +509,8 @@ class MemberTransitionController extends BaseController {
 		$this->assign ( 'credit_title', $creditTitle );
 		
 		// 交易方式查询
-		$coupon_id = I ( 'coupon_id' );
+		$coupon_id = I ( 'coupon_id', 0, 'intval' );
+		$this->assign ( 'coupon_id', $coupon_id );
 		if ($coupon_id > 0) {
 			$map ['target_id'] = $coupon_id;
 		}
@@ -619,6 +605,12 @@ class MemberTransitionController extends BaseController {
 		$get_param ['is_export'] = 1;
 		$this->assign ( 'export_url', U ( 'sncode_lists', $get_param ) );
 		$this->assign ( $list_data );
+		$this->assign ( 'add_button', false );
+		$this->assign ( 'del_button', false );
+		$this->assign ( 'check_all', false );
+		$this->assign ( 'search_url', addons_url ( "Card://MemberTransition/sncode_lists" ) );
+		$this->assign ( 'search_key', 'username' );
+		$this->assign ( 'placeholder', '请输入用户名或手机号' );
 		$this->display ();
 	}
 	// 消费统计
@@ -632,8 +624,8 @@ class MemberTransitionController extends BaseController {
 		if ($year && $month && $is_ajax) {
 			$start_date = $year . '-' . $month;
 			$start_date = strtotime ( $start_date );
-			$end_date = strtotime('+1 month', $start_date);
-
+			$end_date = strtotime ( '+1 month', $start_date );
+			
 			$map ['cTime'] = array (
 					'between',
 					array (
@@ -702,7 +694,7 @@ class MemberTransitionController extends BaseController {
 			$day = $this->getDays ( $year, $month );
 			$start_date = $year . '-' . $month;
 			$start_date = strtotime ( $start_date );
-			$end_date = strtotime('+1 month', $start_date);
+			$end_date = strtotime ( '+1 month', $start_date );
 			$map1 ['cTime'] = $map2 ['cTime'] = array (
 					'between',
 					array (
@@ -739,22 +731,23 @@ class MemberTransitionController extends BaseController {
 		$this->assign ( 'get_score', $getTotal );
 		$this->assign ( 'use_score', $useTotal );
 		
-		$get_data = M ( 'credit_data' )->where ( $map1 )->field ( "sum(score) totalScore,from_unixtime(cTime,'%m-%d') allday" )->group ( "allday" )->select ();
-		$use_data = M ( 'credit_data' )->where ( $map2 )->field ( "sum(score) totalScore,from_unixtime(cTime,'%m-%d') allday" )->group ( "allday" )->select ();
+		$get_data = ( array ) M ( 'credit_data' )->where ( $map1 )->field ( "sum(score) totalScore,from_unixtime(cTime,'%m-%d') allday" )->group ( "allday" )->select ();
+		$use_data = ( array ) M ( 'credit_data' )->where ( $map2 )->field ( "sum(score) totalScore,from_unixtime(cTime,'%m-%d') allday" )->group ( "allday" )->select ();
 		$month = str_pad ( $month, 2, "0", STR_PAD_LEFT );
+		$the_date = [ ];
 		for($i = 1; $i <= $day; $i ++) {
 			$i = str_pad ( $i, 2, "0", STR_PAD_LEFT );
 			$dateArr [$month . '-' . $i] = $month . '-' . $i;
 			$the_date [] = $month . '-' . $i;
 		}
-		// dump($dateArr);
-		// dump($get_data);
+		$getAllScore = $useAllScore = [ ];
 		foreach ( $get_data as $v ) {
 			// $getAllDay[]=$v['allday'];
 			if ($dateArr [$v ['allday']]) {
 				$getAllScore [] = round ( floatval ( $v ['totalScore'] ), 2 );
 			}
 		}
+		
 		foreach ( $use_data as $v ) {
 			// $useAllDay[]=$v['allday'];
 			if ($dateArr [$v ['allday']]) {
@@ -791,7 +784,8 @@ class MemberTransitionController extends BaseController {
 			} else {
 				$this->error ( '400063:兑换失败' );
 			}
+		} else {
+			$this->display ();
 		}
-		$this->display ();
 	}
 }

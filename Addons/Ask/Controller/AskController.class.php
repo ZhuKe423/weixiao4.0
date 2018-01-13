@@ -14,14 +14,14 @@ class AskController extends ManageBaseController {
 		$this->display ( 'Home@Addons/preview' );
 	}
 	function ask_question() {
-		$param ['mdm'] = $_GET ['mdm'];
+		$param ['mdm'] =  I( 'mdm' );
 		$param ['ask_id'] = I ( 'id', 0, 'intval' );
 		$url = addons_url ( 'Ask://Question/lists', $param );
 		// dump($url);
 		redirect ( $url );
 	}
 	function ask_answer() {
-		$param ['mdm'] = $_GET ['mdm'];
+		$param ['mdm'] =  I( 'mdm' );
 		$param ['ask_id'] = I ( 'id', 0, 'intval' );
 		$url = addons_url ( 'Ask://Answer/lists', $param );
 		// dump($url);

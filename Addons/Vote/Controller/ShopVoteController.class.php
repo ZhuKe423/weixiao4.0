@@ -18,7 +18,7 @@ class ShopVoteController extends ManageBaseController {
 	public function lists() {
 		$isAjax = I ( 'isAjax' );
 		$isRadio = I ( 'isRadio' );
-		$param ['mdm'] = $_GET ['mdm'];
+		$param ['mdm'] =  I( 'mdm' );
 		$res ['title'] = '投票活动';
 		$res ['url'] = addons_url ( 'Vote://ShopVote/lists', $param );
 		$res ['class'] = CONTROLLER_NAME == 'ShopVote' ? 'current' : '';
@@ -47,7 +47,7 @@ class ShopVoteController extends ManageBaseController {
 			$Model = D ( parse_name ( get_table_name ( $this->model ['id'] ), 1 ) );
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $this->model ['id'] );
-			if ($Model->create () && $Model->save ()) {
+			if ($Model->create () && false !== $Model->save ()) {
 				D ( 'Addons://Vote/ShopVote' )->getInfo ( $id, true );
 				$this->success ( '保存' . $this->model ['title'] . '成功！', U ( 'lists?model=' . $this->model ['name'], $this->get_param ) );
 			} else {
@@ -101,7 +101,7 @@ class ShopVoteController extends ManageBaseController {
 	 * 投票选项列表
 	 */
 	function option_lists() {
-		$param1 ['mdm'] = $param ['mdm'] = $_GET ['mdm'];
+		$param1 ['mdm'] = $param ['mdm'] =  I( 'mdm' );
 		$map ['vote_id'] = $param ['vote_id'] = I ( 'vote_id' );
 		if (empty ( $param ['vote_id'] )) {
 			$this->error ( '400438:获取不到投票活动' );
@@ -132,7 +132,7 @@ class ShopVoteController extends ManageBaseController {
 		$this->display ( 'lists' );
 	}
 	function option_add() {
-		$param1 ['mdm'] = $param ['mdm'] = $_GET ['mdm'];
+		$param1 ['mdm'] = $param ['mdm'] =  I( 'mdm' );
 		$param ['vote_id'] = I ( 'vote_id' );
 		$model = $this->getModel ( 'shop_vote_option' );
 		$postUrl = addons_url ( 'Vote://ShopVote/option_add', $param );
@@ -174,7 +174,7 @@ class ShopVoteController extends ManageBaseController {
 	}
 	function option_edit() {
 		$model = $this->getModel ( 'shop_vote_option' );
-		$param ['mdm'] = $_GET ['mdm'];
+		$param ['mdm'] =  I( 'mdm' );
 		
 		$res ['title'] = '投票活动';
 		$res ['url'] = addons_url ( 'Vote://ShopVote/lists', $param );
@@ -202,7 +202,7 @@ class ShopVoteController extends ManageBaseController {
 			$Model = D ( parse_name ( get_table_name ( $model ['id'] ), 1 ) );
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $model ['id'] );
-			if ($Model->create () && $Model->save ()) {
+			if ($Model->create () && false !== $Model->save ()) {
 				D ( 'Addons://Vote/ShopVoteOption' )->getInfo ( $id, true );
 				D ( 'Addons://Vote/ShopVoteOption' )->getOptions ( $_POST ['vote_id'], true );
 				$this->success ( '保存' . $model ['title'] . '成功！', U ( 'option_lists?model=' . $model ['name'] . '&vote_id=' . $_POST ['vote_id'] . '&mdm=' . $_GET ['mdm'] ) );
@@ -231,7 +231,7 @@ class ShopVoteController extends ManageBaseController {
 	// 显示投票记录
 	function show_log() {
 		$model = $this->getModel ( 'shop_vote_log' );
-		$param1 ['mdm'] = $param ['mdm'] = $_GET ['mdm'];
+		$param1 ['mdm'] = $param ['mdm'] =  I( 'mdm' );
 		$vote_id = I ( 'vote_id' );
 		$vote_id && $param ['vote_id'] = $map ['vote_id'] = $vote_id;
 		$opt_id = I ( 'option_id' );
@@ -364,7 +364,7 @@ class ShopVoteController extends ManageBaseController {
 	}
 	/* 预览 */
 	function preview() {
-		$id = I ( 'vote_id', 0, intval );
+		$id = I ( 'vote_id', 0, 'intval' );
 		$url = addons_url ( 'Vote://Wap/index', array (
 				'vote_id' => $id 
 		) );

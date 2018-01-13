@@ -11,7 +11,7 @@
     	<div class="conpons_list" id="conpons_list_0">
     	<if condition="!empty($list[0])" >
         	<volist name='list[0]' id="vo">
-                 	<a class="conpon_item" href="{:addons_url('Coupon://Wap/show',array('id'=>$vo['id'],'sn_id'=>$vo['sn_id']))}">
+                 	<a class="conpon_item" href="{:addons_url('Coupon://Wap/showIndex',array('id'=>$vo['id'],'sn_id'=>$vo['sn_id']))}">
                   <div class="coupon_head" 
                   	 style="<notempty name="vo[background]">background:url({$vo.background|get_cover_url}) no-repeat; background-size:100% auto;<else />background:url({:ADDON_PUBLIC_PATH}/cover_pic.jpg) no-repeat; background-size:100% auto;</notempty>"
                     >

@@ -54,6 +54,10 @@ class NewsAddon extends Plugin {
 			$this->assign ( 'count', $count );
 			$this->assign ( 'main', $main );
 			$this->assign ( 'list', $list );
+		} else {
+			$this->assign ( 'count', 0 );
+			$this->assign ( 'main', [ ] );
+			$this->assign ( 'list', [ ] );
 		}
 		$this->assign ( $data );
 		

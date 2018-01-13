@@ -64,7 +64,7 @@ function downloadPackage(version){
 }
 function unzipPackage(){
     showMsg('更新包解压中');
-    var version = "{:$_GET['version']|t}";
+    var version = "{:I('version')}";
 	var postURL = "{:U('admin/Update/step03_unzipPackage')}&version=" + version;
 	$.post(postURL, {id:1}, function(res){
 	    if(res!=1){
@@ -76,7 +76,7 @@ function unzipPackage(){
 }
 function checkFileIsWritable(){
     showMsg('判断系统文件的可写权限');
-	var packageName = "{:$_GET['packageName']|t}";
+	var packageName = "{:I('packageName')}";
 	var postURL = "{:U('admin/Update/step04_checkFileIsWritable')}&packageName=" + packageName;
 	$.post(postURL, {id:1}, function(res){
          if(res!=1){
@@ -117,7 +117,7 @@ function finishUpate(){
 		}
 	});
 }
-var step = "{:$_GET['step']|t}";
+var step = "{:I('step')}";
 
 if(step=='unzipPackage'){
     unzipPackage();

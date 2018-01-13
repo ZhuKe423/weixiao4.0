@@ -10,7 +10,7 @@ class ScoreController extends ManageBaseController {
 		parent::_initialize ();
 		
 		$type = I ( 'type', 0, 'intval' );
-		$param ['mdm'] = $_GET ['mdm'];
+		$param ['mdm'] =  I( 'mdm' );
 		$param ['type'] = 0;
 		$res ['title'] = '所有的积分兑换活动';
 		$res ['url'] = addons_url ( 'Card://Score/lists', $param );
@@ -174,8 +174,9 @@ class ScoreController extends ManageBaseController {
 			$Model = D ( parse_name ( get_table_name ( $model ['id'] ), 1 ) );
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $model ['id'] );
-			
-			if ($Model->create () && $res = $Model->$act ()) {
+			$res = false;
+			$Model->create () && $res = $Model->$act ();
+			if ($res !== false ) {
 				$act == 'add' && $id = $res;
 				
 				$this->success ( '保存' . $model ['title'] . '成功！', U ( 'lists?model=' . $model ['name'], $this->get_param ) );

@@ -11,8 +11,8 @@
         
         <php>if(C('MATERIAL')) { </php> 
         		<div style="padding-bottom: 20px;padding-left: 15px;">
-                <a class="btn" href="{:U('syc_image_to_wechat',array('mdm'=>$_GET['mdm']))}">一键上传素材到微信素材库</a>
-                <a class="btn" href="{:U('syc_image_from_wechat',array('mdm'=>$_GET['mdm']))}">一键下载微信素材库到本地</a>
+                <a class="btn" href="{:U('syc_image_to_wechat')}">一键上传素材到微信素材库</a>
+                <a class="btn" href="{:U('syc_image_from_wechat')}">一键下载微信素材库到本地</a>
                 </div>
                  <php> } </php>
                  
@@ -73,7 +73,7 @@ function uploadImgCallback(name,id,src){
 								'</div>'+
 								'<div class="picture_action">'+
 									'<a href="javascript:;" data-clipboard-text="'+src+'" id="picture_'+id+'">复制链接</a>'+
-									'<a href="javascript:;" onclick="del({$vo.id}, this)" class="ajax-post" data-url="">删除</a>'+
+									'<a href="javascript:;" onclick="del('+id+', this)" class="ajax-post" data-url="">删除</a>'+
 								'</div>'+
 							'</div>'+
 						'</li>');

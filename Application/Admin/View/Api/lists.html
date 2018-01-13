@@ -15,8 +15,8 @@
         <if condition="$search_button">
 		<div class="search-form fr cf">
 			<div class="sleft">
-            <php> $get_param[model]=$model['name']; $search_url || $search_url = U(MODULE_NAME.'/'.CONTROLLER_NAME.'/lists', $get_param);</php>
-                <php>empty($search_key) && $search_key=$model['search_key'];empty($search_key) && $search_key='title';</php>
+            <php> $get_param['model']=$model['name']; $search_url || $search_url = U(MODULE_NAME.'/'.CONTROLLER_NAME.'/lists', $get_param);</php>
+                <php>empty($search_key) && isset($model['search_key']) && $search_key=$model['search_key'];empty($search_key) && $search_key='title';</php>
 				<input type="text" name="{$search_key}" class="search-input" value="{:I($search_key)}" placeholder="{$placeholder}">
 				<a class="sch-btn" href="javascript:;" id="search" url="{$search_url}"><i class="btn-search"></i></a>
 			</div>

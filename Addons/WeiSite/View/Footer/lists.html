@@ -21,8 +21,8 @@
       <div class="table-bar">
         <div class="fl">
 			<div class="tools">
-				<if condition="$add_button"><php> $add_url || $add_url = U('add?model='.$model['id'],array('mdm'=>$_GET['mdm']));</php><a class="btn" href="{$add_url}">新 增</a></if>
-				<if condition="$del_button"><php> $del_url || $del_url = U('del?model='.$model['id'],array('mdm'=>$_GET['mdm']));</php><button class="btn ajax-post confirm" target-form="ids" url="{$del_url}">删 除</button></if>                
+				<if condition="$add_button"><php> $add_url || $add_url = U('add?model='.$model['id']);</php><a class="btn" href="{$add_url}">新 增</a></if>
+				<if condition="$del_button"><php> $del_url || $del_url = U('del?model='.$model['id']);</php><button class="btn ajax-post confirm" target-form="ids" url="{$del_url}">删 除</button></if>                
 			</div>
         </div>
         <!-- 高级搜索 -->
@@ -30,7 +30,7 @@
         <div class="search-form fr cf">
           <div class="sleft">
             <php> $search_url || $search_url = addons_url(MODULE_NAME.'://'.CONTROLLER_NAME.'/lists',array('model'=>$model['name']));</php>
-            <php>empty($search_key) && $search_key=$model['search_key'];empty($search_key) && $search_key='title';</php>
+            <php>empty($search_key) && isset($model['search_key']) && $search_key=$model['search_key'];empty($search_key) && $search_key='title';</php>
             <input type="text" name="{$search_key}" class="search-input" value="{:I($search_key)}" placeholder="请输入关键字">
             <a class="sch-btn" href="javascript:;" id="search" url="{$search_url}"><i class="btn-search"></i></a> </div>
         </div>

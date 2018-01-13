@@ -59,8 +59,7 @@ class CustomReplyMultController extends BaseController {
 		$this->assign ( $list_data );
 		// dump ( $list_data );
 		$this->assign ( 'search_button', false );
-		$templateFile = $this->model ['template_list'] ? $this->model ['template_list'] : '';
-		$this->display ( $templateFile );
+		$this->display ();
 	}
 	// 通用插件的编辑模型
 	public function edit() {

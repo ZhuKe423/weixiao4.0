@@ -243,7 +243,7 @@ class PaymentController extends BaseController {
 			} else {
 				// 获取模型的字段信息
 				$Model = $this->checkAttr ( $Model, $this->model ['id'] );
-				if ($Model->create () && $Model->save ()) {
+				if ($Model->create () && false !== $Model->save ()) {
 					switch ($savetype) {
 						case 0 : // 微信支付
 							$this->success ( '保存' . $this->model ['title'] . '成功！', U ( 'lists', array (

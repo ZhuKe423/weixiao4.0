@@ -33,7 +33,7 @@ class WeixinMessageController extends HomeController {
 		// $map ['type'] = 0;
 		$map ['ToUserName'] = get_token ();
 		$list = M ( 'weixin_message' )->where ( $map )->order ( 'id desc' )->selectPage ();
-		
+
 		$dao = D ( 'Common/User' );
 		foreach ( $list ['list_data'] as &$v ) {
 			$user = $dao->getUserInfoByOpenid ( $v ['FromUserName'] );
@@ -42,7 +42,6 @@ class WeixinMessageController extends HomeController {
 			}
 			$v ['Content'] = $this->_deal_content ( $v );
 		}
-		
 		$this->assign ( $list );
 		$this->display ( 'collect' );
 	}
@@ -82,17 +81,24 @@ class WeixinMessageController extends HomeController {
 		}
 		
 		$token = get_token ();
-// 		$sql = "SELECT * FROM (SELECT * FROM {$px}weixin_message WHERE type=0 AND `ToUserName` = '{$token}' ORDER BY is_read ASC, id DESC) temp GROUP BY FromUserName ORDER BY is_read ASC,id DESC LIMIT " . $limit;
-// 		$list ['list_data'] = M ()->query ( $sql );
-		$map['type']=0;
-		$map['ToUserName']=$token;
-		$ids = M('weixin_message')->where($map)->field('MAX(id) as mid')->group('FromUserName')->page($page,$row)->select();
-		foreach ($ids as $vv){
-		    $arr[]=$vv['mid'];
+		// $sql = "SELECT * FROM (SELECT * FROM {$px}weixin_message WHERE type=0 AND `ToUserName` = '{$token}' ORDER BY is_read ASC, id DESC) temp GROUP BY FromUserName ORDER BY is_read ASC,id DESC LIMIT " . $limit;
+		// $list ['list_data'] = M ()->query ( $sql );
+		$map ['type'] = 0;
+		$map ['ToUserName'] = $token;
+		$ids = M ( 'weixin_message' )->where ( $map )->field ( 'MAX(id) as mid' )->group ( 'FromUserName' )->page ( $page, $row )->select ();
+		$arr = $list = [ ];
+		if (! empty ( $ids )) {
+			foreach ( $ids as $vv ) {
+				$arr [] = $vv ['mid'];
+			}
 		}
-		if (!empty($arr)){
-		    $map1['id']=array('in',$arr);
-		    $list ['list_data'] = M('weixin_message')->where($map1)->order('is_read ASC,id DESC')->page($page,$row)->select();
+		$list ['list_data'] = [ ];
+		if (! empty ( $arr )) {
+			$map1 ['id'] = array (
+					'in',
+					$arr 
+			);
+			$list ['list_data'] = M ( 'weixin_message' )->where ( $map1 )->order ( 'is_read ASC,id DESC' )->page ( $page, $row )->select ();
 		}
 		
 		$dao = D ( 'Common/User' );
@@ -149,8 +155,8 @@ class WeixinMessageController extends HomeController {
 		vendor ( "qqface" );
 		$data ['Content'] = qqface_convert_html ( $data ['Content'] );
 		$dd ['Content'] = parseHtmlemoji ( $data ['Content'] );
-		if ($dd ['Content'] == '【收到不支持的消息类型，暂无法显示】'){
-		    $dd ['Content'] = '【该消息为名片消息类型，暂无法显示】';
+		if ($dd ['Content'] == '【收到不支持的消息类型，暂无法显示】') {
+			$dd ['Content'] = '【该消息为名片消息类型，暂无法显示】';
 		}
 		switch ($data ['MsgType']) {
 			case 'image' :
@@ -221,13 +227,13 @@ class WeixinMessageController extends HomeController {
 				$data ['Content'] = 'video'; // TODO
 				break;
 			case 'shortvideo' :
-			    $msgtype='shortvideo';
-			    $dd['Content']='【该消息为短视频消息类型，暂无法显示】';
+				$msgtype = 'shortvideo';
+				$dd ['Content'] = '【该消息为短视频消息类型，暂无法显示】';
 				$data ['Content'] = 'shortvideo'; // TODO
 				break;
 			case 'location' :
-			    $msgtype='location';
-			    $dd['Content']='【该消息为地理位置消息类型，暂无法显示】';
+				$msgtype = 'location';
+				$dd ['Content'] = '【该消息为地理位置消息类型，暂无法显示】';
 				$data ['Content'] = 'location'; // TODO
 				break;
 			case 'link' :
@@ -277,7 +283,7 @@ class WeixinMessageController extends HomeController {
 						// dump($content['news']);
 						$news = $content ['news'] ['articles'];
 						$index = count ( $news ) - 1;
-// 						$fist = $news [$index];
+						// $fist = $news [$index];
 						$fist = $news [0];
 						unset ( $news [0] );
 						$other = $news;
@@ -332,8 +338,8 @@ class WeixinMessageController extends HomeController {
 							0x32,
 							0x20E3 
 					) 
-			) // KEYCAP 2
-;
+			); // KEYCAP 2
+			
 			foreach ( $src as $unified ) {
 				$bytes = '';
 				$hex = array ();
@@ -414,8 +420,8 @@ class WeixinMessageController extends HomeController {
 			case 'text' :
 				$param ['touser'] = I ( 'openid' );
 				$param ['msgtype'] = 'text';
-				$content = I('content');
-				$content=str_replace("\"","'",$content);
+				$content = I ( 'content' );
+				$content = str_replace ( "\"", "'", $content );
 				$param ['text'] ['content'] = $content;
 				break;
 			case 'appmsg' :
@@ -430,7 +436,7 @@ class WeixinMessageController extends HomeController {
 					$art ['title'] = $vo ['title'];
 					$art ['description'] = $vo ['intro'];
 					if (empty ( $vo ['url'] )) {
-						$art ['url'] = U('Home/Wap/news_detail', array (
+						$art ['url'] = U ( 'Home/Wap/news_detail', array (
 								'id' => $vo ['id'] 
 						) );
 					} else {
@@ -519,7 +525,7 @@ class WeixinMessageController extends HomeController {
 		
 		$res = post_data ( $url, $param );
 		if ($res ['errcode'] != 0) {
-			$this->error ( '110205:'.error_msg ( $res ) );
+			$this->error ( '110205:' . error_msg ( $res ) );
 		} else {
 			$data ['ToUserName'] = get_token ();
 			$data ['FromUserName'] = $param ['touser'];
@@ -565,7 +571,7 @@ class WeixinMessageController extends HomeController {
 		$url = 'https://api.weixin.qq.com/cgi-bin/media/upload?access_token=' . get_access_token ();
 		$res = post_data ( $url, $param, true );
 		if (isset ( $res ['errcode'] ) && $res ['errcode'] != 0) {
-			$this->error ( '110208:'.error_msg ( $res, '封面图上传' ) );
+			$this->error ( '110208:' . error_msg ( $res, '封面图上传' ) );
 		}
 		
 		return $res ['media_id'];
@@ -700,7 +706,9 @@ class WeixinMessageController extends HomeController {
 		if ($res1) {
 			// $isMaterial=$message['is_material'];
 			$save ['is_material'] = $set_sucai;
-			$res = M ( 'weixin_message' )->where ( ['id' => $id ] )->save ( $save );
+			$res = M ( 'weixin_message' )->where ( [ 
+					'id' => $id 
+			] )->save ( $save );
 		}
 		
 		echo $res;

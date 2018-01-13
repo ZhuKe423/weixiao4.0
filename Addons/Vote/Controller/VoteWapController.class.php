@@ -39,7 +39,7 @@ class VoteWapController extends WapBaseController {
 		$this->assign ( 'overtime', $overtime );
 		$canJoin = ! empty ( $openid ) && ! empty ( $token ) && ! $overtime && ! ($this->_is_join ( $vote_id, $this->mid, $token ));
 		$this->assign ( 'canJoin', $canJoin );
-		$test_id = intval ( $_REQUEST ['test_id'] );
+		$test_id = I ( 'test_id', 0, 'intval' );
 		$this->display ();
 	}
 	function _getVoteInfo($id) {
@@ -55,6 +55,7 @@ class VoteWapController extends WapBaseController {
 		
 		// dump($info);
 		$opts = D ( 'VoteOption' )->getList ( $id );
+		$total = 0;
 		foreach ( $opts as $p ) {
 			$total += $p ['opt_count'];
 		}
@@ -106,7 +107,7 @@ class VoteWapController extends WapBaseController {
 		// 增加积分
 		add_credit ( 'vote' );
 		
-		redirect ( U ( 'show', 'id=' . $vote_id ) );
+		redirect ( U ( 'showIndex', 'id=' . $vote_id ) );
 	}
 	
 	// 已过期返回 true ,否则返回 false
@@ -142,7 +143,7 @@ class VoteWapController extends WapBaseController {
 		}
 		return false;
 	}
-	function show() {
+	function showIndex() {
 		$id = I ( 'id' );
 		$url = addons_url ( 'Vote://VoteWap/index', [ 
 				'id' => $id 

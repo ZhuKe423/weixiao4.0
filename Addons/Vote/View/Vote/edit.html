@@ -29,7 +29,7 @@
                             <input type="file" id="upload_picture_picurl">
                             <input type="hidden" name="picurl" id="cover_id_picurl" value="{$data.picurl}"/>
                             <div class="upload-img-box" rel="img">
-                              <notempty name="data[picurl]">
+                              <notempty name="data['picurl']">
                                 <div class="upload-pre-item2"><img width="100" height="100" src="{$data.picurl|get_cover_url}"/></div>
                                 <em class="edit_img_icon">&nbsp;</em>
                               </notempty>
@@ -52,7 +52,7 @@
                 			<volist name=":parse_field_attr($fields['type']['extra'])" id="vo">
                           	<div class="check-item">
 								  <input type="radio" class="regular-radio toggle-data" value="{$key}" id="type_{$key}" name="type" toggle-data="{$vo|get_hide_attr}"
-								  <eq name="data[type]" value="$key">checked="checked"</eq> />
+								  <eq name="data['type']" value="$key">checked="checked"</eq> />
 								  <label for="type_{$key}"></label>{$vo|clean_hide_attr} 
 							  </div>
                           </volist>        
@@ -76,11 +76,11 @@
                     <label class="item-label"><span class="need_flag">*</span>文字/图片选项</label>
                     <div class="controls">
                       <div class="check-item">
-                              <input type="radio" name="is_img" value="0" class="regular-radio" id="is_img_0" <if condition="$data[is_img]==0">checked</if> onClick="changeOption()"><label for="is_img_0"> </label>
+                              <input type="radio" name="is_img" value="0" class="regular-radio" id="is_img_0" <if condition="$data['is_img']==0">checked</if> onClick="changeOption()"><label for="is_img_0"> </label>
                               文字投票
                            </div>
                            <div class="check-item">   
-                              <input type="radio" name="is_img" value="1" class="regular-radio" id="is_img_1" <if condition="$data[is_img]==1">checked</if> onClick="changeOption()">
+                              <input type="radio" name="is_img" value="1" class="regular-radio" id="is_img_1" <if condition="$data['is_img']==1">checked</if> onClick="changeOption()">
                               <label for="is_img_1"> </label>图片投票   
                         
                         </div>

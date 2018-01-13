@@ -12,8 +12,8 @@
             <div style="padding-bottom: 20px;padding-left: 15px;">
             <a class="btn" href="{:U('video_add',array('mdm'=>I('mdm')))}">新 增</a>
             <php>if(C('MATERIAL')) { </php> 
-                <a class="btn" href="{:U('syc_video_to_wechat',array('mdm'=>$_GET['mdm']))}">一键上传素材到微信素材库</a>
-                <a class="btn" href="{:U('syc_file_from_wechat',array('mdm'=>$_GET['mdm']))}&type=2">一键下载微信素材库到本地</a>
+                <a class="btn" href="{:U('syc_video_to_wechat')}">一键上传素材到微信素材库</a>
+                <a class="btn" href="{:U('syc_file_from_wechat')}&type=2">一键下载微信素材库到本地</a>
              <php> } </php>
             </div>
                  

@@ -16,6 +16,7 @@ class CardLevelModel extends Model {
 		$map1 ['uid'] = $uid;
 		$cardMember = M ( 'card_member' )->where ( $map1 )->find ();
 		$cardLevel = M ( 'card_level' )->find ( $cardMember ['level'] );
+		$levelInfo = [ ];
 		foreach ( $levelList as $vo ) {
 			if (empty ( $cardLevel ) || $vo ['score'] > $cardLevel ['score'] || $vo ['recharge'] > $cardLevel ['recharge']) {
 				if ($vo ['score'] >= 0 && $vo ['recharge'] >= 0) {

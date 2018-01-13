@@ -30,7 +30,7 @@ class WishCardContentController extends BaseController{
 		$templateFile = $this->model ['template_list'] ? $this->model ['template_list'] : '';
 		$this->assign('search_key','content');
 		$this->assign('search_url',U('lists'));
-		$this->display ( $templateFile );
+		$this->display ();
 	}
 	function add() {
 		$map ['token'] = get_token ();
@@ -64,7 +64,7 @@ class WishCardContentController extends BaseController{
 			$_POST['content_cate'] = M('WishCardContentCate')->where($cate_data)->getField('content_cate_name');
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $model ['id'] );
-			if ($Model->create () && $Model->save ()) {
+			if ($Model->create () && false !== $Model->save ()) {
 				$this->_saveKeyword ( $model, $id );
 			}
 			// 清空缓存

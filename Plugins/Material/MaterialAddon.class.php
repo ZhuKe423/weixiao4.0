@@ -33,20 +33,18 @@ class MaterialAddon extends Plugin {
 	 * table=addons&type=1&value_field=name&title_field=title&order=id desc
 	 */
 	public function material($data) {
-		$manager_id = $GLOBALS ['uid'];
-		$token = get_token ();
-		$data ['extra'] = str_replace ( array (
-				'[manager_id]',
-				'[token]' 
-		), array (
-				$manager_id,
-				$token 
-		), $data ['extra'] );
-		// dump ( $json );
-		
 		$data ['default_value'] = $data ['value'];
-		$valArr = wp_explode ( $data ['value'], ':' );
-		$data [$valArr [0] . '_id'] = $valArr [1];
+		isset ( $data ['default_type'] ) || $data ['default_type'] = '';
+		isset ( $data ['default_id'] ) || $data ['default_id'] = '';
+		isset ( $data ['text_id'] ) || $data ['text_id'] = '';
+		isset ( $data ['news_id'] ) || $data ['news_id'] = '';
+		isset ( $data ['img_id'] ) || $data ['img_id'] = '';
+		isset ( $data ['voice_id'] ) || $data ['voice_id'] = '';
+		isset ( $data ['video_id'] ) || $data ['video_id'] = '';
+		if (! empty ( $data ['value'] )) {
+			$valArr = wp_explode ( $data ['value'], ':' );
+			$data [$valArr [0] . '_id'] = isset ( $valArr [1] ) ? $valArr [1] : '';
+		}
 		$this->assign ( $data );
 		$this->display ( 'content' );
 	}

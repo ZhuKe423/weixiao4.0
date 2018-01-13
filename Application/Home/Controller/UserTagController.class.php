@@ -1,4 +1,5 @@
 <?php
+
 // +----------------------------------------------------------------------
 // | OneThink [ WE CAN DO IT JUST THINK IT ]
 // +----------------------------------------------------------------------
@@ -7,7 +8,6 @@
 // | Author: 麦当苗儿 <zuojiazi@vip.qq.com> <http://www.zjzit.cn>
 // +----------------------------------------------------------------------
 namespace Home\Controller;
-
 
 /**
  * 前台首页控制器
@@ -20,22 +20,24 @@ class UserTagController extends HomeController {
 	}
 	// 通用插件的列表模型
 	public function lists() {
-	    $map['token']=get_token();
-	    session ( 'common_condition' ,$map);
-	    $this->assign('search_url',U('lists',array('mdm'=>$_GET['mdm'])));
+		$map ['token'] = get_token ();
+		session ( 'common_condition', $map );
+		$this->assign ( 'search_url', U ( 'lists' ) );
 		parent::common_lists ( $this->model, 0, 'Addons/lists' );
 	}
 	
 	// 通用插件的编辑模型
 	public function edit() {
-	    if (IS_POST){
-	        $tagMap['tag_id']=$_POST['id'];
-            $uids=M('user_tag_link')->where($tagMap)->getFields('uid');
-            foreach ($uids as $uid){
-                $key = 'getUserInfo_' . $uid;
-                S ( $key ,null);                
-            }
-	    }
+		if (IS_POST) {
+			$tagMap ['tag_id'] = $_POST ['id'];
+			$uids = M ( 'user_tag_link' )->where ( $tagMap )->getFields ( 'uid' );
+			if (! empty ( $uids )) {
+				foreach ( $uids as $uid ) {
+					$key = 'getUserInfo_' . $uid;
+					S ( $key, null );
+				}
+			}
+		}
 		parent::common_edit ( $this->model, 0, 'Addons/edit' );
 	}
 	

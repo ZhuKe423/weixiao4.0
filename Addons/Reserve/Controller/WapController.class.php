@@ -129,8 +129,9 @@ class WapController extends WapBaseController {
 			
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $this->model ['id'], $fields );
-			
-			if ($Model->create () && $res = $Model->$act ()) {
+			$res = false;
+			$Model->create () && $res = $Model->$act ();
+			if ($res !== false ) {{
 				// 增加积分
 				add_credit ( 'Reserve' );
 				if ($act == 'add') {
@@ -162,7 +163,7 @@ class WapController extends WapBaseController {
 		$this->display ();
 	}
 	function reserve_success() {
-		$map3 ['reserve_id'] = $map ['reserve_id'] = $map2 ['reserve_id'] = $this->reserve_id = I ( 'reserve_id', 0, intval );
+		$map3 ['reserve_id'] = $map ['reserve_id'] = $map2 ['reserve_id'] = $this->reserve_id = I ( 'reserve_id', 0, 'intval' );
 		$reserve = M ( 'reserve' )->find ( $this->reserve_id );
 		$page_title = $reserve ['title'];
 		$this->assign ( 'page_title', $page_title );
@@ -219,7 +220,7 @@ class WapController extends WapBaseController {
 		$this->display ();
 	}
 	function do_pay(){
-	    $map3 ['reserve_id'] = $map ['reserve_id'] = $map2 ['reserve_id'] = $this->reserve_id = I ( 'reserve_id', 0, intval );
+	    $map3 ['reserve_id'] = $map ['reserve_id'] = $map2 ['reserve_id'] = $this->reserve_id = I ( 'reserve_id', 0, 'intval' );
 	    $reserve = M ( 'reserve' )->find ( $this->reserve_id );
 	    $publicInfo = get_token_appinfo ();
 	    $this->assign ( 'pubilc_name', $publicInfo ['public_name'] );
@@ -314,7 +315,7 @@ class WapController extends WapBaseController {
 		}
 		$uid = I ( 'uid' );
 		$scanCode = I ( 'scan_code' );
-		$map2 ['reserve_id'] = $map3 ['reserve_id'] = $map ['reserve_id'] = $this->reserve_id = I ( 'reserve_id', 0, intval );
+		$map2 ['reserve_id'] = $map3 ['reserve_id'] = $map ['reserve_id'] = $this->reserve_id = I ( 'reserve_id', 0, 'intval' );
 		
 		$reserve = M ( 'reserve' )->find ( $this->reserve_id );
 		$reserve ['cover'] = ! empty ( $reserve ['cover'] ) ? get_cover_url ( $reserve ['cover'] ) : ADDON_PUBLIC_PATH . '/background.png';

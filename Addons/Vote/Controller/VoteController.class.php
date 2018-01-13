@@ -9,10 +9,6 @@ class VoteController extends ManageBaseController {
 	protected $option;
 	protected $vlog;
 	public function __construct() {
-		if (ACTION_NAME == 'show') {
-			$GLOBALS ['is_wap'] = true;
-		}
-		
 		parent::__construct ();
 		$this->model = getModelByName ( CONTROLLER_NAME );
 		$this->model || $this->error ( '400444:模型不存在！' );
@@ -117,7 +113,7 @@ class VoteController extends ManageBaseController {
 			$Model = D ( parse_name ( get_table_name ( $this->model ['id'] ), 1 ) );
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $this->model ['id'] );
-			if ($Model->create () && $Model->save ()) {
+			if ($Model->create () && false !== $Model->save ()) {
 				D ( 'Vote' )->clear ( $id );
 				// 增加选项
 				D ( 'Addons://Vote/VoteOption' )->set ( I ( 'post.id' ), I ( 'post.' ) );
@@ -146,8 +142,9 @@ class VoteController extends ManageBaseController {
 			
 			$this->assign ( 'fields', $fields );
 			$this->assign ( 'data', $data );
+
 			$this->meta_title = '编辑' . $this->model ['title'];
-			$this->display ( T ( 'Addons://Vote@Vote/edit' ) );
+			$this->display ();
 		}
 	}
 	function checkPostData() {
@@ -218,12 +215,17 @@ class VoteController extends ManageBaseController {
 			
 			$vote_fields = get_model_attribute ( $this->model ['id'] );
 			$this->assign ( 'fields', $vote_fields );
+			$this->assign ( 'data', [ 
+					'type' => 0,
+					'is_img' => 0 
+			] );
+			$this->assign ( 'option_list', [ ] );
 			// 选项表
 			$option_fields = get_model_attribute ( $this->option ['id'] );
 			$this->assign ( 'option_fields', $option_fields );
 			
 			$this->meta_title = '新增' . $this->model ['title'];
-			$this->display ( $this->model ['template_add'] ? $this->model ['template_add'] : T ( 'Addons://Vote@Vote/add' ) );
+			$this->display ();
 		}
 	}
 	protected function checkAttr($Model, $model_id) {
@@ -284,9 +286,7 @@ class VoteController extends ManageBaseController {
 		$nav [1] ['class'] = "current";
 		$this->assign ( 'nav', $nav );
 		
-		$btn ['url'] = U ( 'lists', array (
-				'mdm' => $_GET ['mdm'] 
-		) );
+		$btn ['url'] = U ( 'lists' );
 		$btn ['title'] = '返回';
 		$returnbtn [] = $btn;
 		$this->assign ( 'top_more_button', $returnbtn );

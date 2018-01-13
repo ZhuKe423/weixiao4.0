@@ -37,7 +37,6 @@ class RedBagModel extends Model {
 		return $data_list;
 	}
 	function getPackageData($id) {
-	   
 		$info = get_token_appinfo ();
 		$param ['publicid'] = $info ['id'];
 		$param ['publicUid'] = session ( 'mid' );
@@ -67,7 +66,6 @@ class RedBagModel extends Model {
 		
 		$recode ['openid'] = getPaymentOpenid ( $config ['wxappid'], $config ['wxappsecret'] );
 		
-		
 		if ($info ['collect_limit'] > 0) {
 			$my_count = M ( 'redbag_follow' )->where ( $recode )->count ();
 			if ($my_count >= $info ['collect_limit']) {
@@ -85,7 +83,7 @@ class RedBagModel extends Model {
 		
 		// 商户和公众号信息
 		$data ['mch_id'] = $config ['mch_id']; // 微信支付分配的商户号
-		$data ['mch_billno'] = $config ['mch_id'] . date ( Ymd ) . $this->getRandStr (); // 商户订单号（每个订单号必须唯一）组成： mch_id+yyyymmdd+10位一天内不能重复的数字。接口根据商户订单号支持重入， 如出现超时可再调用。
+		$data ['mch_billno'] = $config ['mch_id'] . date ( 'Ymd' ) . $this->getRandStr (); // 商户订单号（每个订单号必须唯一）组成： mch_id+yyyymmdd+10位一天内不能重复的数字。接口根据商户订单号支持重入， 如出现超时可再调用。
 		$data ['wxappid'] = $config ['wxappid']; // 商户appid，如：wx9e088eb8b3152ae2
 		$data ['re_openid'] = $recode ['openid']; // 接受收红包的用户
 		$data ['nonce_str'] = uniqid (); // 随机字符串，不长于32位
@@ -129,16 +127,17 @@ class RedBagModel extends Model {
 		);
 		$fileData = M ( 'file' )->where ( $map )->select ();
 		
-		$downloadConfig = C ( DOWNLOAD_UPLOAD );
 		$certpath = $keypath = '';
-		foreach ( $fileData as $f ) {
-			if ($config ['cert_dir'] == $f ['id']) {
-				$certpath = SITE_PATH .  substr ( $downloadConfig ['rootPath'], 1 ) . $f ['savepath'] . $f ['savename'] ;
-			} else {
-				$keypath = SITE_PATH . substr ( $downloadConfig ['rootPath'], 1 ) . $f ['savepath'] . $f ['savename'] ;
+		if (! empty ( $fileData )) {
+			$downloadConfig = C ( 'DOWNLOAD_UPLOAD' );
+			foreach ( $fileData as $f ) {
+				if ($config ['cert_dir'] == $f ['id']) {
+					$certpath = SITE_PATH . substr ( $downloadConfig ['rootPath'], 1 ) . $f ['savepath'] . $f ['savename'];
+				} else {
+					$keypath = SITE_PATH . substr ( $downloadConfig ['rootPath'], 1 ) . $f ['savepath'] . $f ['savename'];
+				}
 			}
 		}
-		
 		$res = $this->curl_post_ssl ( $url, $vars, $certpath, $keypath );
 		
 		if ($res ['return_code'] == 'FAIL') {
@@ -162,7 +161,9 @@ class RedBagModel extends Model {
 		M ( 'redbag_follow' )->add ( $recode );
 		$saveData ['collect_amount'] = $info ['collect_amount'] + $data ['total_amount'];
 		$saveData ['collect_count'] = $info ['collect_count'] + 1;
-		M ( 'redbag' )->where ( ['id' => $id ] )->save ( $saveData );
+		M ( 'redbag' )->where ( [ 
+				'id' => $id 
+		] )->save ( $saveData );
 		$this->getInfo ( $id, true );
 		
 		$returnData ['msg_code'] = 1;
@@ -190,7 +191,7 @@ class RedBagModel extends Model {
 				$ids 
 		);
 		$fileData = M ( 'file' )->where ( $map )->select ();
-		$downloadConfig = C ( DOWNLOAD_UPLOAD );
+		$downloadConfig = C ( 'DOWNLOAD_UPLOAD' );
 		$certpath = $keypath = '';
 		foreach ( $fileData as $f ) {
 			if ($config ['cert_dir'] == $f ['id']) {

@@ -38,11 +38,11 @@
           <label class="item-label"> 发放途径 </label>
           <div class="controls">
             <div class="check-item">
-              <input type="radio" name="is_public" id="is_public_0" value="0" class="regular-radio is_public" <if condition="intval($data[is_public])==0">checked="checked"</if> >
+              <input type="radio" name="is_public" id="is_public_0" value="0" class="regular-radio is_public" checked="checked" >
               <label for="is_public_0"></label>
               通用券（在会员卡中可领取） </div>
             <div class="check-item">
-              <input type="radio" name="is_public" id="is_public_1" value="1" class="regular-radio is_public" <if condition="$data[is_public]==1">checked="checked"</if> >
+              <input type="radio" name="is_public" id="is_public_1" value="1" class="regular-radio is_public" >
               <label for="is_public_1"></label>
               活动券（参与活动后赠送，如积分兑换优惠券） </div>
           </div>
@@ -52,18 +52,15 @@
 <label class="item-label">
                        适用人群
                 </label>
-                <div class="check-item"> <input type="checkbox" class="regular-checkbox toggle-data" value="0" id="member_0" name="member[]" toggle-data=""
+                <div class="check-item"> <input type="checkbox" class="regular-checkbox toggle-data" value="0" id="member_0" name="member[]"
                               
                  checked="checked"                   >
                         <label for="member_0"></label>所有用户 </div>
-                <div class="check-item"> <input type="checkbox" class="regular-checkbox toggle-data" value="-1" id="member_-1" name="member[]" toggle-data=""
-                              
-                           <php>if(in_array(-1,$data['member'])){echo ' checked="checked"';}</php>                        >
+                <div class="check-item"> <input type="checkbox" class="regular-checkbox toggle-data" value="-1" id="member_-1" name="member[]">
                         <label for="member_-1"></label>所有会员 </div>
                 <notempty name='level'>
                 	<volist name='level' id='vo'>
-                	<div class="check-item"> <input type="checkbox" class="regular-checkbox toggle-data" value="{$key}" id="member_{$key}" name="member[]" toggle-data=""
-                      <php>if(in_array($key,$data['member'])){echo ' checked="checked"';}</php>                                    >
+                	<div class="check-item"> <input type="checkbox" class="regular-checkbox toggle-data" value="{$key}" id="member_{$key}" name="member[]">
                         <label for="member_{$key}"></label>
                        {$vo} </div> 
                 	</volist>
@@ -78,7 +75,7 @@
                 <input style="width:175px"  type="datetime" name="end_time" class="text time" value="" placeholder="请选择时间" />
             </div>
             <div class="controls">
-                <div class="check-item"> <input type="radio" class="regular-radio toggle-data" value="0" id="time_0" name="use_time_type" toggle-data="" checked="checked">
+                <div class="check-item"> <input type="radio" class="regular-radio toggle-data" value="0" id="time_0" name="use_time_type" checked="checked">
                     <label for="time_0"></label> 
                 </div>
                 <div class="inline-block">
@@ -91,7 +88,7 @@
                 </div>
             </div>
             <div class="controls">
-                <div class="check-item"> <input type="radio" class="regular-radio toggle-data" value="1" id="time_1" name="use_time_type" toggle-data="">
+                <div class="check-item"> <input type="radio" class="regular-radio toggle-data" value="1" id="time_1" name="use_time_type">
                     <label for="time_1"></label> 
                 </div>
                 <div class="inline-block">

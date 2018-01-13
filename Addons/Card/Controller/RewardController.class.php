@@ -10,7 +10,7 @@ class RewardController extends ManageBaseController {
 		parent::_initialize ();
 		
 		$type = I ( 'type', 0, 'intval' );
-		$param ['mdm'] = $_GET ['mdm'];
+		$param ['mdm'] =  I( 'mdm' );
 		$param ['type'] = 0;
 		$res ['title'] = '所有的开卡即送活动';
 		$res ['url'] = addons_url ( 'Card://Reward/lists', $param );

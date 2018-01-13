@@ -10,7 +10,7 @@
 				<if condition="$add_button"><php> $add_url || $add_url = U('add?model='.$model['id'], $get_param);</php><a class="btn" href="{$add_url}">新 增</a></if>
 				<if condition="$del_button"><php> $del_url || $del_url = U('del?model='.$model['id'], $get_param);</php><button class="btn ajax-post confirm" target-form="ids" url="{$del_url}">删 除</button></if>    
                 <volist name="top_more_button" id="vo">
-                <if condition="$vo[is_buttion]">
+                <if condition="isset($vo['is_buttion']) and $vo['is_buttion']">
                 <button class="btn {$vo.class}" target-form="ids" url="{$vo.url}">{$vo.title}</button>
                 <else />
                 <a class="btn" href="{$vo.url}">{$vo.title}</a>
@@ -20,17 +20,17 @@
 			</div>
 			&nbsp;&nbsp;交易方式：
               <select name="credit_type" style="padding:3px 4px; margin-bottom:5px; width:120px" >
-              	<option value="0" <php>if($_GET['credit_type']==0)echo 'selected=selected';</php>>全部方式</option>
+              	<option value="0" <php>if($credit_type==0)echo 'selected=selected';</php>>全部方式</option>
               	<notempty name='credit_title'>
               		<volist name='credit_title' key='k' id='s'>
-              			<option value="{$key}" <php>if($_GET['credit_type']==$key)echo 'selected=selected';</php>>{$s}</option>
+              			<option value="{$key}" <php>if($credit_type==$key)echo 'selected=selected';</php>>{$s}</option>
               		</volist>
               	</notempty>
               </select>
       
-     &nbsp;&nbsp;  交易时间：&nbsp; <input type="datetime" placeholder="请选择交易日期" value="{$_GET['start_ctime']}" class="text date" name="start_ctime" style="width: 130px;">
+     &nbsp;&nbsp;  交易时间：&nbsp; <input type="datetime" placeholder="请选择交易日期" value="{:I('start_ctime')}" class="text date" name="start_ctime" style="width: 130px;">
             至
-            <input type="datetime" placeholder="请选择交易日期" value="{$_GET['end_ctime']}" class="text date" name="end_ctime" style="width: 130px;">
+            <input type="datetime" placeholder="请选择交易日期" value="{:I('end_ctime')}" class="text date" name="end_ctime" style="width: 130px;">
          &nbsp;<a href='javascript:;' class='btn' id='ctimeSearch' style='margin-top: -9px;'>查询</a>
       
         </div>
@@ -38,8 +38,8 @@
         <if condition="$search_button">
         <div class="search-form fr cf">
           <div class="sleft">
-            <php> $get_param[model]=$model['name']; $search_url || $search_url = addons_url(MODULE_NAME.'://'.CONTROLLER_NAME.'/lists', $get_param);</php>
-            <php>empty($search_key) && $search_key=$model['search_key'];empty($search_key) && $search_key='title';</php>
+            <php> $get_param['model']=$model['name']; $search_url || $search_url = addons_url(MODULE_NAME.'://'.CONTROLLER_NAME.'/lists', $get_param);</php>
+            <php>empty($search_key) && isset($model['search_key']) && $search_key=$model['search_key'];empty($search_key) && $search_key='title';</php>
             <input type="text" name="{$search_key}" class="search-input" value="{:I($search_key)}" placeholder="{$placeholder}">
             <a class="sch-btn" href="javascript:;" id="search" url="{$search_url}"><i class="btn-search"></i></a> </div>
         </div>
@@ -155,7 +155,7 @@ $(function(){
         if(query == '' ){
         	var addon="{MODULE_NAME}";
         	if(addon){
-        		url="{:addons_url(MODULE_NAME.'://'.CONTROLLER_NAME.'/score_lists')}&mdm={$_GET['mdm']}";
+        		url="{:addons_url(MODULE_NAME.'://'.CONTROLLER_NAME.'/score_lists')}";
         	}
         }
 		window.location.href = url;
@@ -169,7 +169,7 @@ $(function(){
     });
     
     $("select[name='credit_type']").change(function(){
-		var url = "{:addons_url(MODULE_NAME.'://'.CONTROLLER_NAME.'/score_lists')}&mdm={$_GET["mdm"]}&credit_type="+$(this).val();
+		var url = "{:addons_url(MODULE_NAME.'://'.CONTROLLER_NAME.'/score_lists')}&credit_type="+$(this).val();
 		
         var query  = $('.type-form').serialize();
         query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
@@ -185,7 +185,7 @@ $(function(){
 		var start =$("input[name='start_ctime']").val();
 		var end =$("input[name='end_ctime']").val();
 		if(start || end){
-			var url="{:addons_url(MODULE_NAME.'://'.CONTROLLER_NAME.'/score_lists')}&mdm={$_GET["mdm"]}&is_ctime=1&start_ctime="+start+"&end_ctime="+end;
+			var url="{:addons_url(MODULE_NAME.'://'.CONTROLLER_NAME.'/score_lists')}&is_ctime=1&start_ctime="+start+"&end_ctime="+end;
 			location.href=url;
 		}
 		

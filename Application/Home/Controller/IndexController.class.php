@@ -149,21 +149,7 @@ class IndexController extends HomeController {
 		foreach ( $data as $k => &$vo ) {
 			if ($token_status [$vo ['name']] === '-1') {
 				unset ( $data [$k] );
-				// $vo ['status_title'] = '无权限';
-				// $vo ['action'] = '';
-				// $vo ['color'] = '#CCC';
-				// $vo ['status'] = 0;
-			} elseif ($token_status [$vo ['name']] === 0) {
-				// $vo ['status_title'] = '已停用';
-				// $vo ['action'] = '启用';
-				// $vo ['color'] = '#CCC';
-				// $vo ['status'] = 0;
-			} else {
-				// $vo ['status_title'] = '已启用';
-				// $vo ['action'] = '停用';
-				// $vo ['color'] = '';
-				// $vo ['status'] = 1;
-			}
+			} 
 			$app_icon = SITE_PATH . '/Addons/' . $vo ['name'] . '/icon.png';
 			if (file_exists ( $app_icon )) {
 				$vo ['app_icon'] = SITE_URL . '/Addons/' . $vo ['name'] . '/icon.png';
@@ -179,6 +165,7 @@ class IndexController extends HomeController {
 				$vo ['addons_url'] = addons_url ( $vo ['name'] . '://' . $vo ['name'] . '/nulldeal' );
 			}
 		}
+
 		$this->assign ( 'list_data', $data );
 		
 		// 自动同步微信用户

@@ -40,7 +40,7 @@ class AuthGroupController extends HomeController {
 		$map ['manager_id'] = $this->mid;
 		$map ['is_del'] = 0;
 		session ( 'common_condition', $map );
-		
+		$groupidArr = $uidsArr = $group_uid = $hasSub = [ ];
 		$list_data = $this->_get_model_list ( $this->model, 0, 'id asc' );
 		
 		foreach ( $list_data ['list_data'] as $dd ) {
@@ -62,7 +62,7 @@ class AuthGroupController extends HomeController {
 			}
 		}
 		foreach ( $groupidArr as $gg ) {
-			if ($group_uid [$gg]) {
+			if (isset ( $group_uid [$gg] )) {
 				$fmap ['uid'] = array (
 						'in',
 						$group_uid [$gg] 
@@ -71,14 +71,16 @@ class AuthGroupController extends HomeController {
 				$hasSub [$gg] = M ( 'apps_follow' )->where ( $fmap )->count ();
 			}
 		}
+		
 		if ($this->qr_code) {
-		    
+			
 			foreach ( $list_data ['list_data'] as &$vo ) {
+				$count = isset ( $hasSub [$vo ['id']] ) ? intval ( $hasSub [$vo ['id']] ) : 0;
 				$vo ['count'] = '<a href="' . addons_url ( 'UserCenter://UserCenter/lists', array (
 						'group_id' => $vo ['id'] 
-				) ) . '"/>' . intval ( $hasSub [$vo ['id']] ) . '</a>';
+				) ) . '"/>' . $count . '</a>';
 				if (! empty ( $vo ['qr_code'] )) {
-					$vo ['qr_code'] = "<a target='_blank' href='{$vo[qr_code]}'><img src='{$vo[qr_code]}' class='list_img'></a>";
+					$vo ['qr_code'] = "<a target='_blank' href='{$vo['qr_code']}'><img src='{$vo['qr_code']}' class='list_img'></a>";
 					continue;
 				}
 				
@@ -87,7 +89,7 @@ class AuthGroupController extends HomeController {
 					$map2 ['id'] = $vo ['id'];
 					M ( 'auth_group' )->where ( $map2 )->setField ( 'qr_code', $res );
 					$vo ['qr_code'] = $res;
-					$vo ['qr_code'] = "<a target='_blank' href='{$vo[qr_code]}'><img src='{$vo[qr_code]}' class='list_img'></a>";
+					$vo ['qr_code'] = "<a target='_blank' href='{$vo['qr_code']}'><img src='{$vo['qr_code']}' class='list_img'></a>";
 				}
 			}
 			$normal_tips .= '当用户微信扫分组里的二维码时，用户会自动移到该分组中';
@@ -100,9 +102,7 @@ class AuthGroupController extends HomeController {
 			
 			$normal_tips = '温馨提示：当前用户组数据会与微信端的用户组实时同步，需要删除用户组请到微信后台删除。';
 			// 搜索按钮
-			$search_url = U ( 'AuthGroup/lists', array (
-					'mdm' => $_GET ['mdm'] 
-			) );
+			$search_url = U ( 'AuthGroup/lists' );
 			$this->assign ( 'search_url', $search_url );
 			
 			$this->assign ( 'check_all', false );
@@ -117,7 +117,7 @@ class AuthGroupController extends HomeController {
 		$this->display ( 'Addons/lists' );
 	}
 	function toGroupdetail() {
-		$group_id = I ( 'group_id', 0, intval );
+		$group_id = I ( 'group_id', 0, 'intval' );
 		redirect ( addons_url ( 'UserCenter://UserCenter/lists', array (
 				'group_id' => $group_id 
 		) ) );
@@ -189,19 +189,21 @@ class AuthGroupController extends HomeController {
 			$Model = D ( parse_name ( get_table_name ( $model ['id'] ), 1 ) );
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $model ['id'] );
-			if ($Model->create () && $Model->$act ()) {
-			    if (IS_POST){
-			        $groupMap['group_id']=$id;
-			        $uids=M('auth_group_access')->where($groupMap)->getFields('uid');
-			        foreach ($uids as $uid){
-			            $key = 'getUserInfo_' . $uid;
-			            S ( $key ,null);
-			        }
-			    }
+			$res = false;
+			$Model->create () && $res = $Model->$act ();
+			if ($res !== false ) {
+				if (IS_POST) {
+					$groupMap ['group_id'] = $id;
+					$uids = M ( 'auth_group_access' )->where ( $groupMap )->getFields ( 'uid' );
+					foreach ( $uids as $uid ) {
+						$key = 'getUserInfo_' . $uid;
+						S ( $key, null );
+					}
+				}
 				$title = I ( 'title' );
 				if ($this->syc_wechat && $title != $data ['title'] && ! empty ( $data ['wechat_group_id'] )) {
 					// 修改的用户组名同步到微信端
-					$url = 'https://api.weixin.qq.com/cgi-bin/groups/update?access_token=' . get_access_token();
+					$url = 'https://api.weixin.qq.com/cgi-bin/groups/update?access_token=' . get_access_token ();
 					
 					$param ['group'] ['id'] = $data ['wechat_group_id'];
 					$param ['group'] ['name'] = $title;
@@ -286,6 +288,7 @@ class AuthGroupController extends HomeController {
 		$map ['manager_id'] = $this->mid;
 		$map ['type'] = 1;
 		$group_list = M ( 'auth_group' )->where ( $map )->field ( 'id,title,wechat_group_id,wechat_group_name,wechat_group_count' )->select ();
+		$ournew = $groups = [ ];
 		foreach ( $group_list as $g ) {
 			if ($g ['wechat_group_id'] == - 1) {
 				$ournew [] = $g;
@@ -435,7 +438,7 @@ class AuthGroupController extends HomeController {
 		$dataArr [0] = $ht;
 		$dataArr = array_merge ( $dataArr, ( array ) $data );
 		// dump($dataArr);
-		outExcel ( $dataArr, $map ['module'] );
+		outExcel ( $dataArr );
 		// vendor ( 'out-csv' );
 		// export_csv ( $dataArr, 'user_export' );
 	}

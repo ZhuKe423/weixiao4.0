@@ -14,22 +14,22 @@
             	 <li class="form-item cf">
                     <label class="item-label"><span class="need_flag">*</span>关键词</label>
                     <div class="controls">
-                      <input type="text" class="text input-large" name="keyword" value="{$data.keyword}">
+                      <input type="text" class="text input-large" name="keyword" value="{$data.keyword|default=''}">
                     </div>
                   </li>  
                    <li class="form-item cf">
                     <label class="item-label"><span class="need_flag">*</span>投票标题</label>
                     <div class="controls">
-                      <input type="text" class="text input-large" name="title" value="{$data.title}">
+                      <input type="text" class="text input-large" name="title" value="{$data.title|default=''}">
                     </div>
                   </li>  
                   <li class="form-item cf">
                   		<label class="item-label"><span class="need_flag">*</span>封面图片<span class="check-tips">图片高度控制在200px-400px之间</span></label>
                 		<div class="controls uploadrow2" data-max="1" title="点击修改图片" rel="picurl">
                             <input type="file" id="upload_picture_picurl">
-                            <input type="hidden" name="picurl" id="cover_id_picurl" value="{$data.picurl}"/>
+                            <input type="hidden" name="picurl" id="cover_id_picurl" value="{$data.picurl|default=''}"/>
                             <div class="upload-img-box" rel="img">
-                              <notempty name="data[picurl]">
+                              <notempty name="data['picurl']">
                                 <div class="upload-pre-item2"><img width="100" height="100" src="{$data.picurl|get_cover_url}"/></div>
                                 <em class="edit_img_icon">&nbsp;</em>
                               </notempty>
@@ -40,7 +40,7 @@
                     <label class="item-label"><span class="need_flag">*</span>投票描述</label>
                     <div class="controls">
                       <label class="textarea input-large">
-                      <textarea class="text input-large" name="description" >{$data.description}</textarea>
+                      <textarea class="text input-large" name="description" >{$data.description|default=''}</textarea>
                       </label>
                     </div>
                   </li>   
@@ -51,7 +51,7 @@
                 			<volist name=":parse_field_attr($fields['type']['extra'])" id="vo">
                           	<div class="check-item">
 								  <input type="radio" class="regular-radio toggle-data" value="{$key}" id="type_{$key}" name="type" toggle-data="{$vo|get_hide_attr}"
-								  <eq name="data[type]" value="$key">checked="checked"</eq> />
+								  <eq name="data['type']" value="$key">checked="checked"</eq> />
 								  <label for="type_{$key}"></label>{$vo|clean_hide_attr} 
 							  </div>
                           </volist>        
@@ -61,13 +61,13 @@
                   <li class="form-item cf">
                     <label class="item-label"><span class="need_flag">*</span>开始时间</label>
                     <div class="controls">
-                       <input type="datetime" name="start_date" class="text input-large time" value="{$data.start_date|time_format}" placeholder="请选择时间" />
+                       <input type="datetime" name="start_date" class="text input-large time" value="{$data.start_date|default=''|time_format}" placeholder="请选择时间" />
                     </div>
                   </li>  
                   <li class="form-item cf">
                     <label class="item-label"><span class="need_flag">*</span>结束时间</label>
                     <div class="controls">
-                       <input type="datetime" name="end_date" class="text input-large time" value="{$data.end_date|time_format}" placeholder="请选择时间" />
+                       <input type="datetime" name="end_date" class="text input-large time" value="{$data.end_date|default=''|time_format}" placeholder="请选择时间" />
                     </div>
                   </li>   
                   
@@ -75,11 +75,11 @@
                     <label class="item-label"><span class="need_flag">*</span>文字/图片选项</label>
                     <div class="controls">
                       <div class="check-item">
-                              <input type="radio" name="is_img" value="0" class="regular-radio" id="is_img_0" <if condition="$data[is_img]==0">checked</if> onClick="changeOption()"><label for="is_img_0"> </label>
+                              <input type="radio" name="is_img" value="0" class="regular-radio" id="is_img_0" <if condition="$data['is_img']==0">checked</if> onClick="changeOption()"><label for="is_img_0"> </label>
                               文字投票
                            </div>
                            <div class="check-item">   
-                              <input type="radio" name="is_img" value="1" class="regular-radio" id="is_img_1" <if condition="$data[is_img]==1">checked</if> onClick="changeOption()">
+                              <input type="radio" name="is_img" value="1" class="regular-radio" id="is_img_1" <if condition="$data['is_img']==1">checked</if> onClick="changeOption()">
                               <label for="is_img_1"> </label>图片投票   
                         
                         </div>

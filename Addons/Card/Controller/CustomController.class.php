@@ -10,7 +10,7 @@ class CustomController extends BaseController {
 		parent::_initialize ();
 		
 		$type = I ( 'type', 0, 'intval' );
-		$param ['mdm'] = $_GET ['mdm'];
+		$param ['mdm'] =  I( 'mdm' );
 		$param ['type'] = 0;
 		$res ['title'] = '所有的客户关怀活动';
 		$res ['url'] = addons_url ( 'Card://Custom/lists', $param );
@@ -107,7 +107,7 @@ class CustomController extends BaseController {
 		$this->assign ( $list_data );
 		// dump($list_data);
 		
-		$this->display ( $templateFile );
+		$this->display ( );
 	}
 	function add() {
 		$this->_get_card_conpon ();
@@ -125,7 +125,9 @@ class CustomController extends BaseController {
 			$Model = D ( parse_name ( get_table_name ( $model ['id'] ), 1 ) );
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $model ['id'] );
-			if ($Model->create () && $res = $Model->$act ()) {
+			$res = false;
+			$Model->create () && $res = $Model->$act ();
+			if ($res !== false ) {
 				$act == 'add' && $id = $res;
 				$token = get_token ();
 				$key = 'CardCustom_listData_' . $token;

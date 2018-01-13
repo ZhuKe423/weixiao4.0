@@ -133,7 +133,7 @@ class MenuModel extends Model {
 			if (isset ( $_GET ['mdm'] )) {
 				$mdm = explode ( '|', $_GET ['mdm'] );
 				$default ['top'] = intval ( $mdm [0] );
-				$default ['side'] = intval ( $mdm [1] );
+				$default ['side'] = isset ( $mdm [1] ) ? intval ( $mdm [1] ) : 0;
 			} else {
 				$current_url = MODULE_NAME . '/' . CONTROLLER_NAME . '/' . ACTION_NAME;
 				foreach ( $menus ['default_data'] as $k => $v ) {

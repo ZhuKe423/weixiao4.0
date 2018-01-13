@@ -12,8 +12,8 @@
             	
             	<notempty name='prizelist'>
             		<volist name='prizelist' id='vo' key="i">
-                        	<div class="item item_{$i} <gt name='i' value='10'>hide</gt>" data-prizeid = "{$vo[award_id]}" data-name="{$vo[award_name]}">
-                                <img src="{$vo[award_pic]}"/>
+                        	<div class="item item_{$i} <gt name='i' value='10'>hide</gt>" data-prizeid = "{$vo['award_id']}" data-name="{$vo['award_name']}">
+                                <img src="{$vo['award_pic']}"/>
                             </div>
                        
             		</volist>

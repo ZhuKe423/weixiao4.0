@@ -48,7 +48,7 @@
                 <a class="voice" href="javascript:;">语音消息</a>
                 <a class="video" href="javascript:;">视频消息</a>
                         </div>
-                    	<form id="form" action="{:U('reply',array('mdm'=>$_GET['mdm']))}" method="post" class="form-horizontal form-center">
+                    	<form id="form" action="{:U('reply')}" method="post" class="form-horizontal form-center">
                         	<input type="hidden" name="msg_type" value="text"/>
                         	<input type="hidden" class="text input-large" name="openid" value="{:I('person_openid')}">
                             <label class="textarea input-large">
@@ -88,24 +88,6 @@
                     </div>
                      
                              </label>
-                             <!--
-                             <div class="action_type">
-                             	<a class="action_item face" href="javascript:;" title="表情">&nbsp;</a>
-                                <a class="action_item link" href="javascript:;" title="连接">&nbsp;</a>
-                                <div class="action_item picture" href="javascript:;" title="图片">
-                                	<div class="controls uploadrow2" data-max="1" title="点击修改图片" rel="pic">
-                                      <input type="file" id="upload_picture_pic">
-                                      <input type="hidden" name="pic" id="cover_id_pic" value="0"/>
-                                      <div class="upload-img-box">
-                                       
-                                          <div class="upload-pre-item2"><img width="100" height="100" src=""/></div>
-                                        
-                                      </div>
-                                  </div>
-                                </div>
-                                <a class="action_item article" href="javascript:;" title="图文">&nbsp;</a>
-                             </div>
-                             -->
                              <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">回 复</button>
                         	 <a href='javascript:;' id='getText'  onClick="selectText();" style="display: inline;border: 1px solid #C5CBDC;padding: 8px;margin-left: 20px;border-radius: 5px;background-color: #E6E9F3;color: cadetblue;">选择文本素材</a>
                         		
@@ -207,19 +189,10 @@
                       	<a href="javascript:void(0)" onclick="set_material({$vo.id},'video',0)">取消设置视频素材</a> </eq>
                  	
 	                   <elseif condition="$vo['Content']['msg_type'] eq 'link'" />
-<!-- 	                     <eq name="vo.is_material" value="0"> <a href="javascript:void(0)" onclick="set_material({$vo.id},'link')">设为素材</a> -->
-<!--                        	<else /> -->
-<!--                       	<a href="javascript:void(0)" onclick="set_material({$vo.id},'link')">取消设置文本素材</a> </eq> -->
                  	
 	                   <elseif condition="$vo['Content']['msg_type'] eq 'shortvideo'" />
-<!-- 	                     <eq name="vo.is_material" value="0"> <a href="javascript:void(0)" onclick="set_material({$vo.id},'text')">设为文本素材</a> -->
-<!--                        	<else /> -->
-<!--                       	<a href="javascript:void(0)" onclick="set_material({$vo.id},'text')">取消设置文本素材</a> </eq> -->
                  	
 	                   <elseif condition="$vo['Content']['msg_type'] eq 'news'" />
-<!-- 	                     <eq name="vo.is_material" value="0"> <a href="javascript:void(0)" onclick="set_material({$vo.id},'news')">设为图文素材</a> -->
-<!--                        	<else /> -->
-<!--                       	<a href="javascript:void(0)" onclick="set_material({$vo.id},'news')">取消设置图文素材</a> </eq> -->
                  	
 	                   <else/>
 	                    <eq name="vo.is_material" value="0"> <a href="javascript:void(0)" onclick="set_material({$vo.id},'text',1)">设为文本素材</a>

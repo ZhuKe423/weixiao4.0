@@ -2,7 +2,7 @@
 
 namespace Addons\Card\Controller;
 
-use Addons\Card\Controller\BaseController;
+use Addons\Card\Controller\CardSetController;
 
 class CardLevelController extends CardSetController {
 	var $model;

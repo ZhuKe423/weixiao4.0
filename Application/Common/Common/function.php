@@ -550,8 +550,12 @@ function time_offset($time = NULL) {
 // 获取用户信息
 function getUserInfo($uid, $field = '', $update = false) {
 	$info = D ( 'Common/User' )->getUserInfo ( $uid, $update );
-	// dump ( $info );
-	return empty ( $field ) ? $info : $info [$field];
+	
+	if (empty ( $field )) {
+		return $info;
+	} else {
+		return isset ( $info [$field] ) ? $info [$field] : false;
+	}
 }
 // 通过openid 获取用户信息
 function getUserInfoByOpenid($openid, $field = '', $update = false) {
@@ -1053,6 +1057,7 @@ function get_cover($cover_id, $field = null) {
 }
 function get_cover_url($cover_id, $width = '', $height = '') {
 	$info = get_cover ( $cover_id );
+	$thumb = '';
 	if ($width > 0 && $height > 0) {
 		$thumb = "?imageMogr2/thumbnail/{$width}x{$height}";
 	} elseif ($width > 0) {
@@ -1453,7 +1458,7 @@ function get_access_token($token = '', $update = false) {
 		$url = 'https://api.weixin.qq.com/cgi-bin/getcallbackip?access_token=' . $access_token;
 		$res = wp_file_get_contents ( $url );
 		$res = json_decode ( $res, true );
-		if ($res ['errcode'] == '40001') {
+		if (isset ( $res ['errcode'] ) && $res ['errcode'] == '40001') {
 			$access_token = get_access_token ( $token, true );
 		}
 	}
@@ -2714,13 +2719,15 @@ function post_data($url, $param, $type = 'json', $return_array = true, $useCert 
 	// 设置超时
 	curl_setopt ( $ch, CURLOPT_TIMEOUT, $timeOut );
 	
-	if (class_exists ( '/CURLFile' )) { // php5.5跟php5.6中的CURLOPT_SAFE_UPLOAD的默认值不同
-		curl_setopt ( $ch, CURLOPT_SAFE_UPLOAD, true );
-	} else {
-		if (defined ( 'CURLOPT_SAFE_UPLOAD' )) {
-			curl_setopt ( $ch, CURLOPT_SAFE_UPLOAD, false );
-		}
-	}
+	/*
+	 * if (class_exists ( '/CURLFile' )) { // php5.5跟php5.6中的CURLOPT_SAFE_UPLOAD的默认值不同
+	 * curl_setopt ( $ch, CURLOPT_SAFE_UPLOAD, true );
+	 * } else {
+	 * if (defined ( 'CURLOPT_SAFE_UPLOAD' )) {
+	 * curl_setopt ( $ch, CURLOPT_SAFE_UPLOAD, false );
+	 * }
+	 * }
+	 */
 	curl_setopt ( $ch, CURLOPT_URL, $url );
 	curl_setopt ( $ch, CURLOPT_POST, true );
 	curl_setopt ( $ch, CURLOPT_SSL_VERIFYPEER, false );

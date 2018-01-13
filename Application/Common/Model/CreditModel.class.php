@@ -58,7 +58,11 @@ class CreditModel extends Model {
 			S ( $key, $config );
 		}
 		
-		return empty ( $credit_name ) ? $config [$token] : $config [$token] [$credit_name];
+		if (empty ( $credit_name )) {
+			return isset ( $config [$token] ) ? $config [$token] : [ ];
+		} else {
+			return isset ( $config [$token] [$credit_name] ) ? $config [$token] [$credit_name] : [ ];
+		}
 	}
 	// 更新个人总积分
 	function updateFollowTotalCredit($uid) {

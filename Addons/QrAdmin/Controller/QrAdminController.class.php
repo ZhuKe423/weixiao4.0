@@ -18,13 +18,13 @@ class QrAdminController extends ManageBaseController {
 		$list_data = $this->_get_model_list ( $model );
 		foreach ( $list_data ['list_data'] as &$vo ) {
 			empty ( $vo ['qr_code'] ) || $vo ['qr_code'] = '<img class="list_img" src="' . $vo ['qr_code'] . '">';
-// 			$vo ['action_name'] = $vo ['action_name'] == 'QR_SCENE' ? '临时二维码' : '永久二维码';
-			$vo ['group_id'] = $groupArr [$vo ['group_id']];
+			// $vo ['action_name'] = $vo ['action_name'] == 'QR_SCENE' ? '临时二维码' : '永久二维码';
+			$vo ['group_id'] = isset ( $groupArr [$vo ['group_id']] ) ? $groupArr [$vo ['group_id']] : 0;
 			
 			$tagTitle = array ();
 			$tag_ids = explode ( ',', $vo ['tag_ids'] );
 			foreach ( $tag_ids as $id ) {
-				$tagTitle [] = $tagArr [$id];
+				$tagTitle [] = isset ( $tagArr [$id] ) ? $tagArr [$id] : '';
 			}
 			
 			$vo ['tag_ids'] = implode ( ',', $tagTitle );
@@ -55,13 +55,13 @@ class QrAdminController extends ManageBaseController {
 					} elseif ($save ['qr_code'] == - 3) {
 						$msg = '保存二维码失败';
 					}
-					$this->error( '400330:'. $msg );
+					$this->error ( '400330:' . $msg );
 					exit ();
 				}
 				
 				$this->success ( '添加二维码成功！', U ( 'lists?model=' . $model ['name'], $this->get_param ) );
 			} else {
-				$this->error( '400331:'. $Model->getError () );
+				$this->error ( '400331:' . $Model->getError () );
 			}
 		} else {
 			$fields = get_model_attribute ( $model ['id'] );
@@ -75,20 +75,20 @@ class QrAdminController extends ManageBaseController {
 		$id = I ( 'id' );
 		// 获取数据
 		$data = M ( get_table_name ( $model ['id'] ) )->find ( $id );
-		$data || $this->error( '400332:数据不存在！' );
+		$data || $this->error ( '400332:数据不存在！' );
 		if (IS_POST) {
 			
 			$Model = D ( parse_name ( get_table_name ( $model ['id'] ), 1 ) );
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $model ['id'] );
 			
-			if ($Model->create () && $Model->save ()) {
+			if ($Model->create () && false !== $Model->save ()) {
 				// 清空缓存
 				method_exists ( $Model, 'clear' ) && $Model->clear ( $id, 'edit' );
 				
 				$this->success ( '保存' . $model ['title'] . '成功！', U ( 'lists?model=' . $model ['name'], $this->get_param ) );
 			} else {
-				$this->error( '400333:'. $Model->getError () );
+				$this->error ( '400333:' . $Model->getError () );
 			}
 		} else {
 			$fields = get_model_attribute ( $model ['id'] );

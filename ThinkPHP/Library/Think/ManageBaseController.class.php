@@ -120,7 +120,7 @@ class ManageBaseController extends Controller {
 		$param ['c'] = CONTROLLER_NAME;
 		$param ['a'] = ACTION_NAME;
 		$param ['uid'] = $this->mid;
-		$tongji_code .= '<script>$.post("' . SITE_URL . '/log.php?' . http_build_query ( $param ) . '");</script>';
+		$tongji_code = '<script>$.post("' . SITE_URL . '/log.php?' . http_build_query ( $param ) . '");</script>';
 		$this->assign ( 'tongji_code', $tongji_code );
 		if ($info ['type'] < 4) {
 			// 公众号接口权限

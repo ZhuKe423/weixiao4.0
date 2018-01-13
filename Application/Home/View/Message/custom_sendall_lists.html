@@ -4,13 +4,14 @@
     <section id="contents"> 
     	<include file="Home@Addons/_nav" /> 
       <div class="tab-content">
+      <php> $send_time = I('send_time'); </php>
       	<select name='send_time'>
-      		<option value='1' <php>if($_GET['send_time']==1)echo 'selected=selected';</php>>最近五天</option>
-      		<option value='2' <php>if($_GET['send_time']==2)echo 'selected=selected';</php>>今天</option>
-      		<option value='3' <php>if($_GET['send_time']==3)echo 'selected=selected';</php>>昨天</option>
-      		<option value='4' <php>if($_GET['send_time']==4)echo 'selected=selected';</php>>前天</option>
-      		<option value='5' <php>if($_GET['send_time']==5)echo 'selected=selected';</php>>更早</option>
-      	</select>
+      		<option value='1' <php>if($send_time==1)echo 'selected=selected';</php>>最近五天</option>
+      		<option value='2' <php>if($send_time==2)echo 'selected=selected';</php>>今天</option>
+      		<option value='3' <php>if($send_time==3)echo 'selected=selected';</php>>昨天</option>
+      		<option value='4' <php>if($send_time==4)echo 'selected=selected';</php>>前天</option>
+      		<option value='5' <php>if($send_time==5)echo 'selected=selected';</php>>更早</option>
+      	</select>      	
       </div>
       <!-- 数据列表 -->
       <div class="data-table">
@@ -137,7 +138,7 @@ function selectText(){
 	})
 }
 function do_again(diff){
-	var url="{:U(sendOldMessage)}";
+	var url="{:U('sendOldMessage')}";
 	$.post(url,{'diff':diff},function(d){
 		alert('有'+d+ '条消息发送成功！');
 		

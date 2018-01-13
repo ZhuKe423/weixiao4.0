@@ -27,7 +27,6 @@ class WishCardContentCateController extends BaseController{
 	
 		$list_data = $this->_get_model_list ( $this->model );
 		$this->assign ( $list_data );
-		$templateFile = $this->model ['template_list'] ? $this->model ['template_list'] : '';
-		$this->display ( $templateFile );
+		$this->display ();
 	}
 }

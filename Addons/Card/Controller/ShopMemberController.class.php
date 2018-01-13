@@ -23,10 +23,10 @@ class ShopMemberController extends BaseController {
 		
 		$btn[0]['title']='导入会员';
 		$btn[0]['class']='ajax-post';
-		$btn[0]['url']=addons_url('Card://ShopMember/import',array('mdm'=>$_GET['mdm']));
+		$btn[0]['url']=addons_url('Card://ShopMember/import');
 		$btn[1]['title']='导出会员';
 		$btn[1]['class']='ajax-post';
-		$btn[1]['url']=addons_url('Card://ShopMember/output',array('mdm'=>$_GET['mdm']));
+		$btn[1]['url']=addons_url('Card://ShopMember/output');
 		
 		$this->assign('top_more_button',$btn);
 		$list_data = $this->_get_model_list ( $this->model );
@@ -125,7 +125,7 @@ class ShopMemberController extends BaseController {
 	        // dump($arr);
 	        // $msg = trim ( $msg, ', ' );
 	        // dump($msg);exit;
-	        $this->success ( $msg, U ( 'lists',array('mdm'=>$_GET['mdm'])) );
+	        $this->success ( $msg, U ( 'lists') );
 	    } else {
 	        $fields = get_model_attribute ( $model ['id'] );
 	        $this->assign ( 'fields', $fields );

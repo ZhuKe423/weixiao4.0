@@ -22,8 +22,6 @@
                	</ul>
           </div>
           <div class="form-item form_bh">
-            <input type="hidden" name="id" value="{$data.id}">
-            <input type='hidden' name='member_id' value='{$data.member_id}' />
             <button class="btn submit-btn dialog_submit" id="submit" type="submit" target-form="form-horizontal">确 定</button>
           </div>
         </form>
@@ -57,7 +55,7 @@ function set_number(){
 	}
 }
 function checkMember(number){
-	var url = "{:U('checkMemberByAjax')}&number="+number;
+	var url = "{:U('Member/checkMemberByAjax')}&number="+number;
 	$.post(url,{number:number},function(data){
 		var data = $.parseJSON(data);
 		if(data.status==0){

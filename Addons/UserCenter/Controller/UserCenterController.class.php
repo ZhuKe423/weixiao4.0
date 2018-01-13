@@ -84,29 +84,31 @@ class UserCenterController extends ManageBaseController {
 			/* 查询记录总数 */
 			$count = M ()->table ( $px . 'apps_follow as f' )->join ( $px . 'user as u ON f.uid=u.uid' )->where ( $map )->count ();
 		}
-		foreach ( $data as $k => $d ) {
-			$user = getUserInfo ( $d ['uid'] );
-			$user ['openid'] = $d ['openid'];
-			$user ['group'] = implode ( ', ', getSubByKey ( $user ['groups'], 'title' ) );
-			if ($isDown) {
-				$arr ['uid'] = $user ['uid'];
-				$arr ['nickname'] = $user ['nickname'];
-				$arr ['truename'] = $user ['truename'];
-				$arr ['mobile'] = $user ['mobile'];
-				$arr ['sex'] = $user ['sex_name'];
-				$arr ['province'] = $user ['province'];
-				$arr ['city'] = $user ['city'];
-				$arr ['group'] = isset ( $user ['groups'] ) ? implode ( ', ', getSubByKey ( $user ['groups'], 'title' ) ) : '';
-				$arr ['tag_titles'] = $user ['tag_titles'];
-				$arr ['openid'] = $user ['openid'];
-				$dataArr [] = $arr;
-				unset ( $arr );
-			} else {
-				$data [$k] = $user;
+		if (! empty ( $data )) {
+			foreach ( $data as $k => $d ) {
+				$user = getUserInfo ( $d ['uid'] );
+				$user ['openid'] = $d ['openid'];
+				$user ['group'] = implode ( ', ', getSubByKey ( $user ['groups'], 'title' ) );
+				if ($isDown) {
+					$arr ['uid'] = $user ['uid'];
+					$arr ['nickname'] = $user ['nickname'];
+					$arr ['truename'] = $user ['truename'];
+					$arr ['mobile'] = $user ['mobile'];
+					$arr ['sex'] = $user ['sex_name'];
+					$arr ['province'] = $user ['province'];
+					$arr ['city'] = $user ['city'];
+					$arr ['group'] = isset ( $user ['groups'] ) ? implode ( ', ', getSubByKey ( $user ['groups'], 'title' ) ) : '';
+					$arr ['tag_titles'] = $user ['tag_titles'];
+					$arr ['openid'] = $user ['openid'];
+					$dataArr [] = $arr;
+					unset ( $arr );
+				} else {
+					$data [$k] = $user;
+				}
 			}
 		}
 		if ($isDown) {
-			outExcel ( $dataArr, $map ['module'] );
+			outExcel ( $dataArr );
 			exit ();
 		}
 		
@@ -631,35 +633,33 @@ class UserCenterController extends ManageBaseController {
 		
 		// $auth_map ['manager_id'] = $this->mid;
 		$auth_map ['token'] = get_token ();
+		$groupArr = $wechatArr = [ ];
 		$groups = M ( 'auth_group' )->where ( $auth_map )->field ( 'id,wechat_group_id' )->select ();
-		foreach ( $groups as $g ) {
-			$groupArr [$g ['id']] = $g ['wechat_group_id'];
-			$wechatArr [$g ['wechat_group_id']] = $g ['id'];
+		if (! empty ( $groups )) {
+			foreach ( $groups as $g ) {
+				$groupArr [$g ['id']] = $g ['wechat_group_id'];
+				$wechatArr [$g ['wechat_group_id']] = $g ['id'];
+			}
 		}
-		
 		M ( 'auth_group_access' )->where ( $user_map )->delete ();
-		// 获取一个uid是否对应一条数据，多条则删除
-		// $morelist=M ( 'auth_group_access' )->where ( $user_map )->field('uid,count(uid) as cuid')->group('uid')->select();
-		// foreach ($morelist as $mm){
-		// if ($mm['cuid'] >1){
-		// $delmap['uid']=$mm['uid'];
-		// M ( 'auth_group_access' )->where ( $delmap )->delete();
-		// }
-		// }
-		$list = M ( 'auth_group_access' )->where ( $user_map )->select ();
-		foreach ( $list as $vo ) {
-			$access [$vo ['uid']] = $vo ['group_id'];
-		}
 		
+		$access = [ ];
+		$list = M ( 'auth_group_access' )->where ( $user_map )->select ();
+		if (! empty ( $list )) {
+			foreach ( $list as $vo ) {
+				$access [$vo ['uid']] = $vo ['group_id'];
+			}
+		}
 		foreach ( $uids as $uid ) {
-			$new_groupid = $userArr [$uid];
-			$old_groupid = $groupArr [$access [$uid]];
-			if (isset ( $access [$uid] ) && $new_groupid == $old_groupid)
+			$new_groupid = isset ( $userArr [$uid] ) ? $userArr [$uid] : 0;
+			$aid = isset ( $access [$uid] ) ? $access [$uid] : 0;
+			$old_groupid = ! empty ( $aid ) && isset ( $groupArr [$aid] ) ? $groupArr [$aid] : 0;
+			if ($aid && $new_groupid == $old_groupid)
 				continue;
-			$save ['group_id'] = intval ( $wechatArr [$new_groupid] );
-			if (isset ( $access [$uid] )) {
+			$save ['group_id'] = isset ( $wechatArr [$new_groupid] ) ? $wechatArr [$new_groupid] : 0;
+			if ($aid) {
 				$amap ['uid'] = $uid;
-				$amap ['group_id'] = $access [$uid];
+				$amap ['group_id'] = $aid;
 				$res = M ( 'auth_group_access' )->where ( $amap )->save ( $save );
 			} else {
 				$save ['uid'] = $uid;

@@ -31,7 +31,7 @@ class WeixinController extends ManageBaseController {
 					$ids 
 			);
 			$fileData = M ( 'file' )->where ( $map )->select ();
-			$downloadConfig = C ( DOWNLOAD_UPLOAD );
+			$downloadConfig = C ( 'DOWNLOAD_UPLOAD' );
 			foreach ( $fileData as $f ) {
 				if ($paymentSet ['wx_cert_pem'] == $f ['id']) {
 					

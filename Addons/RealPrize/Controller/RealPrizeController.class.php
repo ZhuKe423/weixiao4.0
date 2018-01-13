@@ -17,7 +17,7 @@ class RealPrizeController extends ManageBaseController {
 			$Model = D ( parse_name ( get_table_name ( $model ['id'] ), 1 ) );
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $model ['id'] );
-			if ($Model->create () && $Model->save ()) {
+			if ($Model->create () && false !== $Model->save ()) {
 				$this->_saveKeyword ( $model, $id );
 				// 清空缓存
 				method_exists ( $Model, 'clear' ) && $Model->clear ( $id, 'edit' );
@@ -109,6 +109,7 @@ class RealPrizeController extends ManageBaseController {
 		$nav [0] ['title'] = "实物奖励";
 		$nav [0] ['class'] = "";
 		$nav [0] ['url'] = U ( "lists" );
+		
 		$nav [1] ['title'] = "收货地址";
 		$nav [1] ['class'] = "current";
 		$this->assign ( 'nav', $nav );
@@ -145,11 +146,11 @@ class RealPrizeController extends ManageBaseController {
 		$data = $this->parseData ( $data, $dataTable->fields, $dataTable->list_grid, $dataTable->config );
 		
 		// 获取prizeid对应的奖品名称
-		$map2 [id] = I ( 'target_id' );
+		$map2 ['id'] = I ( 'target_id' );
 		$pname = M ( 'real_prize' )->where ( $map2 )->getField ( 'prize_name' );
 		foreach ( $data as &$v ) {
 			$v ['prizeid'] = $pname;
-			$v['turename']=$v['turename']?$v['turename']:get_nickname($v['uid']);
+			$v ['turename'] = $v ['turename'] ? $v ['turename'] : get_nickname ( $v ['uid'] );
 		}
 		
 		/* 查询记录总数 */
@@ -174,7 +175,7 @@ class RealPrizeController extends ManageBaseController {
 			$Model = D ( parse_name ( get_table_name ( $model ['id'] ), 1 ) );
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $model ['id'] );
-			if ($Model->create () && $Model->save ()) {
+			if ($Model->create () && false !== $Model->save ()) {
 				$this->_saveKeyword ( $model, $id );
 				// 清空缓存
 				method_exists ( $Model, 'clear' ) && $Model->clear ( $id, 'edit' );
@@ -192,7 +193,8 @@ class RealPrizeController extends ManageBaseController {
 			if (isset ( $data ['token'] ) && $token != $data ['token'] && defined ( 'ADDON_PUBLIC_PATH' )) {
 				$this->error ( '400348:非法访问！' );
 			}
-			$param ['mdm'] = $_GET ['mdm'];
+			
+			$param ['mdm'] =  I( 'mdm' );
 			$postUrl = U ( 'address_edit', $param );
 			$this->assign ( 'post_url', $postUrl );
 			

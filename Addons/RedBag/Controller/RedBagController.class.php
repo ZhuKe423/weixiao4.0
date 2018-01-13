@@ -90,7 +90,7 @@ class RedBagController extends ManageBaseController {
 		if (IS_POST) {
 			$this->checkPostData ();
 		}
-		parent::add ();
+		parent::common_add ($model);
 	}
 	function checkPostData() {
 		// if (! I ( 'post.mch_id' )) {
@@ -169,8 +169,7 @@ class RedBagController extends ManageBaseController {
 			$this->assign ( 'fields', $fields );
 			$this->assign ( 'data', $data );
 			
-			$templateFile || $templateFile = $model ['template_edit'] ? $model ['template_edit'] : '';
-			$this->display ( $templateFile );
+			$this->display ();
 		}
 	}
 	function preview() {

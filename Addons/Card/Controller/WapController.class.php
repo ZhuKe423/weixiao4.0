@@ -34,6 +34,7 @@ class WapController extends WapBaseController {
 				$map ['token'] = $token;
 				
 				$notices = M ( 'card_notice' )->where ( $map )->select ();
+				$data = [ ];
 				foreach ( $notices as $v ) {
 					$gradeArr = explode ( ',', $v ['grade'] );
 					if ($v ['to_uid'] == 0) {
@@ -128,13 +129,15 @@ class WapController extends WapBaseController {
 	function do_buy() {
 		$model = $this->getModel ( 'buy_log' );
 		
-		if ($_POST ['coupon_id']) {
-			$_POST ['sn_id'] = $_POST ['coupon_id'];
-			$code = M ( 'sn_code' )->find ( $_POST ['coupon_id'] );
+		$coupon_id = I ( 'post.coupon_id' );
+		if ($coupon_id) {
+			$_POST ['sn_id'] = $coupon_id;
+			$code = M ( 'sn_code' )->find ( $coupon_id );
 			$_POST ['pay'] = $_POST ['pay'] - $code ['prize_title'];
 		}
-		if ($_POST ['member_id']) {
-			$map1 ['id'] = $_POST ['member_id'];
+		$member_id = I ( 'post.member_id' );
+		if ($member_id) {
+			$map1 ['id'] = $member_id;
 			$info = M ( 'card_member' )->find ( $map1 ['id'] );
 		} else {
 			$map ['uid'] = $this->mid;
@@ -241,8 +244,8 @@ class WapController extends WapBaseController {
 			$this->assign ( 'levelInfo', $levelInfo );
 			// 获取优惠券数量
 			$CouponCount = D ( 'Common/SnCode' )->getUserCount ( $this->mid );
-			$this->assign ( 'shop_coupon_count', intval ( $CouponCount ['ShopCoupon'] ['left_count'] ) );
-			$this->assign ( 'coupon_count', intval ( $CouponCount ['Coupon'] ['left_count'] ) );
+			$this->assign ( 'shop_coupon_count', isset ( $CouponCount ['ShopCoupon'] ['left_count'] ) ? $CouponCount ['ShopCoupon'] ['left_count'] : 0 );
+			$this->assign ( 'coupon_count', isset ( $CouponCount ['Coupon'] ['left_count'] ) ? $CouponCount ['Coupon'] ['left_count'] : 0 );
 		} else {
 			redirect ( U ( 'index', $this->get_param ) );
 			return;
@@ -618,7 +621,7 @@ class WapController extends WapBaseController {
 		// $day=$this->getDays($year, $month);
 		$start_date = $year . '-' . $month;
 		$start_date = strtotime ( $start_date );
-		$end_date = strtotime('+1 month', $start_date);
+		$end_date = strtotime ( '+1 month', $start_date );
 		$map1 ['cTime'] = $map2 ['cTime'] = array (
 				'between',
 				array (
@@ -656,7 +659,7 @@ class WapController extends WapBaseController {
 					} else {
 						$vo ['credit_name'] = '手动扣除';
 					}
-				} else if (! $creditTitle [$vo ['credit_name']]) {
+				} else if (! isset ( $creditTitle [$vo ['credit_name']] )) {
 					$vo ['credit_name'] = $vo ['credit_title'];
 				} else {
 					$vo ['credit_name'] = $vo ['credit_name'] == 'auto_add' ? $vo ['credit_title'] : $creditTitle [$vo ['credit_name']];
@@ -685,7 +688,7 @@ class WapController extends WapBaseController {
 		// $day=$this->getDays($year, $month);
 		$start_date = $year . '-' . $month;
 		$start_date = strtotime ( $start_date );
-		$end_date = strtotime('+1 month', $start_date);
+		$end_date = strtotime ( '+1 month', $start_date );
 		$map1 ['cTime'] = $map2 ['cTime'] = array (
 				'between',
 				array (
@@ -752,8 +755,8 @@ class WapController extends WapBaseController {
 			$month = $month ? $month : time_format ( NOW_TIME, 'm' );
 			$start_date = $year . '-' . $month;
 			$start_date = strtotime ( $start_date );
-			$end_date = strtotime('+1 month', $start_date);
-
+			$end_date = strtotime ( '+1 month', $start_date );
+			
 			// 总
 			$map1 ['recharge'] = array (
 					'egt',
@@ -854,6 +857,7 @@ class WapController extends WapBaseController {
 		);
 		$hasLog = M ( 'signin_log' )->where ( $map )->getField ( 'id' );
 		$mDay = '[';
+		$mDayArr = [ ];
 		foreach ( $sDay as $s ) {
 			$m = time_format ( $s, 'Y-m' );
 			if ($year . '-' . $month == $m) {
@@ -1126,7 +1130,7 @@ class WapController extends WapBaseController {
 		$list_data = $this->_list_grid ( $model );
 		
 		// 搜索条件
-		$map = $this->_search_map ( $model, $fields );
+		$map = $this->_search_map ( $model );
 		$type = I ( 'type', 0, 'intval' );
 		if ($type == 1) {
 			$map ['is_birthday'] = 0;
@@ -1148,6 +1152,7 @@ class WapController extends WapBaseController {
 		// 读取模型数据列表
 		$name = parse_name ( get_table_name ( $model ['id'] ), true );
 		$data = M ( $name )->field ( true )->where ( $map )->order ( 'id desc' )->page ( $page, $row )->select ();
+		$idsarr = [ ];
 		foreach ( $data as $ddd ) {
 			$idsarr [$ddd ['id']] = $ddd ['id'];
 		}

@@ -1,4 +1,5 @@
 <?php
+
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
 // +----------------------------------------------------------------------
@@ -82,8 +83,8 @@ class WapBaseController extends Controller {
 		$info = $GLOBALS ['public_info'] = get_token_appinfo ( $token );
 		if (! $info)
 			return false;
-			
-			// 设置公众号管理者信息
+		
+		// 设置公众号管理者信息
 		if ($info ['uid']) {
 			$manager_id = $info ['uid'];
 			session ( 'manager_id', $manager_id );
@@ -154,14 +155,14 @@ class WapBaseController extends Controller {
 		}
 		if ($uid <= 0)
 			return false;
-			
-			// 当前登录者
+		
+		// 当前登录者
 		$GLOBALS ['mid'] = $this->mid = intval ( $uid );
 		$myinfo = get_userinfo ( $this->mid );
 		$GLOBALS ['myinfo'] = $myinfo;
 		
 		// 当前访问对象的uid
-		$GLOBALS ['uid'] = $this->uid = intval ( $_REQUEST ['uid'] == 0 ? $this->mid : $_REQUEST ['uid'] );
+		$GLOBALS ['uid'] = $this->uid = isset ( $_REQUEST ['uid'] ) ? intval ( $_REQUEST ['uid'] ) : $this->mid;
 		
 		$this->assign ( 'mid', $this->mid ); // 登录者
 		$this->assign ( 'uid', $this->uid ); // 访问对象
@@ -170,5 +171,3 @@ class WapBaseController extends Controller {
 		return $GLOBALS ['myinfo'];
 	}
 }
-// 设置控制器别名 便于升级
-class_alias ( 'Think\Controller', 'Think\Action' );

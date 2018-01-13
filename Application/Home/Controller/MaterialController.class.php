@@ -60,8 +60,8 @@ class MaterialController extends HomeController {
 		// dump ( $_POST );
 		$ids = array ();
 		$group_id = I ( 'get.group_id', 0, 'intval' );
-		if (count($data) > 8){
-		    $this->error ( '最多只可以添加8篇图文！' );
+		if (count ( $data ) > 8) {
+			$this->error ( '最多只可以添加8篇图文！' );
 		}
 		foreach ( $data as $key => $vo ) {
 			$save = array ();
@@ -108,9 +108,7 @@ class MaterialController extends HomeController {
 		// 如果有权限，则静默同步到微信
 		// $this->_syc_news ( $group_id, true );
 		
-		$this->success ( '操作成功', U ( 'material_lists', array (
-				'mdm' => $_GET ['mdm'] 
-		) ) );
+		$this->success ( '操作成功', U ( 'material_lists' ) );
 	}
 	function material_lists() {
 		$page = I ( 'p', 1, 'intval' );
@@ -128,28 +126,33 @@ class MaterialController extends HomeController {
 					"%$title%" 
 			);
 		}
-		$map['group_id']=array('gt',0);
-		$field = 'id,title,cover_id,intro,group_id';
-		$list = M ( 'material_news' )->where ( $map )->field ( $field . ',count(id) as count' )->group ( 'group_id' )->order ( 'cTime desc, group_id desc' )->page ( $page, $row )->select ();
-		foreach ( $list as &$vo ) {
-			if ($vo ['count'] == 1)
-				continue;
-			
-			$map2 ['group_id'] = $vo ['group_id'];
-			$child_list = M ( 'material_news' )->field ( $field )->order ( 'id asc' )->where ( $map2 )->select ();
-			
-			$vo = $child_list [0];
-			unset ( $child_list [0] );
-			$vo ['child'] = $child_list;
-		}
-		
+		$map ['group_id'] = array (
+				'gt',
+				0 
+		);
 		/* 查询记录总数 */
 		$count = M ( 'material_news' )->where ( $map )->count ( 'distinct group_id' );
-		// 分页
-		if ($count > $row) {
-			$page = new \Think\Page ( $count, $row );
-			$page->setConfig ( 'theme', '%FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END% %HEADER%' );
-			$this->assign ( '_page', $page->show () );
+		$list = [ ];
+		if ($count > 0) {
+			$field = 'id,title,cover_id,intro,group_id,cTime';
+			$list = M ( 'material_news' )->where ( $map )->field ( $field . ',count(id) as count' )->group ( 'group_id' )->order ( 'cTime desc, group_id desc' )->page ( $page, $row )->select ();
+			foreach ( $list as &$vo ) {
+				if ($vo ['count'] == 1)
+					continue;
+				
+				$map2 ['group_id'] = $vo ['group_id'];
+				$child_list = M ( 'material_news' )->field ( $field )->order ( 'id asc' )->where ( $map2 )->select ();
+				
+				$vo = $child_list [0];
+				unset ( $child_list [0] );
+				$vo ['child'] = $child_list;
+			}
+			// 分页
+			if ($count > $row) {
+				$page = new \Think\Page ( $count, $row );
+				$page->setConfig ( 'theme', '%FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END% %HEADER%' );
+				$this->assign ( '_page', $page->show () );
+			}
 		}
 		$this->assign ( 'list_data', $list );
 		$this->assign ( 'add_url', U ( 'add_material', array (
@@ -173,7 +176,7 @@ class MaterialController extends HomeController {
 			$this->assign ( 'others', $others );
 		}
 		$map ['mdm'] = $_GET ['mdm'];
-		$this->assign('group_id',$map['group_id']);
+		$this->assign ( 'group_id', $map ['group_id'] );
 		$this->assign ( 'post_url', U ( 'doAdd', $map ) );
 		$this->display ();
 	}
@@ -275,9 +278,7 @@ class MaterialController extends HomeController {
 		$list = M ( 'material_news' )->limit ( 10 )->where ( $where )->where ( $map )->field ( $field . ',count(id) as count' )->group ( 'group_id' )->order ( 'group_id desc' )->select ();
 		// dump($list);
 		if (empty ( $list )) {
-			$url = U ( 'material_lists', array (
-					'mdm' => $_GET ['mdm'] 
-			) );
+			$url = U ( 'material_lists' );
 			$this->jump ( $url, '上传素材完成' );
 		}
 		foreach ( $list as $art ) {
@@ -288,7 +289,7 @@ class MaterialController extends HomeController {
 				'group_id' => $group_id,
 				'mdm' => $_GET ['mdm'] 
 		) );
-
+		
 		$this->jump ( $url, '上传本地素材到微信中，请勿关闭' );
 	}
 	function _syc_news($group_id, $show_error = true) {
@@ -310,8 +311,8 @@ class MaterialController extends HomeController {
 			$data ['digest'] = $vo ['intro'];
 			$data ['show_cover_pic'] = 1;
 			$data ['content_source_url'] = ! empty ( $vo ['link'] ) ? $vo ['link'] : U ( 'Wap/news_detail', array (
-					'id' => $vo ['id'] ,
-			        'publicid' => $public_info ['id']
+					'id' => $vo ['id'],
+					'publicid' => $public_info ['id'] 
 			) );
 			$vo ['content'] = $this->getNewContent ( $vo ['content'] );
 			$data ['content'] = str_replace ( '"', '\'', $vo ['content'] );
@@ -320,7 +321,7 @@ class MaterialController extends HomeController {
 			! empty ( $media_id ) && $data ['media_id'] = $media_id;
 			$news [] = $data;
 		}
-
+		
 		$update_url = 'https://api.weixin.qq.com/cgi-bin/material/update_news?access_token=' . get_access_token ();
 		$add_url = 'https://api.weixin.qq.com/cgi-bin/material/add_news?access_token=' . get_access_token ();
 		
@@ -348,11 +349,11 @@ class MaterialController extends HomeController {
 			}
 		} else { // 添加图文素材
 			$param ['articles'] = $news;
-			//dump($param);
+			// dump($param);
 			$res = post_data ( $add_url, $param );
-			//dump($res);exit;
+			// dump($res);exit;
 			if ($res ['errcode'] != 0) {
-			   // exit;
+				// exit;
 				if ($show_error) {
 					$this->error ( '110111:' . error_msg ( $res ) );
 				} else {
@@ -398,9 +399,7 @@ class MaterialController extends HomeController {
 			$this->error ( '110113:' . error_msg ( $list ) );
 		}
 		if (empty ( $list ['item'] )) {
-			$url = U ( 'material_lists', array (
-					'mdm' => $_GET ['mdm'] 
-			) );
+			$url = U ( 'material_lists' );
 			$this->jump ( $url, '下载素材完成' );
 		}
 		$map ['media_id'] = array (
@@ -562,6 +561,7 @@ class MaterialController extends HomeController {
 	function _download_imgage($media_id, $picUrl = '', $dd = NULL) {
 		$savePath = SITE_PATH . '/Uploads/Picture/' . time_format ( NOW_TIME, 'Y-m-d' );
 		mkdirs ( $savePath );
+		$cover_id = 0;
 		if (empty ( $picUrl )) {
 			// 获取图片URL
 			$url = 'https://api.weixin.qq.com/cgi-bin/material/get_material?access_token=' . get_access_token ();
@@ -678,9 +678,7 @@ class MaterialController extends HomeController {
 		$map ['token'] = get_token ();
 		$list = M ( 'material_image' )->limit ( 10 )->where ( $map )->field ( 'id,cover_id' )->order ( 'cTime desc' )->select ();
 		if (empty ( $list )) {
-			$url = U ( 'picture_lists', array (
-					'mdm' => $_GET ['mdm'] 
-			) );
+			$url = U ( 'picture_lists' );
 			$this->jump ( $url, '上传素材完成' );
 		}
 		foreach ( $list as $vo ) {
@@ -693,9 +691,7 @@ class MaterialController extends HomeController {
 				) )->save ( $save );
 			}
 		}
-		$url = U ( 'syc_image_to_wechat', array (
-				'mdm' => $_GET ['mdm'] 
-		) );
+		$url = U ( 'syc_image_to_wechat' );
 		$this->jump ( $url, '上传本地素材到微信中，请勿关闭' );
 	}
 	// 下载图片
@@ -711,9 +707,7 @@ class MaterialController extends HomeController {
 			$this->error ( '110115:' . error_msg ( $list ) );
 		}
 		if (empty ( $list ['item'] )) {
-			$url = U ( 'picture_lists', array (
-					'mdm' => $_GET ['mdm'] 
-			) );
+			$url = U ( 'picture_lists' );
 			$this->jump ( $url, '下载素材完成' );
 		}
 		
@@ -744,7 +738,6 @@ class MaterialController extends HomeController {
 			}
 		}
 		$url = U ( 'syc_image_from_wechat', array (
-				'mdm' => $_GET ['mdm'],
 				'offset' => $param ['offset'] + $list ['item_count'] 
 		) );
 		$this->jump ( $url, '下载微信素材中，请勿关闭' );
@@ -897,9 +890,7 @@ class MaterialController extends HomeController {
 			$fields = get_model_attribute ( $model ['id'] );
 			$this->assign ( 'fields', $fields );
 			
-			$this->assign ( 'post_url', U ( 'voice_add', array (
-					'mdm' => $_GET ['mdm'] 
-			) ) );
+			$this->assign ( 'post_url', U ( 'voice_add' ) );
 			$this->assign ( 'UploadFileExts', '*.mp3;*.wma;*.wav;*.amr' );
 			
 			$this->display ( 'add' );
@@ -949,13 +940,11 @@ class MaterialController extends HomeController {
 		} else {
 			$fields = get_model_attribute ( $model ['id'] );
 			$fields ['introduction'] ['is_show'] = 0;
-			$fields ['title'] ['is_show'] =0;
+			$fields ['title'] ['is_show'] = 0;
 			$this->assign ( 'fields', $fields );
 			$this->assign ( 'data', $data );
 			
-			$this->assign ( 'post_url', U ( 'voice_edit', array (
-					'mdm' => $_GET ['mdm'] 
-			) ) );
+			$this->assign ( 'post_url', U ( 'voice_edit' ) );
 			$this->assign ( 'UploadFileExts', '*.mp3;*.wma;*.wav;*.amr' );
 			
 			$this->display ( 'Addons:edit' );
@@ -1027,14 +1016,12 @@ class MaterialController extends HomeController {
 		$map ['type'] = 1;
 		$list = M ( 'material_file' )->limit ( 10 )->where ( $map )->field ( 'id,file_id' )->order ( 'cTime desc' )->select ();
 		if (empty ( $list )) {
-			$url = U ( 'voice_lists', array (
-					'mdm' => $_GET ['mdm'] 
-			) );
+			$url = U ( 'voice_lists' );
 			$this->jump ( $url, '上传素材完成' );
 		}
 		foreach ( $list as $vo ) {
 			
-			$mediaId = $this->_get_file_media_id ( $vo ['file_id'], 'voice',$vo['title'] );
+			$mediaId = $this->_get_file_media_id ( $vo ['file_id'], 'voice', $vo ['title'] );
 			if ($mediaId) {
 				$save ['media_id'] = $mediaId;
 				M ( 'material_file' )->where ( array (
@@ -1042,9 +1029,7 @@ class MaterialController extends HomeController {
 				) )->save ( $save );
 			}
 		}
-		$url = U ( 'syc_voice_to_wechat', array (
-				'mdm' => $_GET ['mdm'] 
-		) );
+		$url = U ( 'syc_voice_to_wechat' );
 		$this->jump ( $url, '上传本地素材到微信中，请勿关闭' );
 	}
 	
@@ -1102,9 +1087,7 @@ class MaterialController extends HomeController {
 			$fields = get_model_attribute ( $model ['id'] );
 			$fields ['introduction'] ['is_show'] = 1;
 			$this->assign ( 'fields', $fields );
-			$this->assign ( 'post_url', U ( 'video_add', array (
-					'mdm' => $_GET ['mdm'] 
-			) ) );
+			$this->assign ( 'post_url', U ( 'video_add' ) );
 			$this->display ( 'Addons:add' );
 		}
 	}
@@ -1143,33 +1126,39 @@ class MaterialController extends HomeController {
 			$this->assign ( 'fields', $fields );
 			$this->assign ( 'data', $data );
 			
-			$this->assign ( 'post_url', U ( 'video_edit', array (
-					'mdm' => $_GET ['mdm'] 
-			) ) );
+			$this->assign ( 'post_url', U ( 'video_edit' ) );
 			
 			$this->display ( 'Addons:edit' );
 		}
 	}
 	function syc_video_to_wechat() {
-	    
+		
 		// 上传本地视频素材
 		$map ['id'] = array (
 				'gt',
 				I ( 'id', 0, 'intval' ) 
 		);
-		$map ['media_id'] = array(array('eq','0'),array('eq',''),'or');
+		$map ['media_id'] = array (
+				array (
+						'eq',
+						'0' 
+				),
+				array (
+						'eq',
+						'' 
+				),
+				'or' 
+		);
 		// $map ['manager_id'] = $this->mid;
 		$map ['token'] = get_token ();
 		$map ['type'] = 2;
 		$list = M ( 'material_file' )->limit ( 10 )->where ( $map )->field ( 'id,file_id,title,introduction' )->order ( 'id asc' )->select ();
-
+		
 		if (empty ( $list )) {
-			$url = U ( 'video_lists', array (
-					'mdm' => $_GET ['mdm'] 
-			) );
+			$url = U ( 'video_lists' );
 			$this->jump ( $url, '上传素材完成' );
 		}
-	
+		
 		foreach ( $list as $vo ) {
 			$id = $vo ['id'];
 			$mediaId = $this->_get_file_media_id ( $vo ['file_id'], 'video', $vo ['title'], $vo ['introduction'] );
@@ -1180,7 +1169,9 @@ class MaterialController extends HomeController {
 				) )->save ( $save );
 			}
 		}
-		$url = U ( 'syc_video_to_wechat', ['id' => $id ] );
+		$url = U ( 'syc_video_to_wechat', [ 
+				'id' => $id 
+		] );
 		$this->jump ( $url, '上传本地素材到微信中，请勿关闭' );
 	}
 	// 下载音频：未实现 TODO
@@ -1255,13 +1246,9 @@ class MaterialController extends HomeController {
 		}
 		if (empty ( $list ['item'] )) {
 			if ($type == 1) {
-				$url = U ( 'voice_lists', array (
-						'mdm' => $_GET ['mdm'] 
-				) );
+				$url = U ( 'voice_lists' );
 			} else {
-				$url = U ( 'video_lists', array (
-						'mdm' => $_GET ['mdm'] 
-				) );
+				$url = U ( 'video_lists' );
 			}
 			
 			$this->jump ( $url, '下载素材完成' );
@@ -1316,7 +1303,7 @@ class MaterialController extends HomeController {
 				addWeixinLog ( '视频/语音素材不存在：' . $file_id, '_get_file_media_id' );
 				return '';
 			}
-	        $param ['title']=$title;
+			$param ['title'] = $title;
 			$param ['type'] = $type;
 			$param ['media'] = '@' . realpath ( $path );
 			if ($type == 'video') {
@@ -1326,8 +1313,8 @@ class MaterialController extends HomeController {
 			}
 			
 			$url = 'https://api.weixin.qq.com/cgi-bin/material/add_material?access_token=' . get_access_token ();
-			$res = post_data ( $url, $param,'file', true,[],0 );
-// 			addWeixinLog ( $res, '_get_file_media_id' );
+			$res = post_data ( $url, $param, 'file', true, [ ], 0 );
+			// addWeixinLog ( $res, '_get_file_media_id' );
 			if (! $res) {
 				addWeixinLog ( error_msg ( $res, '视频/语音素材上传' ), '_get_file_media_id' );
 				return '';
@@ -1362,9 +1349,8 @@ class MaterialController extends HomeController {
 		
 		$list_data = $this->_get_model_list ( $model );
 		$this->assign ( $list_data );
-		
+		$this->assign ( 'isRadio', $isRadio );
 		if ($isAjax) {
-			$this->assign ( 'isRadio', $isRadio );
 			$this->assign ( $list_data );
 			$this->display ( 'text_lists_data' );
 		} else {
@@ -1376,7 +1362,9 @@ class MaterialController extends HomeController {
 	// 根据id获取文本素材,设置欢迎语用到
 	function ajax_text_by_id() {
 		$id = I ( 'text_id' );
-		$text = M ( 'material_text' )->where ( ['id' => $id ] )->getField ( 'content' );
+		$text = M ( 'material_text' )->where ( [ 
+				'id' => $id 
+		] )->getField ( 'content' );
 		
 		echo $text;
 	}
@@ -1384,7 +1372,7 @@ class MaterialController extends HomeController {
 		$model = $this->getModel ( 'material_text' );
 		
 		if (IS_POST) {
-		    $this->_check_text_content($_POST['content']);
+			$this->_check_text_content ( $_POST ['content'] );
 			$Model = D ( parse_name ( get_table_name ( $model ['id'] ), 1 ) );
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $model ['id'] );
@@ -1404,13 +1392,13 @@ class MaterialController extends HomeController {
 			$this->display ( 'Addons:add' );
 		}
 	}
-	function _check_text_content($content){
-	    if (empty ( $content )) {
-	        $this->error ( '110137:文本内容不能为空' );
-	    }
-	    if (strlen($content) > 2048){
-	        $this->error ( '110139:文本内容不超过600个字' );
-	    }
+	function _check_text_content($content) {
+		if (empty ( $content )) {
+			$this->error ( '110137:文本内容不能为空' );
+		}
+		if (strlen ( $content ) > 2048) {
+			$this->error ( '110139:文本内容不超过600个字' );
+		}
 	}
 	function text_del() {
 		$model = $this->getModel ( 'material_text' );
@@ -1430,7 +1418,7 @@ class MaterialController extends HomeController {
 		}
 		
 		if (IS_POST) {
-		    $this->_check_text_content($_POST['content']);
+			$this->_check_text_content ( $_POST ['content'] );
 			$Model = D ( parse_name ( get_table_name ( $model ['id'] ), 1 ) );
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $model ['id'] );

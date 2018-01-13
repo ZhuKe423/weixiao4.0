@@ -63,7 +63,7 @@ class SlideshowController extends BaseController {
 			$Model = D ( parse_name ( get_table_name ( $model ['id'] ), 1 ) );
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $model ['id'] );
-			if ($Model->create () && $Model->save ()) {
+			if ($Model->create () && false !== $Model->save ()) {
 				$this->_saveKeyword ( $model, $id );
 				
 				// 清空缓存
@@ -97,8 +97,7 @@ class SlideshowController extends BaseController {
 			$this->assign ( 'fields', $fields );
 			$this->assign ( 'data', $data );
 			
-			$templateFile = $model ['template_edit'] ? $model ['template_edit'] : '';
-			$this->display ( $templateFile );
+			$this->display ();
 		}
 	}
 	

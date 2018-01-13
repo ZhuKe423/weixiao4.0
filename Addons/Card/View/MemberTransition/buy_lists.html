@@ -12,7 +12,7 @@
 				<if condition="$del_button"><php> $del_url || $del_url = U('del?model='.$model['id'], $get_param);</php><button class="btn ajax-post confirm" target-form="ids" url="{$del_url}">删 除</button></if>    
                 <a class="btn" href="{$export_url}">导出数据</a>
                 <volist name="top_more_button" id="vo">
-                <if condition="$vo[is_buttion]">
+                <if condition="isset($vo['is_buttion']) and $vo['is_buttion']">
                 <button class="btn {$vo.class}" target-form="ids" url="{$vo.url}">{$vo.title}</button>
                 <else />
                 <a class="btn" href="{$vo.url}">{$vo.title}</a>
@@ -32,11 +32,11 @@
               		</volist>
               	</notempty>
               </select>
-              	&nbsp;&nbsp;消费金额：<input type='text' name ='minVal' value="{$_GET['min_value']}" style='width: 50px;'/> ~ <input type='text' name ='maxVal' value="{$_GET['max_value']}" style='width: 50px;'/> &nbsp;<a href='javascript:;' class='btn' id='priceSearch' style='margin-top: -9px;'>查询</a>
+              	&nbsp;&nbsp;消费金额：<input type='text' name ='minVal' value="{:I('min_value')}" style='width: 50px;'/> ~ <input type='text' name ='maxVal' value="{:I('max_value')}" style='width: 50px;'/> &nbsp;<a href='javascript:;' class='btn' id='priceSearch' style='margin-top: -9px;'>查询</a>
       
-     &nbsp;&nbsp;  消费时间<input type="datetime" placeholder="请选择消费日期" value="{$_GET['start_ctime']}" class="text date" name="start_ctime" style="width: 130px;">
+     &nbsp;&nbsp;  消费时间<input type="datetime" placeholder="请选择消费日期" value="{:I('start_ctime')}" class="text date" name="start_ctime" style="width: 130px;">
             至
-            <input type="datetime" placeholder="请选择消费日期" value="{$_GET['end_ctime']}" class="text date" name="end_ctime" style="width: 130px;">
+            <input type="datetime" placeholder="请选择消费日期" value="{:I('end_ctime')}" class="text date" name="end_ctime" style="width: 130px;">
          &nbsp;<a href='javascript:;' class='btn' id='ctimeSearch' style='margin-top: -9px;'>查询</a>
       
         
@@ -48,8 +48,8 @@
        
          
           <div class="sleft">
-            <php> $get_param[model]=$model['name']; $search_url || $search_url = addons_url(MODULE_NAME.'://'.CONTROLLER_NAME.'/lists', $get_param);</php>
-            <php>empty($search_key) && $search_key=$model['search_key'];empty($search_key) && $search_key='title';</php>
+            <php> $get_param['model']=$model['name']; $search_url || $search_url = addons_url(MODULE_NAME.'://'.CONTROLLER_NAME.'/lists', $get_param);</php>
+            <php>empty($search_key) && isset($model['search_key']) && $search_key=$model['search_key'];empty($search_key) && $search_key='title';</php>
             <input type="text" name="{$search_key}" class="search-input" value="{:I($search_key)}" placeholder="{$placeholder}">
             <a class="sch-btn" href="javascript:;" id="search" url="{$search_url}"><i class="btn-search"></i></a> </div>
         </div>
@@ -165,7 +165,7 @@ $(function(){
         if(query == '' ){
         	var addon="{MODULE_NAME}";
         	if(addon){
-        		url="{:addons_url(MODULE_NAME.'://'.CONTROLLER_NAME.'/buy_lists')}&mdm={$_GET['mdm']}";
+        		url="{:addons_url(MODULE_NAME.'://'.CONTROLLER_NAME.'/buy_lists')}";
         	}
         }
 		window.location.href = url;
@@ -179,7 +179,7 @@ $(function(){
     });
     
     $("select[name='pay_shop']").change(function(){
-		var url = "{:addons_url(MODULE_NAME.'://'.CONTROLLER_NAME.'/buy_lists')}&mdm={$_GET["mdm"]}&pay_shop="+$(this).val();
+		var url = "{:addons_url(MODULE_NAME.'://'.CONTROLLER_NAME.'/buy_lists')}&pay_shop="+$(this).val();
 		
         var query  = $('.type-form').serialize();
         query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
@@ -194,14 +194,14 @@ $(function(){
     $('#priceSearch').click(function(){
 		var min =$("input[name='minVal']").val();
 		var max =$("input[name='maxVal']").val();
-		var url="{:addons_url(MODULE_NAME.'://'.CONTROLLER_NAME.'/buy_lists')}&mdm={$_GET["mdm"]}&is_recharge=1&min_value="+min+"&max_value="+max;
+		var url="{:addons_url(MODULE_NAME.'://'.CONTROLLER_NAME.'/buy_lists')}&is_recharge=1&min_value="+min+"&max_value="+max;
 		location.href=url;
 	});
     $('#ctimeSearch').click(function(){
 		var start =$("input[name='start_ctime']").val();
 		var end =$("input[name='end_ctime']").val();
 		if(start || end){
-			var url="{:addons_url(MODULE_NAME.'://'.CONTROLLER_NAME.'/buy_lists')}&mdm={$_GET["mdm"]}&is_ctime=1&start_ctime="+start+"&end_ctime="+end;
+			var url="{:addons_url(MODULE_NAME.'://'.CONTROLLER_NAME.'/buy_lists')}&is_ctime=1&start_ctime="+start+"&end_ctime="+end;
 			location.href=url;
 		}
 		

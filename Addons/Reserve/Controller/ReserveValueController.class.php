@@ -11,7 +11,7 @@ class ReserveValueController extends BaseController {
 		parent::_initialize ();
 
 		$this->model = $this->getModel ( 'reserve_value' );
-		$param['mdm']=$_GET['mdm'];
+		$param ['mdm'] =  I( 'mdm' );
 		$res ['title'] = '微预约';
 		$res ['url'] = addons_url ( 'Reserve://Reserve/lists',$param );
 		$res ['class'] = '';

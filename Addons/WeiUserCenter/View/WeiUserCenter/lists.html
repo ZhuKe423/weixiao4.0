@@ -4,20 +4,12 @@
     <section id="contents"> <include file="Home@Addons/_nav" />
       <div class="table-bar">
         <div class="fl">
-          <div class="tools"> <!-- <a href="javascript:void(0);" class="btn setting_group">设置用户组</a> &nbsp;<a href="javascript:void(0);" class="btn setting_tag">设置标签</a> &nbsp; -->  <button class="btn" id="btnSubmit" type="button" >导出数据</button><!-- <a href="{:U ( 'export' )}" class="btn">导出用户</a> &nbsp;  -->
-         <!--  <if condition="$syc_wechat"><a href="{:U('syc_auth_group')}" class="btn tongbu">一键同步微信公众号粉丝</a> &nbsp;</if>  -->
+          <div class="tools"> <button class="btn" id="btnSubmit" type="button" >导出数据</button>
           </div>
         </div>
         <!-- 高级搜索 -->
         <div class="search-form fr cf">
-          <!-- <div class="sleft" style="margin-right:10px;">
-              <select name="group" style="border:none; padding:4px; margin:0;">
-              <option value="{:addons_url('WeiUserCenter://WeiUserCenter/lists',array('group_id'=>0))}" <eq name="$group_id" value="0">selected</eq> >全部用户</option>
-                  <volist name="auth_group" id="vo">
-                      <option value="{:addons_url('WeiUserCenter://WeiUserCenter/lists',array('group_id'=>$vo['id']))}" <eq name="vo['id']" value="$group_id">selected</eq> >{$vo.title}</option>
-                  </volist>
-              </select>
-          </div> -->
+
           <div class="sleft">
             <input type="text" placeholder="请输入昵称或标签搜索" value="{:I('nickname')}" class="search-input" name="nickname">
             <a url="{:addons_url('WeiUserCenter://WeiUserCenter/lists',$get_param)}" id="search" href="javascript:;" class="sch-btn"><i class="btn-search"></i></a> </div>
@@ -36,8 +28,6 @@
                 <th>头像</th>
                 <th>用户昵称</th>
                 <th>性别</th>
-              <!--   <th>分组</th> -->
-               <!--  <th>标签</th> -->
                 <th>操作</th>
               </tr>
             </thead>
@@ -52,14 +42,8 @@
                   <td>{$vo.headimgurl|url_img_html}</td>
                   <td>{$vo.nickname}</td>
                   <td>{$vo.sex_name}</td>
-                 <!--  <td>{$vo.group}</td> -->
-                  <!-- <td>{$vo.tag_titles}</td> -->
                   <td>
-                  <a href="{:addons_url('UserCenter://UserCenter/detail',array('uid'=>$vo[uid]))}" target="_self">详细资料</a> 
-                  <!--<a href="{:addons_url('UserCenter://UserCenter/edit',array('uid'=>$vo[uid]))}" target="_self">编辑</a>-->
-                  <!-- <a href="{:U('Home/CreditData/lists',array('uid'=>$vo[uid]))}" target="_self">积分记录</a>
-                  <a href="javascript:void(0);" class="set_remark" rel="{$vo.uid}">备注</a> -->
-                  
+                  <a href="{:addons_url('UserCenter://UserCenter/detail',array('uid'=>$vo[uid]))}" target="_self">详细资料</a>                   
                   </td>
                 </tr>
               </volist>
@@ -75,10 +59,6 @@
   <div class="group_html" style="display:none">
     	<div class="manage_group normal_dialog">
             <div class="content">
-<!--            <select name="type" id="select_type" style="width:25%">
-                    <option value="0">移入</option>
-                    <option value="1">移出</option>
-            </select>-->
             <select name="group" id="select_group" style="width:100%">
                 <volist name="auth_group" id="vo">
                     <option value="{$vo.id}">{$vo.title}</option>

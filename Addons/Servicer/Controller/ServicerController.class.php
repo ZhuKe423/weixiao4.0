@@ -68,8 +68,7 @@ class ServicerController extends ManageBaseController {
 		$this->display ();
 	}
 	function set_enable() {
-		$enable = I ( 'enable' );
-		$enable = $enable == '启用' ? 1 : 0;
+		$enable = I ( 'enable', 0, 'intval' );
 		$save ['enable'] = 1 - $enable;
 		$map ['id'] = I ( 'id' );
 		$res = M ( 'Servicer' )->where ( $map )->save ( $save );

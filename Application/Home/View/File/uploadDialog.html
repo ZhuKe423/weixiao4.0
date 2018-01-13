@@ -23,8 +23,8 @@
   <div class="upload_dialog_bar"><a id="conBtn" class="btn" href="javascript:;" onClick="confirmImage();">确定</a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="border-btn" href="javascript:;" onClick="window.parent.$.Dialog.close();">取消</a></div>
 </body>
 <script type="text/javascript">
-var maxCount = parseInt("{$_GET['max']}");
-var fieldName =  "{$_GET['field']}";
+var maxCount = parseInt("{:I('max')}");
+var fieldName =  "{:I('field')}";
 var uploader = WebUploader.create({
 
 	// 设置文件上传域的name

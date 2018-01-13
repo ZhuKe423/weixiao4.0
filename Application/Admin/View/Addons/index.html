@@ -15,8 +15,8 @@
 		<div class="search-form fr cf">
             <div class="sleft">
                 <select name="group">
-                        <option value="{:U('Admin/Addons/index',array('cate_id'=>0))}" <eq name="$cate_id" value="0">selected</eq> >全部插件</option>
-                        <option value="{:U('Admin/Addons/index',array('cate_id'=>'-1'))}" <eq name="$cate_id" value="-1">selected</eq> >无分类插件</option>
+                        <option value="{:U('Admin/Addons/index',array('cate_id'=>0))}" <eq name="cate_id" value="0">selected</eq> >全部插件</option>
+                        <option value="{:U('Admin/Addons/index',array('cate_id'=>'-1'))}" <eq name="cate_id" value="-1">selected</eq> >无分类插件</option>
                     <volist name="cates" id="vo">
                         <option value="{:U('Admin/Addons/index',array('cate_id'=>$vo['id']))}" <eq name="vo['id']" value="$cate_id">selected</eq> >{$vo.title}</option>
                     </volist>

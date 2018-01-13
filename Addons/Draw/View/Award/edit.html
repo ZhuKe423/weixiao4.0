@@ -80,7 +80,7 @@
                         </case>                           
                         <case value="news">
                         <div id="news_{$field.name}"></div>
-                        {:hook('news', array('name'=>$field['name'],'value'=>$data[$field['name']],'extra'=>$field['extra']))}
+                        {:hook('news', array('name'=>$field['name'],'value'=>$data[$field['name']]))}
                         </case> 
                         <case value="image">
                         <div id="image_{$field.name}"></div>

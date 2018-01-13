@@ -51,7 +51,7 @@ class BusinessCardController extends ManageBaseController {
 	        // 获取模型的字段信息
 	        $Model = $this->checkAttr ( $Model, $model ['id'] );
 	        if ($act=='edit'){
-	            if ($Model->create () && $Model->save ()) {
+	            if ($Model->create () && false !== $Model->save ()) {
 	                // 清空缓存
 	                method_exists ( $Model, 'clear' ) ;
 	                //     			$url=  '<script language=javascript>history.go(-1);</script>';

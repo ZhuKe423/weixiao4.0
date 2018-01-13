@@ -15,6 +15,7 @@ class CouponModel extends Model {
 			$info = ( array ) (empty ( $data ) ? $this->find ( $id ) : $data);
 			
 			$more_button = wp_explode ( $info ['more_button'] );
+			$more_buttonArr = [ ];
 			foreach ( $more_button as $v ) {
 				$arr = explode ( '|', $v );
 				$more_buttonArr [$arr [1]] = $arr [0];

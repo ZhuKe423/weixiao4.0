@@ -15,19 +15,19 @@
       <div class="box-content">
       <div class="tab-content has-weixinpreivew"> 
      <h5>快捷交易</h5>
-     <a class="tile tile_themed" onClick="$.WeiPHP.openSubmitDialog('会员消费','{:addons_url('Card://Member/do_buy?model='.$model['id'],array('id'=>$data['id']))}',600,600)" href="javascript:;">
+     <a class="tile tile_themed" onClick="$.WeiPHP.openSubmitDialog('会员消费','{:addons_url('Card://Member/do_buy?model='.$model['id'])}',600,600)" href="javascript:;">
      <i class="i_usd"></i>
      <div class="div_info">
      <strong>消费</strong>
      </div>
      </a>
-     <a class="tile tile_themed" onClick="$.WeiPHP.openSubmitDialog('会员充值','{:addons_url('Card://Member/do_recharge?model='.$model['id'],array('id'=>$data['id']))}',600,400)" href="javascript:;">
+     <a class="tile tile_themed" onClick="$.WeiPHP.openSubmitDialog('会员充值','{:addons_url('Card://Member/do_recharge?model='.$model['id'])}',600,400)" href="javascript:;">
      <i class="i_yen"></i>
      <div class="div_info">
      <strong>充值</strong>
      </div>
      </a>
-     <a class="tile tile_themed" onClick="$.WeiPHP.openSubmitDialog('手动修改积分','{:addons_url('Card://Member/update_score?model='.$model['id'],array('id'=>$data['id']))}',600,400)" href="javascript:;">
+     <a class="tile tile_themed" onClick="$.WeiPHP.openSubmitDialog('手动修改积分','{:addons_url('Card://Member/update_score?model='.$model['id'])}',600,400)" href="javascript:;">
      <i class="i_money"></i>
      <div class="div_info">
      <strong>手动修改积分</strong>
@@ -46,13 +46,13 @@
       
       <div class="tab-content has-weixinpreivew"> 
      <h5>交易统计</h5>
-     <a class="tile tile_themed" href="{:addons_url('Card://MemberTransition/buy_tongji')}&mdm={$_GET['mdm']}">
+     <a class="tile tile_themed" href="{:addons_url('Card://MemberTransition/buy_tongji')}">
      <i class="i_chart"></i>
      <div class="div_info">
      <strong>消费统计</strong>
      </div>
      </a>
-     <a class="tile tile_themed"  href="{:addons_url('Card://MemberTransition/score_tongji')}&mdm={$_GET['mdm']}">
+     <a class="tile tile_themed"  href="{:addons_url('Card://MemberTransition/score_tongji')}">
      <i class="i_chart"></i>
      <div class="div_info">
      <strong>积分统计</strong>
@@ -66,25 +66,25 @@
       <div class="tab-content has-weixinpreivew"> 
       
      <h5>交易明细查询</h5>
-     <a class="tile tile_themed" href="{:addons_url('Card://MemberTransition/buy_lists')}&mdm={$_GET['mdm']}">
+     <a class="tile tile_themed" href="{:addons_url('Card://MemberTransition/buy_lists')}">
      <i class="i_search"></i>
      <div class="div_info">
      <strong>消费查询</strong>
      </div>
      </a>
-     <a class="tile tile_themed" href="{:addons_url('Card://MemberTransition/recharge_lists')}&mdm={$_GET['mdm']}">
+     <a class="tile tile_themed" href="{:addons_url('Card://MemberTransition/recharge_lists')}">
      <i class="i_search"></i>
      <div class="div_info">
      <strong>充值查询</strong>
      </div>
      </a>
-     <a class="tile tile_themed"  href="{:addons_url('Card://MemberTransition/score_lists')}&mdm={$_GET['mdm']}">
+     <a class="tile tile_themed"  href="{:addons_url('Card://MemberTransition/score_lists')}">
      <i class="i_search"></i>
      <div class="div_info">
      <strong>积分查询</strong>
      </div>
      </a>
-     <a class="tile tile_themed"  href="{:addons_url('Card://MemberTransition/sncode_lists')}&mdm={$_GET['mdm']}">
+     <a class="tile tile_themed"  href="{:addons_url('Card://MemberTransition/sncode_lists')}">
      <i class="i_search"></i>
      <div class="div_info">
      <strong>优惠券核销查询</strong>

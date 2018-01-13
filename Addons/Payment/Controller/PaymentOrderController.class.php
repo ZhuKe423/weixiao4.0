@@ -16,7 +16,7 @@ class PaymentOrderController extends ManageBaseController {
 		$this->assign ( 'add_button', false );
 		$this->assign ( 'del_button', false );
 		$this->assign ( 'check_all', false );
-		$param['mdm']=$_GET['mdm'];
+		$param ['mdm'] =  I( 'mdm' );
 		$res['title']='订单管理';
 		$res['url']=addons_url('Shop://Order/lists',$param);
 		$res ['class'] = CONTROLLER_NAME == 'Order' ? 'current' : '';
@@ -95,8 +95,7 @@ class PaymentOrderController extends ManageBaseController {
 		}
 		$this->assign ( $list_data );
 		
-		$templateFile = $this->model ['template_list'] ? $this->model ['template_list'] : '';
-		$this->display ( $templateFile );
+		$this->display ();
 	}
 	// 通用插件的编辑模型
 	public function edit() {
@@ -107,7 +106,7 @@ class PaymentOrderController extends ManageBaseController {
 			$Model = D ( parse_name ( get_table_name ( $model ['id'] ), 1 ) );
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $model ['id'] );
-			if ($Model->create () && $Model->save ()) {
+			if ($Model->create () && false !== $Model->save ()) {
 				D ( 'Common/Keyword' )->set ( $_POST ['keyword'], MODULE_NAME, $id, $_POST ['keyword_type'], 'custom_reply_news' );
 				
 				$this->success ( '保存' . $model ['title'] . '成功！', U ( 'lists?model=' . $model ['name'] ) );
@@ -248,6 +247,6 @@ class PaymentOrderController extends ManageBaseController {
 	        unset($vo['id']);
 	        $dataArr[]=$vo;
 	    }
-	    outExcel ( $dataArr, $map ['module'] );
+	    outExcel ( $dataArr );
 	}
 }

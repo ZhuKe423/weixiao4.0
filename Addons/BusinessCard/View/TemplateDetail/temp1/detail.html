@@ -152,7 +152,7 @@
 			
 		 });
 		 $('#comment_submit').click(function(){
-			 var uid="{$_GET['uid']}";
+			 var uid="{:I('uid')}";
 			 var aim_id="{$info.id}";
 			 var truename=$("input[name='truename']").val();
 			 var mobile=$("input[name='mobile']").val();

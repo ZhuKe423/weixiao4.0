@@ -230,7 +230,10 @@ class UserModel extends Model {
 		if ($userInfo === false || $update) {
 			// 获取用户基本信息
 			$userInfo = ( array ) $this->find ( $uid );
-			
+			if (empty ( $userInfo )) {
+				S ( $key, [ ], 86400 );
+				return [ ];
+			}
 			// 公众号管理员信息
 			$manager = ( array ) M ( 'manager' )->where ( "uid='$uid'" )->field ( true )->find ();
 			$userInfo = array_merge ( $userInfo, $manager );
@@ -276,6 +279,7 @@ class UserModel extends Model {
 			// 获取标签信息
 			$tag_map ['uid'] = $uid;
 			$userInfo ['tag_ids'] = M ( 'user_tag_link' )->where ( $tag_map )->getFields ( 'tag_id' );
+			$userInfo ['tag_titles'] = '';
 			if (! empty ( $userInfo ['tag_ids'] )) {
 				$tag_map2 ['id'] = array (
 						'in',
@@ -288,11 +292,11 @@ class UserModel extends Model {
 			S ( $key, $userInfo, 86400 );
 		}
 		
-		$token = session ( 'token' );
+		$token = get_token ();
 		$userInfo ['token'] = $token;
 		if ($token) {
-			$userInfo ['openid'] = $userInfo ['tokens'] [$token];
-			if (! empty ( $userInfo ['remarks'] [$token] )) {
+			$userInfo ['openid'] = isset ( $userInfo ['tokens'] [$token] ) ? $userInfo ['tokens'] [$token] : '';
+			if (isset ( $userInfo ['remarks'] [$token] ) && ! empty ( $userInfo ['remarks'] [$token] )) {
 				$userInfo ['nickname'] = $userInfo ['remarks'] [$token];
 			}
 		} else {

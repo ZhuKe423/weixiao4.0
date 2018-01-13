@@ -10,7 +10,7 @@ class AnswerController extends ManageBaseController {
 	function _initialize() {
 		parent::_initialize ();
 		$this->model = $this->getModel ( 'ask_answer' );
-		$param ['mdm'] = $_GET ['mdm'];
+		$param ['mdm'] =  I( 'mdm' );
 		$param ['ask_id'] = $this->ask_id = intval ( $_REQUEST ['ask_id'] );
 		
 		$res ['title'] = '微抢答';
@@ -136,7 +136,7 @@ class AnswerController extends ManageBaseController {
 			$dataArr = array_merge ( $dataArr, $data );
 		}
 		
-		outExcel ( $dataArr, $map ['module'] );
+		outExcel ( $dataArr );
 	}
 	function detail() {
 		$this->assign ( 'add_button', false );

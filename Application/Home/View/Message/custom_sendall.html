@@ -45,7 +45,7 @@ background-color: #eaeaea;">
                 <a class="voice" href="javascript:;">语音消息</a>
                 <a class="video" href="javascript:;">视频消息</a>
             </div>
-            <php> $post_url || $post_url = U('custom_sendall?model='.$model['id'], $get_param);</php>
+            <php> $post_url || $post_url = U('custom_sendall', $get_param);</php>
             <form id="form" action="{$post_url}" method="post" class="form-horizontal form-center">
                 <input type="hidden" name="msg_type" value="text"/>
                 <label class="textarea" style="position:relative; overflow:hidden; zoom:1;">
@@ -124,7 +124,7 @@ background-color: #eaeaea;">
                           <select name="group_id">
                             <option toggle-data="全部用户" class="toggle-data" value="0">全部用户</option>
                             <volist name="group_list" id="vo">
-                            <option toggle-data="" class="toggle-data" value="{$vo.id}">{$vo.title} </option>
+                            <option class="toggle-data" value="{$vo.id}">{$vo.title} </option>
                             </volist>
 
                           </select>

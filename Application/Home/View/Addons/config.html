@@ -9,7 +9,7 @@
 		<empty name="custom_config">
 			<foreach name="data['config']" item="form" key="o_key">
 				<div class="form-item cf">
-                   <if condition="$form[type]!='hidden'">
+                   <if condition="$form['type']!='hidden'">
 					<label class="item-label">
 						{$form.title|default=''}
 						<present name="form.tip">
@@ -63,7 +63,7 @@
 							</case>
 							<case value="material">
                     			<div id="material_{$o_key}"></div>
-                  {:hook('material', array('name'=>$o_key,'value'=>$form['value'],'extra'=>$field['extra']))}
+                  {:hook('material', array('name'=>$o_key,'value'=>$form['value']))}
                  
                     		</case>
 							<case value="textarea">
@@ -97,18 +97,6 @@
 				                  </present>
 				                </div>
 				             </div>
-                          <!-- <div class="controls upload_file">
-                          	
-                                <input type="file" id="upload_file_{$o_key}">
-                                <input type="hidden" name="config[{$o_key}]" value="{$form['value']}"/>
-                                <div class="upload-img-box">
-                                  <present name="form.value">
-                                    <div class="upload-pre-file"><span class="upload_icon_all"></span>
-                                    {$form['value']|get_table_field=###,'id','name','File'}</div>
-                                  </present>
-                                </div>
-                             
-                          </div> -->
                           <script type="text/javascript">
 								//上传图片
 							    /* 初始化上传插件 */
