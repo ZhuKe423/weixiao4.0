@@ -30,7 +30,7 @@ class PaymentModel extends Model {
 		// add_debug_log($order, '888');
 		// 组装jsapi参数
 		$return ['appId'] = $appid;
-		$return ['timeStamp'] = NOW_TIME;
+		$return ['timeStamp'] = ''.NOW_TIME;//字符串格式，兼容iphone手机
 		$return ['nonceStr'] = uniqid ();
 		$return ['package'] = 'prepay_id=' . $order ['prepay_id'];
 		$return ['signType'] = 'MD5';

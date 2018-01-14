@@ -49,8 +49,8 @@
                         <p class="desc ellipsis">{$vo.intro}</p>
                     </div>
                     <div class="appmsg_action">
-                    	<a href="{:U('add_material', array('group_id'=>$vo['group_id'],'mdm'=>$_GET['mdm']))}">编辑</a>
-                        <a href="{:U('del_material_by_groupid', array('group_id'=>$vo['group_id'],'mdm'=>$_GET['mdm']))}">删除</a>
+                    	<a href="{:U('add_material', array('group_id'=>$vo['group_id']))}">编辑</a>
+                        <a href="{:U('del_material_by_groupid', array('group_id'=>$vo['group_id']))}">删除</a>
                     </div>
                 </li>
                 <else />

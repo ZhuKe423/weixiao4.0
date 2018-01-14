@@ -55,11 +55,13 @@
                                 <div class="upload-img-view" id='mutl_picture_background'>
                                   <notempty name="data[background_arr]">
                                   	<volist name="data[background_arr]" id="vo">
+									<if condition="!empty($vo)">
                                     <div class="upload-pre-item22">
                                     <img width="100" height="100" src="{$vo|get_cover_url}"/>
                                     <input type="hidden" name="background[]" value="{$vo}"/>
                                     <em>&nbsp;</em>
                                     </div>
+									</if>
                                     </volist>
                                   </notempty>
                                 </div>
