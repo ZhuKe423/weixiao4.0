@@ -10,7 +10,7 @@
           <select name="cate" id="cate_select" style="width:150px; height:30px; line-height:30px; padding:0; margin-bottom:0">
             <option value="0" >全部分类</option>
             
-            <volist name="weisite_category" id="vo"> <option value="{$vo.id}" <if condition="$_GET[cate_id]==$vo[id]">selected="selected"</if> >{$vo.title}</option>
+            <volist name="weisite_category" id="vo"> <option value="{$vo.id}" <if condition="$_GET['cate_id']==$vo['id']">selected="selected"</if> >{$vo.title}</option>
             </volist>
           </select>
         </div>

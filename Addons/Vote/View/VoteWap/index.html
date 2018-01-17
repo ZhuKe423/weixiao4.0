@@ -18,7 +18,7 @@
                 <!-- 带图片投票 -->
                 <if condition="$info['is_img'] && !empty($opt['image'])">
                 	<li class="pic_li <if condition="$canJoin eq false">disable</if>" data-count="{$opt.opt_count}">
-                    <p class="mb" ><img <php>if(in_array($opt[id], $joinData)) echo 'style="border-color:#c07b36" ';</php> src="{$opt.image|get_cover_url}" /></p>
+                    <p class="mb" ><img <php>if(in_array($opt['id'], $joinData)) echo 'style="border-color:#c07b36" ';</php> src="{$opt.image|get_cover_url}" /></p>
                     <p class="count">
                         <span class="count_num">
 							{$opt.opt_count}
@@ -28,7 +28,7 @@
                     <p><span class="name">{$opt.name|msubstr=0,15}</span></p>
                 <else/>
                 	<li class="text_li <if condition="$canJoin eq false">disable</if>" data-count="{$opt.opt_count}">
-                	<div class="bar" <php>if(in_array($opt[id], $joinData)) echo 'style="font-weight:bold" ';</php>>
+                	<div class="bar" <php>if(in_array($opt['id'], $joinData)) echo 'style="font-weight:bold" ';</php>>
                         <p><span class="name">{$opt.name|msubstr=0,15}</span></p>
                         <p class="count">
 
@@ -42,7 +42,7 @@
                 </if>
                 <p class="list" style="display:none">
                     <input type="radio" class="{$style_cls}" id="check_{$opt.id}" name="optArr[]" value="{$opt.id}"
-                  <php>/**if(in_array($opt[id], $joinData)) echo 'checked="checked" '; if(!$canJoin) echo ' disabled'; */</php>
+                  <php>/**if(in_array($opt['id'], $joinData)) echo 'checked="checked" '; if(!$canJoin) echo ' disabled'; */</php>
                   ><label for="check_{$opt.id}"></label>
                 </p>
             </li>

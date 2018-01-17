@@ -15,7 +15,7 @@ class StyleController extends AddonsController {
 	function get_article_style(){
 	    $p = I ( 'p', 1, 'intval' ); // 默认显示第一页数据
 	    $row = 15;
-		$group_id = I('group_id',0,intval);
+		$group_id = I('group_id',0,'intval');
 		$groupList = M('article_style_group') -> select();
 		if($groupList){
 			if($group_id==0){

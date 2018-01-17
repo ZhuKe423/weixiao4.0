@@ -396,12 +396,12 @@ class WapController extends WapBaseController {
 						) );
 					} else if ($res ['other'] == 2) {
 						// 优惠详情
-						$jumpUrl = addons_url ( 'Coupon://Wap/show', array (
+						$jumpUrl = addons_url ( 'Coupon://Wap/showIndex', array (
 								'id' => $awardInfo ['coupon_id'],
 								'sn_id' => $res ['sn_id'] 
 						) );
 					} else if ($res ['other'] == 3 && is_install("ShopCoupon")) {
-						$jumpUrl = addons_url ( 'ShopCoupon://Wap/show', array (
+						$jumpUrl = addons_url ( 'ShopCoupon://Wap/showIndex', array (
 								'id' => $awardInfo ['coupon_id'],
 								'sn_id' => $res ['sn_id'] 
 						) );

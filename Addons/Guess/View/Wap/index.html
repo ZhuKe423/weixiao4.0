@@ -31,10 +31,10 @@ body,html{ background:#414e5f}
                 	<div class="vs_item vs_item_{$i}" data-count = "{$vo.guess_count}">
                         <input type="radio" name="optArr[]" value="{$vo.id}" style="display:none"/>
                         <notempty name="vo[image]">
-                        	<img <php>if(in_array($vo[id], $joinData)) echo 'style="border-color:#018455" ';</php> src="{$vo.image|get_cover_url}"/>
+                        	<img <php>if(in_array($vo['id'], $joinData)) echo 'style="border-color:#018455" ';</php> src="{$vo.image|get_cover_url}"/>
                          	<span class="name">{$vo.name}</span>
                         <else/>
-                        	<span class="circle_name" <php>if(in_array($vo[id], $joinData)) echo 'style="background:#89dbfa" ';</php>>{$vo.name}</span>
+                        	<span class="circle_name" <php>if(in_array($vo['id'], $joinData)) echo 'style="background:#89dbfa" ';</php>>{$vo.name}</span>
                         </notempty>
                         
                        

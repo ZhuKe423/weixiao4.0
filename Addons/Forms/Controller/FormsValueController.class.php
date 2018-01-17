@@ -16,7 +16,6 @@ class FormsValueController extends BaseController {
 		$param ['forms_id'] = $this->forms_id = intval ( I ( 'forms_id' ) );
 		$res ['title'] = '通用表单';
 		$res ['url'] = addons_url ( 'Forms://Forms/lists' );
-		$res ['class'] = '';
 		$nav [] = $res;
 		
 		$res ['title'] = '数据管理';

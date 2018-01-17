@@ -15,7 +15,6 @@ class ReserveAttributeController extends BaseController {
 
 		$res ['title'] = '微预约';
 		$res ['url'] = addons_url ( 'Reserve://Reserve/lists',$param );
-		$res ['class'] = '';
 		$nav [] = $res;
 		
 		$param ['reserve_id'] = $this->reserve_id = intval ( $_REQUEST ['reserve_id'] );

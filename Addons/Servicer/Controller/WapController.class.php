@@ -10,7 +10,7 @@ class WapController extends WapBaseController{
 		parent::_initialize ();
 	}
 	public function do_login(){
-		$id = I('id',0,intval);
+		$id = I('id',0,'intval');
 		if(empty($id)){
 			//$this -> error('授权失败！');
 		}else{

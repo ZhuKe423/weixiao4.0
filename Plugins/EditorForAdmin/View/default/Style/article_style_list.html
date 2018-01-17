@@ -17,7 +17,7 @@
 	<div class="style_list">
     	<div class="tabs">
         	<volist name="group_list" id="vo">
-        		<a class="{$vo.class}" href="{:addons_url('EditorForAdmin://Style/get_article_style',array('group_id'=>$vo[id]))}">{$vo.group_name}</a>
+        		<a class="{$vo.class}" href="{:addons_url('EditorForAdmin://Style/get_article_style',array('group_id'=>$vo['id']))}">{$vo.group_name}</a>
             </volist>
         </div>
         <div class="style_wrap">

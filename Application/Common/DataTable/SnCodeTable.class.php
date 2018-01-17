@@ -83,7 +83,7 @@ class SnCodeTable {
 									'url' => '[DELETE]'
 							],
 							'1' => [
-									'title' => '改变使用状态',
+									'title' => 'is_use:0|设为已使用,1|重置为未使用',
 									'url' => 'set_use?id=[id]'
 							]
 					],

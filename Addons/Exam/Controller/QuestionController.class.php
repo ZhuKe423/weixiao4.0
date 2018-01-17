@@ -16,7 +16,6 @@ class QuestionController extends ManageBaseController {
 		
 		$res ['title'] = '微考试';
 		$res ['url'] = addons_url ( 'Exam://Exam/lists' );
-		$res ['class'] = '';
 		$nav [] = $res;
 		
 		$res ['title'] = '题目管理';

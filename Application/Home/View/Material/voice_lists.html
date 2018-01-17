@@ -29,7 +29,7 @@
                         </div>
                         <div class="picture_action item_three_action">
                             <a href="{$vo.file_info.path}">下载</a>
-                             <a href="{:U('voice_edit',array('id'=>$vo[id],'mdm'=>$_GET['mdm']))}">编辑</a>
+                             <a href="{:U('voice_edit',array('id'=>$vo['id']))}">编辑</a>
                             <a href="javascript:;" onclick="del({$vo.id}, this)">删除</a>	
                         </div>
                     </div>

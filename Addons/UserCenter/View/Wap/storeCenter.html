@@ -18,11 +18,11 @@
         	<span class="item">
             	<span class="td title">共计划发布 <span class="num">{$vo.num|intval}</span> 张</span>
             </span>
-            <a class="item" href="{:addons_url('UserCenter://Wap/sn', array('is_use'=>0,'coupon_id'=>$vo[id]))}">
+            <a class="item" href="{:addons_url('UserCenter://Wap/sn', array('is_use'=>0,'coupon_id'=>$vo['id']))}">
             	<span class="td title">已被领取 <span  class="num">{$vo.collect_count|intval}</span> 张</span>
                 <em class="arrow">&nbsp;</em>
             </a>
-            <a class="item" href="{:addons_url('UserCenter://Wap/sn', array('is_use'=>1,'coupon_id'=>$vo[id]))}">
+            <a class="item" href="{:addons_url('UserCenter://Wap/sn', array('is_use'=>1,'coupon_id'=>$vo['id']))}">
             	<span class="td title">已被使用 <span  class="num">{$vo.use_count|intval}</span> 张</span>
                 <em class="arrow">&nbsp;</em>
             </a>

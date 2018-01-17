@@ -32,7 +32,7 @@
                              <p>{$vo.desc}</p>
                         </div>
                         <div class="picture_action">
-                            <a href="{:U('video_edit',array('id'=>$vo[id],'mdm'=>$_GET['mdm']))}">编辑</a>
+                            <a href="{:U('video_edit',array('id'=>$vo['id']))}">编辑</a>
                             <a href="javascript:;" onclick="del({$vo.id}, this)">删除</a>	
                         </div>
                     </div>

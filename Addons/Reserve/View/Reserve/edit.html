@@ -85,7 +85,7 @@
           <select name="can_edit">
             <volist name=":parse_field_attr($fields['type']['extra'])" id="vo"> <option value="{$key}" 
               
-              <eq name="data[type]" value="$key">selected="selected"</eq>
+              <eq name="data['type']" value="$key">selected="selected"</eq>
               >{$vo|clean_hide_attr} 
               
               </option>
@@ -144,13 +144,13 @@
                 <tr class="list_tr" rel="{$cd.sort}">
                 <td align="center"><input type="text" value="{$cd.title}" class="form-control" name="attr_title[{$cd.sort}]" style="width:150px"></td>
                 <td align="center"><select name="type[{$cd.sort}]" class="select_type" style="width:150px">
-                    <option value="string" <eq name="cd[type]" value="string">selected</eq> >单行输入 </option>
-                    <option value="textarea" <eq name="cd[type]" value="textarea">selected</eq> >多行输入 </option>
-                    <option value="radio" <eq name="cd[type]" value="radio">selected</eq> >单选 </option>
-                    <option value="checkbox" <eq name="cd[type]" value="checkbox">selected</eq> >多选 </option>
-                    <option value="select" <eq name="cd[type]" value="select">selected</eq> >下拉选择 </option>
-                    <option value="datetime" <eq name="cd[type]" value="datetime">selected</eq> >时间 </option>
-                    <option value="picture" <eq name="cd[type]" value="picture">selected</eq> >上传图片 </option>
+                    <option value="string" <eq name="cd['type']" value="string">selected</eq> >单行输入 </option>
+                    <option value="textarea" <eq name="cd['type']" value="textarea">selected</eq> >多行输入 </option>
+                    <option value="radio" <eq name="cd['type']" value="radio">selected</eq> >单选 </option>
+                    <option value="checkbox" <eq name="cd['type']" value="checkbox">selected</eq> >多选 </option>
+                    <option value="select" <eq name="cd['type']" value="select">selected</eq> >下拉选择 </option>
+                    <option value="datetime" <eq name="cd['type']" value="datetime">selected</eq> >时间 </option>
+                    <option value="picture" <eq name="cd['type']" value="picture">selected</eq> >上传图片 </option>
                   </select></td>
                 <td align="center"><input type="text" value="{$cd.extra}" class="form-control" name="extra[{$cd.sort}]" placeholder=""></td>
                 <td><input type="checkbox" name="is_must[{$cd.sort}]" value="1" 

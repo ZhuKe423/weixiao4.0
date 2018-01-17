@@ -897,7 +897,7 @@ class Model {
 			return false;
 		}
 		if (empty ( $resultSet )) { // 查询结果为空
-			return null;
+			return [];
 		}
 		if (is_string ( $resultSet )) {
 			return $resultSet;

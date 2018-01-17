@@ -22,10 +22,10 @@
       
      
          <div class="v_nav">
-            <a class="item" href="{:addons_url('Coupon://Wap/coupon_detail',array('id'=>$info[id]))}">优惠券详情<em>&nbsp;</em></a>
+            <a class="item" href="{:addons_url('Coupon://Wap/coupon_detail',array('id'=>$info['id']))}">优惠券详情<em>&nbsp;</em></a>
             <notempty name="shop_list">
             <if condition="count($shop_list) neq  1">
-                <a class="item" href="{:addons_url('Coupon://Wap/store_list',array('id'=>$info[id]))}">适用门店<em>&nbsp;</em></a>
+                <a class="item" href="{:addons_url('Coupon://Wap/store_list',array('id'=>$info['id']))}">适用门店<em>&nbsp;</em></a>
             <else/>
             	<volist name="shop_list" id="vo">
                     <li class="item single_address">
@@ -48,8 +48,8 @@
     	<a href="{$jumpURL}" class="start_btn" style="background:{$info.button_color}"> 
         	领取优惠券
         </a> 
-        <notempty name="info[more_button_arr]" id="vo">
-        	<volist name="info[more_button_arr]" id="vo">
+        <notempty name="info['more_button_arr']" id="vo">
+        	<volist name="info['more_button_arr']" id="vo">
         		<a href="{$key}"  class="start_btn" style="background:{$info.button_color}">{$vo}</a>
             </volist>
         </notempty>

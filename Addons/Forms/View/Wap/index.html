@@ -37,7 +37,7 @@
 
               <volist name="fields" id="field">
                 <if condition="$field['is_show'] == 4">
-                  <input type="hidden" class="text input-large" name="{$field.name}" value="{:I($field[name], $field[value])}">
+                  <input type="hidden" class="text input-large" name="{$field.name}" value="{:I($field['name'], $field['value'])}">
                 </if>
                 <if condition="$field['is_show'] == 1 || $field['is_show'] == 3 || ($field['is_show'] == 5 && I($field['name']) )">
                   <div class="form-item cf">
@@ -119,9 +119,9 @@
                                        $tempArr =$data[$field['name']];
                                     	for($i=0;$i<count($tempArr);$i++){
                                     		if(!empty($data['id']) && $forms['can_edit']!=1){
-                                    			echo '<div class="img_item"><input type="hidden" name="'.$field[name].'[]" value="'.$tempArr[$i].'"/><img src="'.get_cover_url($tempArr[$i]).'"/></div>';
+                                    			echo '<div class="img_item"><input type="hidden" name="'.$field['name'].'[]" value="'.$tempArr[$i].'"/><img src="'.get_cover_url($tempArr[$i]).'"/></div>';
                                     		}else{
-                                       			echo '<div class="img_item"><em>X</em><input type="hidden" name="'.$field[name].'[]" value="'.$tempArr[$i].'"/><img src="'.get_cover_url($tempArr[$i]).'"/></div>';
+                                       			echo '<div class="img_item"><em>X</em><input type="hidden" name="'.$field['name'].'[]" value="'.$tempArr[$i].'"/><img src="'.get_cover_url($tempArr[$i]).'"/></div>';
                                        		}
                                         }
                                     </php>

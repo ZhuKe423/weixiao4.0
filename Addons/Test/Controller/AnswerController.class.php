@@ -16,7 +16,6 @@ class AnswerController extends ManageBaseController {
 		
 		$res ['title'] = '微测试';
 		$res ['url'] = addons_url ( 'Test://Test/lists' );
-		$res ['class'] = '';
 		$nav [] = $res;
 		
 		$res ['title'] = '数据管理';

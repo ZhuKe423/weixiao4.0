@@ -41,6 +41,8 @@ class EditorUploadController extends AddonsController {
 				
 				/* 记录文件信息 */
 				$file ['path'] = __ROOT__ . ltrim ( $setting ['rootPath'], "." ) . $file ['savepath'] . $file ['savename'];
+				$file ['url_path']=SITE_URL.ltrim ( $setting ['rootPath'], "." ) . $file ['savepath'] . $file ['savename'];
+				
 				$file ['status'] = 1;
 				$file ['create_time'] = NOW_TIME;
 
@@ -62,7 +64,8 @@ class EditorUploadController extends AddonsController {
 				'data' => '' 
 		);
 		$info = $this->upload ();
-		$img = $info ['imgFile'] ['path'];
+// 		$img = $info ['imgFile'] ['path'];
+		$img = $info ['imgFile'] ['url_path']?$info ['imgFile'] ['url_path']:$info ['imgFile'] ['path'];
 		/* 记录附件信息 */
 		if ($img) {
 			$return ['id'] = $info ['imgFile'] ['id'];
@@ -80,8 +83,7 @@ class EditorUploadController extends AddonsController {
 	// ueditor编辑器上传图片处理
 	public function ue_upimg() {
 		$info = $this->upload ();
-		$img = $info ['imgFile'] ['path'];
-		
+		$img = $info ['imgFile'] ['url_path']?$info ['imgFile'] ['url_path']:$info ['imgFile'] ['path'];
 		$return = array ();
 		$return ['id'] = $info ['imgFile'] ['id'];
 		$return ['url'] = $img;

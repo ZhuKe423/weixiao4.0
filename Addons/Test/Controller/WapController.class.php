@@ -5,7 +5,7 @@ namespace Addons\Test\Controller;
 use Think\WapBaseController;
 
 class WapController extends WapBaseController {
-	function show($html = 'show') {
+	function showIndex($html = 'show') {
 		$map ['id'] = $test_id = I ( 'test_id', 0, 'intval' );
 		$map ['token'] = get_token ();
 		$info = M ( 'test' )->where ( $map )->find ();
@@ -72,7 +72,7 @@ class WapController extends WapBaseController {
 		$start = intval ( $test ['start_time'] );
 		$end = intval ( $test ['end_time'] );
 		if (($start > 0 && $now < $start) || ($end > 0 && $now > $end)) {
-			redirect ( U ( 'show', 'test_id=' . $map ['test_id'] ) );
+			redirect ( U ( 'showIndex', 'test_id=' . $map ['test_id'] ) );
 		}
 		
 		$list = M ( 'test_question' )->where ( $map )->order ( 'sort asc, id asc' )->select ();
@@ -167,6 +167,6 @@ class WapController extends WapBaseController {
 		// 增加积分
 		add_credit ( 'test' );
 		
-		$this->show ( 'finish' );
+		$this->showIndex ( 'finish' );
 	}
 }

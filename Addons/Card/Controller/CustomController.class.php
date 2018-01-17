@@ -39,7 +39,7 @@ class CustomController extends BaseController {
 		$list_data = $this->_list_grid ( $model );
 		
 		// 搜索条件
-		$map = $this->_search_map ( $model, $fields );
+		$map = $this->_search_map ( $model );
 		$type = I ( 'type', 0, 'intval' );
 		if ($type == 1) {
 			$map ['is_birthday'] = 0;
@@ -79,7 +79,8 @@ class CustomController extends BaseController {
 			if ($vo ['type'] == 0) {
 				$vo ['type'] = '送 ' . $vo ['score'] . '积分';
 			} else {
-				$vo ['type'] = '送： ' . M ( 'shop_coupon' )->where ( "id='{$vo[coupon_id]}'" )->getField ( 'title' );
+				$sc_map['id'] = $vo['coupon_id'];
+				$vo ['type'] = '送： ' . M ( 'shop_coupon' )->where ( $sc_map )->getField ( 'title' );
 			}
 		}
 		$dataTable = D ( 'Common/Model' )->getFileInfo ( $model );

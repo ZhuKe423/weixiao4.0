@@ -42,7 +42,7 @@
                 <div  id="upload_file_cert_pem" class="uploadrow_file"></div>
                 <input type="hidden" name="cert_pem" id="cert_pem" value="{$info.cert_pem}" data-fileexts='' data-maxsize=''/>
                 <div class="upload-img-box">
-                  <present name="info[cert_pem]">
+                  <present name="info['cert_pem']">
                     <div class="upload-pre-file"><span class="upload_icon_all"></span>{:get_table_field ( $info['cert_pem'], 'id', 'name', 'File' )}</div>
                   </present>
                 </div>
@@ -64,7 +64,7 @@
                 <div  id="upload_file_key_pem" class="uploadrow_file"></div>
                 <input type="hidden" name="key_pem" id="key_pem" value="{$info.key_pem}" data-fileexts='' data-maxsize=''/>
                 <div class="upload-img-box">
-                  <present name="info[key_pem]">
+                  <present name="info['key_pem']">
                     <div class="upload-pre-file"><span class="upload_icon_all"></span>{:get_table_field ( $info['key_pem'], 'id', 'name', 'File' )}</div>
                   </present>
                 </div>

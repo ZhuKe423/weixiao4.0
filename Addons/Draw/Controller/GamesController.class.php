@@ -204,7 +204,7 @@ class GamesController extends ManageBaseController {
 	}
 	/* 预览 */
 	function preview(){
-	    $id = I('games_id',0,intval);
+	    $id = I('games_id',0,'intval');
 	    $url = addons_url('Draw://Wap/index',array('games_id'=>$id));
 	    $this->assign('url', $url);
 	    $this->display( 'Home@Addons/preview' );

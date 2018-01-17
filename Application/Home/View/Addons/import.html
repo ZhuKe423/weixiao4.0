@@ -9,7 +9,7 @@
         <form id="form" action="{$post_url}" method="post" class="form-horizontal form-center">
               <volist name="fields" id="field">
                 <if condition="$field['is_show'] == 4">
-                  <input type="hidden" class="text input-large" name="{$field.name}" value="{:I($field[name], $field[value])}">
+                  <input type="hidden" class="text input-large" name="{$field.name}" value="{:I($field['name'], $field['value'])}">
                 </if>
                 <if condition="$field['is_show'] == 1 || $field['is_show'] == 2 || ($field['is_show'] == 5 && I($field['name']))">
                   <div class="form-item cf toggle-{$field.name}">
@@ -32,7 +32,7 @@
 								</script> 
                         </case>
                         <default/>
-                        <input type="text" class="text input-large" name="{$field.name}" value="{:I($field[name], $field[value])}">
+                        <input type="text" class="text input-large" name="{$field.name}" value="{:I($field['name'], $field['value'])}">
                       </switch>
                     </div>
                   </div>

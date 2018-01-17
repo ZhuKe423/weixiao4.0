@@ -286,8 +286,7 @@ class MaterialController extends HomeController {
 			$this->_syc_news ( $group_id );
 		}
 		$url = U ( 'syc_news_to_wechat', array (
-				'group_id' => $group_id,
-				'mdm' => $_GET ['mdm'] 
+				'group_id' => $group_id 
 		) );
 		
 		$this->jump ( $url, '上传本地素材到微信中，请勿关闭' );

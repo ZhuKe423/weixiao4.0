@@ -48,7 +48,7 @@
 <!--               <option class="toggle-data" value="0"  <eq name="data[member]" value="0">selected="selected"</eq> >所有用户 </option> -->
 <!--               <option class="toggle-data" value="-1"  <eq name="data[member]" value="-1">selected="selected"</eq> >所有会员卡成员 </option> -->
 <!--               <volist name="card_level" id="cl"> -->
-<!--               <option class="toggle-data" value="{$cl.id}"  <eq name="data[member]" value="$cl[id]">selected="selected"</eq> >{$cl.level} </option> -->
+<!--               <option class="toggle-data" value="{$cl.id}"  <eq name="data[member]" value="$cl['id']">selected="selected"</eq> >{$cl.level} </option> -->
 <!--               </volist> -->
 <!--             </select> -->
 <!--           </div> -->
@@ -113,7 +113,7 @@
                         <else />
                           <option value="0">请选择</option>
                           <volist name="shop_conpon_list" id="sc">
-                            <option value="{$sc.id}" <if condition="$data[coupon_id]==$sc[id]">selected="selected"</if> >{$sc.title}</option>
+                            <option value="{$sc.id}" <if condition="$data['coupon_id']==$sc['id']">selected="selected"</if> >{$sc.title}</option>
                           </volist>
                         </empty>
                       </select>

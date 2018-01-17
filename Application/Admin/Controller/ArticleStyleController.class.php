@@ -137,7 +137,7 @@ class ArticleStyleController extends AdminController {
         }
 	}
 	function groupEdit(){
-		$id = I('id',0,intval);
+		$id = I('id',0,'intval');
 		$postUrl = U('groupEdit',['id' => $id ]);
 		$this ->assign('postUrl',$postUrl);
         if(IS_POST){

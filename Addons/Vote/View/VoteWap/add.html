@@ -51,7 +51,7 @@
                 			<volist name=":parse_field_attr($fields['type']['extra'])" id="vo">
                           	<div class="check-item">
 								  <input type="radio" class="regular-radio toggle-data" value="{$key}" id="type_{$key}" name="type" toggle-data="{$vo|get_hide_attr}"
-								  <eq name="data[type]" value="$key">checked="checked"</eq> />
+								  <eq name="data['type']" value="$key">checked="checked"</eq> />
 								  <label for="type_{$key}"></label>{$vo|clean_hide_attr} 
 							  </div>
                           </volist>        

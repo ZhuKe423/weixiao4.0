@@ -16,7 +16,6 @@ class AnswerController extends ManageBaseController {
 		
 		$res ['title'] = '微调研';
 		$res ['url'] = addons_url ( 'Survey://Survey/lists' );
-		$res ['class'] = '';
 		$nav [] = $res;
 		
 		$res ['title'] = '数据管理';

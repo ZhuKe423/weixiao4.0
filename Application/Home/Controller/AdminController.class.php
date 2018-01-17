@@ -27,7 +27,6 @@ class AdminController extends HomeController {
 		
 		$res ['title'] = '公众号管理';
 		$res ['url'] = U ( 'Home/Apps/lists' );
-		$res ['class'] = '';
 		$nav [] = $res;
 		
 		$res ['title'] = '管理员配置';

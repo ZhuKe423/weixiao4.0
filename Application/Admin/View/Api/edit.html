@@ -59,7 +59,7 @@
                         </select></td>   
                         <td><input type="radio" name="condition[{$sort}][is_must]" value="0" <if condition="$cd[is_must]==0">checked="checked"</if> > NO
                         <input type="radio" name="condition[{$sort}][is_must]" value="1" <if condition="$cd[is_must]==1">checked="checked"</if> > YES</td>
-                        <td><input type="text" value="{$cd.type}" class="form-control" name="condition[{$sort}][type]" placeholder="自动" style="width:50px"> </td>
+                        <td><input type="text" value="{$cd.type}" class="form-control" name="condition[{$sort}]['type']" placeholder="自动" style="width:50px"> </td>
                         <td><input type="text" value="{$cd.remark}" class="form-control" name="condition[{$sort}][remark]" placeholder="" style="width:150px"> </td>
                         <td><a href="javascript:void(0);" onclick="remove_tr(this)">删除</a></td>
                     </tr>
@@ -192,7 +192,7 @@
         <td><input type="text" value="{$cd.title}"  class="form-control attr_title" name="save[{$sort}][title]"></td>       
         <td><input type="radio" name="save[{$sort}][is_must]" value="0" <if condition="$cd[is_must]==0">checked="checked"</if> > NO 
         <input type="radio" name="save[{$sort}][is_must]" value="1" <if condition="$cd[is_must]==1">checked="checked"</if> > YES</td>
-        <td><input type="text" value="{$cd.type}" class="form-control type" name="save[{$sort}][type]" placeholder="" style="width:150px"></td>
+        <td><input type="text" value="{$cd.type}" class="form-control type" name="save[{$sort}]['type']" placeholder="" style="width:150px"></td>
         <td><input type="text" value="{$cd.remark}" class="form-control remark" name="save[{$sort}][remark]" placeholder="" style="width:100px"></td>
         <td><a href="javascript:void(0);" onclick="move_up(this)" title="向上"class="move_up">↑</a>&nbsp;&nbsp;&nbsp;
         <a href="javascript:void(0);" onclick="move_down(this)" title="向下"class="move_down">↓</a>&nbsp;&nbsp;&nbsp;
@@ -265,7 +265,7 @@
         </select></td>        
         <td><input type="radio" name="condition[sort_id][is_must]" value="0" checked="checked"> NO 
         <input type="radio" name="condition[sort_id][is_must]" value="1"> YES</td>
-        <td><input type="text" value="" class="form-control type" name="condition[sort_id][type]" placeholder="" style="width:150px"></td>
+        <td><input type="text" value="" class="form-control type" name="condition[sort_id]['type']" placeholder="" style="width:150px"></td>
         <td><input type="text" value="" class="form-control remark" name="condition[sort_id][remark]" placeholder="" style="width:100px"></td>
         <td><a href="javascript:void(0);" onclick="move_up(this)" title="向上"class="move_up">↑</a>&nbsp;&nbsp;&nbsp;
         <a href="javascript:void(0);" onclick="move_down(this)" title="向下"class="move_down">↓</a>&nbsp;&nbsp;&nbsp;
@@ -290,7 +290,7 @@
         <td><input type="text" value=""  class="form-control attr_title" name="save[sort_id][title]"></td>       
         <td><input type="radio" name="save[sort_id][is_must]" value="0" checked="checked"> NO 
         <input type="radio" name="save[sort_id][is_must]" value="1"> YES</td>
-        <td><input type="text" value="" class="form-control type" name="save[sort_id][type]" placeholder="" style="width:150px"></td>
+        <td><input type="text" value="" class="form-control type" name="save[sort_id]['type']" placeholder="" style="width:150px"></td>
         <td><input type="text" value="" class="form-control remark" name="save[sort_id][remark]" placeholder="" style="width:100px"></td>
         <td><a href="javascript:void(0);" onclick="move_up(this)" title="向上"class="move_up">↑</a>&nbsp;&nbsp;&nbsp;
         <a href="javascript:void(0);" onclick="move_down(this)" title="向下"class="move_down">↓</a>&nbsp;&nbsp;&nbsp;

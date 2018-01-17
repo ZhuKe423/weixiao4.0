@@ -373,7 +373,7 @@
 		$('#video_area .delete').hide();
 		$('input[name="video_id"]').val(0);
 	})
-	$type = "{$_GET['type']}";
+	$type = "{:I('type')}";
 	if($type == 'voice'){
 		var voice_html='';
 		var voiceid=$("input[name='voice_id']").val();

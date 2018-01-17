@@ -64,13 +64,13 @@ class AddonStatusModel extends Model {
 				}
 			}
 		}
-
-		return $token_status;
+		
+		return ( array ) $token_status;
 	}
 	
 	// 获取当前公众号已授权的插件列表
 	function getPublicAddons() {
-		$map['status'] = 1;		
+		$map ['status'] = 1;
 		$data = M ( 'Addons' )->where ( $map )->order ( 'id DESC' )->select ();
 		
 		return $data;

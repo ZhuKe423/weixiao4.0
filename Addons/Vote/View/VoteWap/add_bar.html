@@ -16,7 +16,7 @@
               tab{$key}">
               <volist name="fields[$key]" id="field">
                 <if condition="$field['is_show'] == 4">
-                  <input type="hidden" class="text input-large" name="{$field.name}" value="{:I($field[name], $field[value])}">
+                  <input type="hidden" class="text input-large" name="{$field.name}" value="{:I($field['name'], $field['value'])}">
                 </if>
                 <if condition="$field['is_show'] == 1 || $field['is_show'] == 2 || ($field['is_show'] == 5 && I($field['name']))">
                   <div class="form-item cf">
@@ -82,7 +82,7 @@
                           <textarea name="{$field.name}" style="display:none"></textarea>
                           <button type="button" class="btn {$field.name}_btn">添加图片</button>
                           <div class="{$field.name}_preview" style="display:none"></div>
-                          {:hook('adminArticleEdit', array('name'=>$field['name'],'btnClassName'=>$field[name].'_btn' ,'value'=>$data[$field['name']]))}
+                          {:hook('adminArticleEdit', array('name'=>$field['name'],'btnClassName'=>$field['name'].'_btn' ,'value'=>$data[$field['name']]))}
                         </case>
                         <case value="file">
                           <div class="controls uploadrow">

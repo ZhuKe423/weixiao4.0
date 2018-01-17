@@ -12,7 +12,7 @@
     <div class="tips">绑定信息仅用于领取奖品，不做其他用途，请放心填写</div>
     <volist name="fields" id="field">
       <if condition="$field['is_show'] == 4">
-        <input type="hidden" class="text input-large" name="{$field.name}" value="{:I($field[name], $field[value])}">
+        <input type="hidden" class="text input-large" name="{$field.name}" value="{:I($field['name'], $field['value'])}">
       </if>
       <if condition="$field['is_show'] == 1 || $field['is_show'] == 3 || ($field['is_show'] == 5 && I($field['name']) )">
         <div class="form-item cf">

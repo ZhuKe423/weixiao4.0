@@ -96,7 +96,7 @@ abstract class Controller {
 	 *        	模板缓存前缀
 	 * @return mixed
 	 */
-	protected function show($content, $charset = '', $contentType = '', $prefix = '') {
+	protected function show_view($content, $charset = '', $contentType = '', $prefix = '') {
 		$this->view->display ( '', $charset, $contentType, $content, $prefix );
 	}
 	
@@ -916,7 +916,7 @@ abstract class Controller {
 	}
 	
 	// 获取模型列表数据
-	public function _get_model_list($model = null, $page = 0, $order = '') {
+	public function _get_model_list($model = null, $page = 0, $order = '', $all_field = false) {
 		if (empty ( $model ))
 			return false;
 		
@@ -951,7 +951,11 @@ abstract class Controller {
 		}
 		// dump ( $order );
 		$name = $dataTable->config ['name'];
-		$data = M ( $name )->field ( empty ( $fields ) ? true : $fields )->where ( $map )->order ( $order )->page ( $page, $row )->select ();
+		$db_field = true;
+		if (! $all_field && ! empty ( $fields )) {
+			$db_field = $fields;
+		}
+		$data = M ( $name )->field ( $db_field )->where ( $map )->order ( $order )->page ( $page, $row )->select ();
 		// dump ( $data );
 		$data = $this->parseData ( $data, $dataTable->fields, $dataTable->list_grid, $dataTable->config );
 		// dump ( $data );

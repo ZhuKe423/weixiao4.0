@@ -11,7 +11,7 @@
                         {$data.cTime|time_format}  
                          <!-- | 回复：{$data.reply_count|intval}-->
                         <eq name='data.uid' value="$mid">
-                        	<a href="{:U('home/forum/form',array('id'=>$data['id'],'model'=>$model[id]))}">[编辑]</a>
+                        	<a href="{:U('home/forum/form',array('id'=>$data['id'],'model'=>$model['id']))}">[编辑]</a>
                         </eq>
                         </span>
                         <span class="fr gray">浏览：{$data.view_count|intval}</span>

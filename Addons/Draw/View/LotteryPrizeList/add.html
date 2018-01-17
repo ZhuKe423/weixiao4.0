@@ -33,9 +33,9 @@
 									<td width='250px'>{$vo[name]}</td>
 									<td width='250px'>
 										<eq name="vo.award_type" value="1">
-											<input type="text" value="{$vo.set_num|intval}" name="award_num[{$vo[id]}]">
+											<input type="text" value="{$vo.set_num|intval}" name="award_num[{$vo['id']}]">
 											<else />
-											<input type="text" value="{$vo.set_num|intval}" name="award_num[{$vo[id]}]" style="width: 50px;">%
+											<input type="text" value="{$vo.set_num|intval}" name="award_num[{$vo['id']}]" style="width: 50px;">%
 										</eq>
 									</td>
 
@@ -143,7 +143,7 @@
 
 					+ '<div class="upload-img-box"></div>'
 					+ '</div></td><td>'
-					+ '<select id="select'+i+'"  name="award['+id+']" style="width:250px"><notempty name="awards">	<volist name="awards" id="vo"><option value="{$vo[id]}">{$vo.name}</option></volist></notempty>	</select>'
+					+ '<select id="select'+i+'"  name="award['+id+']" style="width:250px"><notempty name="awards">	<volist name="awards" id="vo"><option value="{$vo['id']}">{$vo.name}</option></volist></notempty>	</select>'
 					+ '</td><td>'
 					+ '<input type="text" value="'+i+'" name="order['+id+']" class="optionSort text input-large" style="width:80px">&nbsp;'
 					+ '</td><td>'

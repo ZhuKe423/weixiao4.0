@@ -469,7 +469,6 @@ class MemberTransitionController extends BaseController {
 		$param ['mdm'] = I ( 'mdm' );
 		$res ['title'] = '会员交易';
 		$res ['url'] = addons_url ( 'Card://MemberTransition/lists', $param );
-		$res ['class'] = '';
 		$nav [] = $res;
 		
 		$res ['title'] = $title;

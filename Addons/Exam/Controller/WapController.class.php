@@ -5,7 +5,7 @@ namespace Addons\Exam\Controller;
 use Think\WapBaseController;
 
 class WapController extends WapBaseController {
-	function show($html = 'show') {
+	function showIndex($html = 'show') {
 		$map ['id'] = $exam_id = I ( 'exam_id', 0, 'intval' );
 		$map ['token'] = get_token ();
 		$info = M ( 'exam' )->where ( $map )->find ();
@@ -51,7 +51,7 @@ class WapController extends WapBaseController {
 		$end = intval ( $exam ['end_time'] );
 		if (($start > 0 && $now < $start) || ($end > 0 && $now > $end)) {
 			
-			redirect ( U ( 'show', 'exam_id=' . $map ['exam_id'] ) );
+			redirect ( U ( 'showIndex', 'exam_id=' . $map ['exam_id'] ) );
 		}
 		
 		$list = M ( 'exam_question' )->where ( $map )->order ( 'sort asc, id asc' )->select ();
@@ -112,7 +112,7 @@ class WapController extends WapBaseController {
 		// 增加积分
 		add_credit ( 'exam' );
 		
-		$this->show ( 'finish' );
+		$this->showIndex ( 'finish' );
 	}
 	
 	// 判断答题得分

@@ -1336,15 +1336,16 @@ function GetCurUrl() {
 // 获取当前用户的OpenId
 function get_openid($openid = NULL) {
 	$token = get_token ();
+	$request_openid = I ( 'openid' );
 	if ($openid !== NULL && $openid != '-1' && $openid != '-2') {
 		session ( 'openid_' . $token, $openid );
-	} elseif (! empty ( $_REQUEST ['openid'] ) && $_REQUEST ['openid'] != '-1' && $_REQUEST ['openid'] != '-2') {
-		session ( 'openid_' . $token, $_REQUEST ['openid'] );
+	} elseif (! empty ( $request_openid ) && $request_openid != '-1' && $request_openid != '-2') {
+		session ( 'openid_' . $token, $request_openid );
 	}
 	$openid = session ( 'openid_' . $token );
 	
 	$isWeixinBrowser = isWeixinBrowser ();
-	if ((empty ( $openid ) || $openid == '-1') && $isWeixinBrowser && $_REQUEST ['openid'] != '-2' && IS_GET && ! IS_AJAX) {
+	if ((empty ( $openid ) || $openid == '-1') && $isWeixinBrowser && $request_openid != '-2' && IS_GET && ! IS_AJAX) {
 		$callback = GetCurUrl ();
 		$openid = OAuthWeixin ( $callback, $token, true );
 		if ($openid != false && $openid != '-2') {
@@ -1373,7 +1374,6 @@ function getPaymentOpenid($appId = "", $serect = "") {
 		
 		$openid = get_openid ();
 		return $openid;
-		exit ();
 	}
 	$callback = GetCurUrl ();
 	
@@ -1542,7 +1542,8 @@ function OAuthWeixin($callback, $token = '', $is_return = false) {
 		redirect ( $callback . 'openid=-2' );
 	}
 	$param ['appid'] = $info ['appid'];
-	if ($_GET ['state'] != 'weiphp') {
+	$state = I ( 'state' );
+	if ($state != 'weiphp') {
 		$param ['redirect_uri'] = $callback;
 		$param ['response_type'] = 'code';
 		$param ['scope'] = 'snsapi_base';
@@ -1550,7 +1551,7 @@ function OAuthWeixin($callback, $token = '', $is_return = false) {
 		$info ['is_bind'] && $param ['component_appid'] = C ( 'COMPONENT_APPID' );
 		$url = 'https://open.weixin.qq.com/connect/oauth2/authorize?' . http_build_query ( $param ) . '#wechat_redirect';
 		redirect ( $url );
-	} elseif ($_GET ['state'] == 'weiphp') {
+	} elseif ($state == 'weiphp') {
 		if (empty ( $_GET ['code'] )) {
 			exit ( 'code获取失败' );
 		}
@@ -3857,7 +3858,7 @@ function mk_rule_image($imgurl, $w, $h) {
 		}
 		
 		file_exists ( $imgurl ) && $imginfo = getimagesize ( $imgurl ); // 图片存在并获取到信息
-		
+		$img_model = null;
 		if ($imginfo) { // 规格图片存在
 			if ($imginfo [0] > $w || $imginfo ['1'] > $h) {
 				$img_model || $img_model = new \Think\Image ();
@@ -3879,8 +3880,8 @@ function mk_rule_image($imgurl, $w, $h) {
 		$filename = basename ( $url_info ['path'] );
 		$filename_ex = explode ( '.', $filename );
 		$dirname = './Uploads/Picture';
-		$dirname_new = $dirname . '/' . think_weiphp_md5 ( $filename_ex [0] . $url_info ['query'] ) . "_$w" . "X$h." . 'jpg'; // $filename_ex[1];
-		$imgurl = SITE_URL . '/Uploads/Picture/' . think_weiphp_md5 ( $filename_ex [0] . $url_info ['query'] ) . "_$w" . "X$h." . 'jpg';
+		$dirname_new = $dirname . '/' . think_weiphp_md5 ( $filename_ex [0] . $url_info ['path'] ) . "_$w" . "X$h." . 'jpg'; // $filename_ex[1];
+		$imgurl = SITE_URL . '/Uploads/Picture/' . think_weiphp_md5 ( $filename_ex [0] . $url_info ['path'] ) . "_$w" . "X$h." . 'jpg';
 		if (file_exists ( $dirname_new )) {
 			return $imgurl;
 		}

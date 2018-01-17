@@ -16,7 +16,6 @@ class QuestionController extends ManageBaseController {
 
 		$res ['title'] = '微抢答';
 		$res ['url'] = addons_url ( 'Ask://Ask/lists' ,$this->get_param);
-		$res ['class'] = '';
 		$nav [] = $res;
 
 		$res ['title'] = '问题管理';

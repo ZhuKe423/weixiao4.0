@@ -45,7 +45,7 @@ class TestController extends ManageBaseController {
 	}
 	function preview() {
 		$param ['test_id'] = I ( 'id', 0, 'intval' );
-		$url = addons_url ( 'Test://Wap/show', $param );
+		$url = addons_url ( 'Test://Wap/showIndex', $param );
 		// dump($url);
 		// redirect ( $url );
 		$this->assign ( 'url', $url );

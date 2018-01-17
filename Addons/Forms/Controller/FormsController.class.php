@@ -18,7 +18,7 @@ class FormsController extends ManageBaseController {
 		$list_data = $this->_list_grid ( $model );
 
 		// 搜索条件
-		$map = $this->_search_map ( $model, $fields );
+		$map = $this->_search_map ( $model );
 
 		$row = empty ( $model ['list_row'] ) ? 20 : $model ['list_row'];
 		$order = 'id desc';

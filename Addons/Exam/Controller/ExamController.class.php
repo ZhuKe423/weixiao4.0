@@ -19,7 +19,7 @@ class ExamController extends ManageBaseController {
 	}
 	function preview() {
 		$param ['exam_id'] = I ( 'id', 0, 'intval' );
-		$url = addons_url ( 'Exam://Wap/show', $param );
+		$url = addons_url ( 'Exam://Wap/showIndex', $param );
 		$this->assign ( 'url', $url );
 		$this->display ( 'Home@Addons/preview' );
 	}
