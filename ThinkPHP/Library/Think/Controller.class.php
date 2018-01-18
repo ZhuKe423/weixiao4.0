@@ -483,7 +483,7 @@ abstract class Controller {
 		$list_data = $this->_get_model_list ( $model, $page, $order );
 		$this->assign ( $list_data );
 		
-		$this->display ();
+		$this->display ( $templateFile );
 	}
 	public function common_export($model = null, $order = 'id desc', $return = false) {
 		set_time_limit ( 0 );
@@ -589,7 +589,7 @@ abstract class Controller {
 			$this->assign ( 'fields', $fields );
 			$this->assign ( 'data', $data );
 			
-			$this->display ();
+			$this->display ( $templateFile );
 		}
 	}
 	public function common_add($model = null, $templateFile = '') {
@@ -616,7 +616,7 @@ abstract class Controller {
 			$fields = get_model_attribute ( $model ['id'] );
 			$this->assign ( 'fields', $fields );
 			
-			$this->display ();
+			$this->display ( $templateFile );
 		}
 	}
 	

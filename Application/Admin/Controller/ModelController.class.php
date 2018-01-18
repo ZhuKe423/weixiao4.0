@@ -1,4 +1,5 @@
 <?php
+
 // +----------------------------------------------------------------------
 // | OneThink [ WE CAN DO IT JUST THINK IT ]
 // +----------------------------------------------------------------------
@@ -57,8 +58,8 @@ class ModelController extends AdminController {
 		foreach ( $list as $k => &$vo ) {
 			$file = $dao->requireFile ( $vo );
 			if (! $file) {
-				//$dao->delete ( $vo ['id'] );
-				//unset ( $list [$k] );
+				// $dao->delete ( $vo ['id'] );
+				// unset ( $list [$k] );
 				continue;
 			}
 			
@@ -210,7 +211,7 @@ class ModelController extends AdminController {
 		// dump ( $vo );
 		$map ['model_id'] = $vo ['id'];
 		$fields = M ( 'attribute_copy' )->where ( $map )->select ();
-		//dump ( $fields );exit;
+		// dump ( $fields );exit;
 		// =================================================//
 		$list_grid = wp_explode ( $vo ['list_grid'], "\r\n" );
 		
@@ -884,7 +885,7 @@ sql;
 			$dirfat = dir ( $path );
 			
 			while ( false !== $entry = $dirfat->read () ) {
-				if ($entry == '.' || $entry == '..') {
+				if ($entry == '.' || $entry == '..' || $entry == '.svn') {
 					continue;
 				}
 				if (! is_dir ( $path . DIRECTORY_SEPARATOR . $entry . DIRECTORY_SEPARATOR . 'DataTable' )) {
@@ -892,7 +893,7 @@ sql;
 				}
 				$fileDir = dir ( $path . DIRECTORY_SEPARATOR . $entry . DIRECTORY_SEPARATOR . 'DataTable' );
 				while ( false !== $file = $fileDir->read () ) {
-					if ($file == '.' || $file == '..') {
+					if ($file == '.' || $file == '..' || $file == '.svn') {
 						continue;
 					}
 					$fileArr [] = $path . DIRECTORY_SEPARATOR . $entry . DIRECTORY_SEPARATOR . 'DataTable' . DIRECTORY_SEPARATOR . $file;

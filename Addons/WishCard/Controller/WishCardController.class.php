@@ -68,7 +68,7 @@ class WishCardController extends BaseController{
 	}
 	/* 预览 */
 	function preview(){
-	    $id = I('id',0,'intval');
+	    $id = I('id', 0,'intval');
 	    $url = addons_url('WishCard://Wap/card_show',array('id'=>$id));
 	    $this->assign('url', $url);
 	    $this->display( 'Home@Addons/preview' );

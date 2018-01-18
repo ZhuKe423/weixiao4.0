@@ -21,7 +21,6 @@ class LogController extends AdminController {
 		);
 		session ( 'common_condition', $map );
 		parent::common_lists ( 'admin_log', 0, 'Think:lists' );
-		// $this->display ();
 	}
 	public function admin() {
 		$map ['mod'] = 'Admin';
