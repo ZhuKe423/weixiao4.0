@@ -85,6 +85,9 @@ class Hook {
                 trace('[ '.$tag.' ] --START--','','INFO');
             }
             foreach (self::$tags[$tag] as $name) {
+                if(strpos($name,'Addons')!==false){ //weiphp 只获取Pulgin下的插件
+                    $name = str_replace('Addons','Plugins',$name);
+                }
                 APP_DEBUG && G($name.'_start');
                 $result =   self::exec($name, $tag,$params);
                 if(APP_DEBUG){
