@@ -223,7 +223,7 @@ class SmsModel extends Model{
 	        $code =rand(0000,9999);
 	        $params[] = $code;
 	        $result = $singleSender->sendWithParam("86", $to, $templId, $params, $sign, "", "");
-	        $rsp = json_decode($result);
+	        $rsp = json_decode($result, true);
 	       //这里的data是我用来保存发送记录的
 	        $data['phone'] = $to;
 			$data['plat_type'] = $this->config['type'];
