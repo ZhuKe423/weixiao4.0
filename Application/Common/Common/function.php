@@ -456,9 +456,9 @@ function hook($hook, $params = array()) {
  * @param strng $name
  *        	插件名
  */
-function get_addon_class($name) {
+function get_addon_class($name, $isPlugins = false) {
 	$class = "Addons\\{$name}\\{$name}Addon";
-	if (! class_exists ( $class ) || $name == 'News') {
+	if (! class_exists ( $class ) || $isPlugins) {
 		$class = "Plugins\\{$name}\\{$name}Addon";
 	}
 	return $class;

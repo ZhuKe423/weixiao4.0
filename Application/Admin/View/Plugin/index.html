@@ -36,7 +36,7 @@
 					<td>
 						<empty name="vo.uninstall">
 							<?php
-								$class	= get_addon_class($vo['name']);
+								$class	= get_addon_class($vo['name'], true);
 								if(!class_exists($class)){
 									$has_config = 0;
 								}else{

@@ -245,7 +245,7 @@ str;
 		// 记录当前列表页的cookie
 		Cookie ( '__forward__', $_SERVER ['REQUEST_URI'] );
 		$this->assign ( 'name', $name );
-		$class = get_addon_class ( $name );
+		$class = get_addon_class ( $name, true );
 		if (! class_exists ( $class ))
 			$this->error( '140176:插件不存在' );
 		$addon = new $class ();
@@ -356,7 +356,7 @@ str;
 		$addon = M ( 'plugin' )->find ( $id );
 		if (! $addon)
 			$this->error( '140178:插件未安装' );
-		$addon_class = get_addon_class ( $addon ['name'] );
+		$addon_class = get_addon_class ( $addon ['name'], true );
 		if (! class_exists ( $addon_class ))
 			trace ( "插件{$addon['name']}无法实例化,", 'Plugins', 'ERR' );
 		$data = new $addon_class ();
@@ -479,7 +479,7 @@ str;
 	 */
 	public function install() {
 		$addon_name = trim ( I ( 'addon_name' ) );
-		$class = get_addon_class ( $addon_name );
+		$class = get_addon_class ( $addon_name, true );
 		if (! class_exists ( $class ))
 			$this->error( '140180:插件不存在' );
 		$addons = new $class ();
@@ -524,7 +524,7 @@ str;
 		$addonsModel = M ( 'plugin' );
 		$id = trim ( I ( 'id' ) );
 		$db_addons = $addonsModel->find ( $id );
-		$class = get_addon_class ( $db_addons ['name'] );
+		$class = get_addon_class ( $db_addons ['name'], true );
 		$this->assign ( 'jumpUrl', U ( 'index' ) );
 		// dump ( $db_addons );
 		// dump ( $class );
@@ -632,7 +632,7 @@ str;
 		$id = I('id', 0);
 		$name = I('name');
 		$this->assign ( 'name', $name );
-		$class = get_addon_class ( $name );
+		$class = get_addon_class ( $name, true );
 		if (! class_exists ( $class ))
 			$this->error( '140195:插件不存在' );
 		$addon = new $class ();
@@ -693,7 +693,7 @@ str;
 			$this->error( '140202:请选择要操作的数据!' );
 		}
 		
-		$class = get_addon_class ( $name );
+		$class = get_addon_class ( $name, true );
 		if (! class_exists ( $class ))
 			$this->error( '140203:插件不存在' );
 		$addon = new $class ();
