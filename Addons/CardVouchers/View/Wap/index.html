@@ -16,8 +16,8 @@
   </div>
   <div class="btnWrap"> <a href="javascript:void(0)" class="start_btn" id="batchAddCard" style="background:{$info.button_color}"> 领取卡券 </a> </div>
   <!-- 更多按钮 -->
-     <notempty name="info[more_button_arr]" id="vo">
-        <volist name="info[more_button_arr]" id="vo">
+     <notempty name="info['more_button_arr']" id="vo">
+        <volist name="info['more_button_arr']" id="vo">
             <a href="{$key}"  class="start_btn" style="background:{$info.button_color}">{$vo}</a>
         </volist>
     </notempty>

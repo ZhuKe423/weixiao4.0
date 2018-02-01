@@ -11,7 +11,7 @@
         <li>
           <ul class="sidenav_sub">
             <volist name='core_side_menu' id='vo'>
-              <li class="{$vo.class}" data-id="{$vo.id}"> <a href="{$vo.url}"> {$vo.title} </a><b class="active_arrow"></b></li>
+              <li class="{$vo.class}" data-id="{$vo.id}"> <a href="{$vo.url}" target="{$vo.target|default='_self'}"> {$vo.title} </a><b class="active_arrow"></b></li>
             </volist>
           </ul>
         </li>

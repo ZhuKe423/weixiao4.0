@@ -36,26 +36,6 @@ class AuthGroupTable {
 					'width' => '',
 					'is_sort' => 0
 			],
-			'ids' => [
-					'title' => '操作',
-					'come_from' => 1,
-					'width' => '',
-					'is_sort' => 0,
-					'href' => [
-							'0' => [
-									'title' => '导出用户',
-									'url' => 'export?id=[id]'
-							],
-							'1' => [
-									'title' => '编辑',
-									'url' => '[EDIT]'
-							],
-							'2' => [
-									'title' => '删除',
-									'url' => '[DELETE]'
-							]
-					]
-			],
 			'urls' => [
 					'title' => '操作',
 					'come_from' => 1,
