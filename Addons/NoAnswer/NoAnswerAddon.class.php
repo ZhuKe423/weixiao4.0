@@ -13,8 +13,8 @@ class NoAnswerAddon extends Addon {
 	public $custom_config = 'config.html';
 	public $info = array (
 			'name' => 'NoAnswer',
-			'title' => '没回答的回复',
-			'description' => '当用户提供的内容或者关键词系统无关识别回复时，自动把当前配置的内容回复给用户',
+			'title' => '微信客服',
+			'description' => '注意：用户回复的内容优先匹配设有关键词的内容，如自动回复，匹配不上才转到本客服',
 			'status' => 1,
 			'author' => '凡星',
 			'version' => '0.1',

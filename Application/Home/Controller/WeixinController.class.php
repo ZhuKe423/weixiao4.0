@@ -223,14 +223,6 @@ class WeixinController extends HomeController {
 			}
 		}
 		// 以上都无法定位插件时，如果开启了客服功能，则默认使用客服功能
-		if (! isset ( $addons [$key] ) && isset ( $addon_list ['YouaskService'] )) {
-			// 您问我答插件特殊处理
-			$YouaskServiceconfig = getAddonConfig ( 'YouaskService' ); // 获取后台插件的配置参数
-			if ($YouaskServiceconfig ['state'] == 1) {
-				$addons [$key] = 'YouaskService';
-			}
-		}
-		// 以上都无法定位插件时，如果开启了未识别回答，则默认使用未识别回答插件
 		if (! isset ( $addons [$key] ) && isset ( $addon_list ['NoAnswer'] )) {
 			$addons [$key] = 'NoAnswer';
 		}

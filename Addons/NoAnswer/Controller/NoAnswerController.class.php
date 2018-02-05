@@ -6,13 +6,9 @@ use Think\ManageBaseController;
 
 class NoAnswerController extends ManageBaseController {
 	public function config() {
-		$strtip = '常用配置地址：<br/>
-&lt;a href=&quot;[follow]&quot;&gt;绑定帐号&lt;/a&gt;<br/>
-&lt;a href=&quot;[website]&quot;&gt;微首页&lt;/a&gt;<br/>
-&lt;a href=&quot;http://xxxx?token=[token]&quot;&gt;Token&lt;/a&gt;<br/>
-&lt;a href=&quot;http://xxxx?opneid=[openid]&quot;&gt;OpenId&lt;/a&gt;';
+		$normal_tips = '注意：用户回复的内容优先匹配设有关键词的内容，如自动回复，匹配不上才转到本客服';
+		$this->assign ( 'normal_tips', $normal_tips );
 		
-		$this->assign ( 'normal_tips', $strtip );
 		$this->getModel ();
 		$map ['name'] = MODULE_NAME;
 		$addon = M ( 'addons' )->where ( $map )->find ();
@@ -47,6 +43,6 @@ class NoAnswerController extends ManageBaseController {
 			}
 		}
 		$this->assign ( 'data', $addon );
-		$this->display ( T ( 'Home@Addons/config' ) );
+		$this->display ();
 	}
 }

@@ -114,13 +114,17 @@ class WeixinModel extends Model {
 		
 		$this->_replyData ( $msg, 'news' );
 	}
+	// 转人工客服
+	public function transferCustomer() {
+		$this->_replyData ( [ ], 'transfer_customer_service' );
+	}
 	/* 发送回复消息到微信平台 */
 	private function _replyData($msg, $msgType) {
 		$msg ['ToUserName'] = $this->data ['FromUserName'];
 		$msg ['FromUserName'] = $this->data ['ToUserName'];
 		$msg ['CreateTime'] = NOW_TIME;
 		$msg ['MsgType'] = $msgType;
-				
+		
 		if (isset ( $_REQUEST ['doNotInit'] )) {
 			// dump ( $msg );
 			exit ();
@@ -293,34 +297,21 @@ class WeixinModel extends Model {
 					if ($vo ['title']) {
 						$art ['Title'] = $vo ['title'];
 						$art ['Description'] = $vo ['intro'];
-						$content = trim($vo['content']);
-						if (! empty ( $vo ['link'] ) && empty($content)) {
-						    $art ['Url'] = replace_url ( $vo ['link'] );
-						}
-						if (empty($art['Url'])){
-						    if (empty ( $vo ['url'] )) {
-						        $public_info = get_token_appinfo ();
-						        $art ['Url'] = U('Home/Wap/news_detail', array (
-										'id' => $vo ['id'],
-										'publicid' => $public_info ['id'] 
-								) );
-						    } else {
-						        $art ['Url'] = $vo ['url'];
-						    }
-						}
-						
-						/* if (empty ( $vo ['url'] )) {
+						$content = trim ( $vo ['content'] );
+						if (! empty ( $vo ['link'] ) && empty ( $content )) {
 							$art ['Url'] = replace_url ( $vo ['link'] );
-							$public_info = get_token_appinfo ();
-							if (! $art ['Url']) {
-								$art ['Url'] = U('Home/Wap/news_detail', array (
+						}
+						if (empty ( $art ['Url'] )) {
+							if (empty ( $vo ['url'] )) {
+								$public_info = get_token_appinfo ();
+								$art ['Url'] = U ( 'Home/Wap/news_detail', array (
 										'id' => $vo ['id'],
 										'publicid' => $public_info ['id'] 
 								) );
+							} else {
+								$art ['Url'] = $vo ['url'];
 							}
-						} else {
-							$art ['Url'] = $vo ['url'];
-						} */
+						}
 						
 						if (! C ( 'USER_OAUTH' )) {
 							$art ['Url'] .= '&openid=' . $param ['openid'];
@@ -363,8 +354,8 @@ class WeixinModel extends Model {
 					if ($voice ['media_id']) {
 						$media_id = $voice ['media_id'];
 					} else if ($voice ['file_id']) {
-// 						$media_id = D ( 'Common/Custom' )->get_file_media_id ( $voice ['file_id'] );
-						$media_id = D ( 'Common/Custom' )->get_ever_file_mediaid($voice);
+						// $media_id = D ( 'Common/Custom' )->get_file_media_id ( $voice ['file_id'] );
+						$media_id = D ( 'Common/Custom' )->get_ever_file_mediaid ( $voice );
 					}
 					if (empty ( $media_id )) {
 						exit ( 'success' );
@@ -379,7 +370,7 @@ class WeixinModel extends Model {
 				
 				// 视频
 				$video = M ( 'material_file' )->find ( $config ['video_id'] );
-			
+				
 				if (! empty ( $video )) {
 					$media_id = '';
 					
@@ -387,8 +378,8 @@ class WeixinModel extends Model {
 						$media_id = $video ['media_id'];
 					} else if ($video ['file_id']) {
 						
-// 						$media_id = D ( 'Common/Custom' )->get_file_media_id ( $video ['file_id'], 'video' );
-					    $media_id = D ( 'Common/Custom' )->get_ever_file_mediaid($video, 'video',$video['title'], $video['introduction']);
+						// $media_id = D ( 'Common/Custom' )->get_file_media_id ( $video ['file_id'], 'video' );
+						$media_id = D ( 'Common/Custom' )->get_ever_file_mediaid ( $video, 'video', $video ['title'], $video ['introduction'] );
 					}
 					
 					if (empty ( $media_id )) {
