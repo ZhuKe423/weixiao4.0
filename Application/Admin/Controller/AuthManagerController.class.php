@@ -104,7 +104,7 @@ class AuthManagerController extends AdminController {
 				'exp',
 				'!=4' 
 		);
-		$list = $this->lists ( 'AuthGroup', $map, 'id desc' );
+		$list = $this->lists_admin( 'AuthGroup', $map, 'id desc' );
 		$list = int_to_string ( $list );
 		
 		$type_arr = array (
@@ -280,7 +280,7 @@ class AuthManagerController extends AdminController {
 		$r_table = $prefix . (AuthGroupModel::AUTH_GROUP_ACCESS);
 		$model = M ()->table ( $l_table . ' m' )->join ( $r_table . ' a ON m.uid=a.uid' );
 		$_REQUEST = array ();
-		$list = $this->lists ( $model, array (
+		$list = $this->lists_admin( $model, array (
 				'a.group_id' => $group_id,
 				'm.status' => array (
 						'egt',

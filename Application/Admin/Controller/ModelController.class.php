@@ -38,10 +38,10 @@ class ModelController extends AdminController {
 			$config = $objArr [$class]->config;
 			
 			if (! isset ( $modelArr [$config ['name']] )) {
-				$dao->add ( $config );
+				$config ['id'] = 0;
+				$needImportModel [$config ['name']] = $config;
 			}
 		}
-		
 		// 自动加载数据模型文件
 		$map = [ ];
 		if (isset ( $_GET ['title'] )) {
@@ -51,7 +51,8 @@ class ModelController extends AdminController {
 					"%$title%" 
 			);
 		}
-		$list = $this->lists ( 'model', $map );
+		$list = $this->lists_admin ( 'model', $map );
+		empty ( $needImportModel ) || $list = array_merge ( $needImportModel, $list );
 		
 		$addonArr = $this->_get_all_addon ();
 		
@@ -74,7 +75,7 @@ class ModelController extends AdminController {
 			// dump ( $fields_md5 );
 			
 			$data = $this->getDBInfo ( $vo ['name'], $obj->fields, '' );
-			if (empty ( $data )) { // 数据表不存在
+			if (isset ( $needImportModel [$vo ['name']] )) { // 数据表不存在
 				$vo ['table_exists'] = 0;
 			} else {
 				$vo ['table_exists'] = 1;
@@ -89,7 +90,7 @@ class ModelController extends AdminController {
 			} else {
 				$vo ['update_file'] = 0;
 			}
-			empty ( $vo ['addon'] ) || $vo ['addon'] = $addonArr [$vo ['addon']];
+			empty ( $vo ['addon'] ) || $vo ['addon_title'] = $addonArr [$vo ['addon']];
 		}
 		
 		int_to_string ( $list );
@@ -436,6 +437,30 @@ class ModelController extends AdminController {
 		unset ( $fields_list );
 		
 		return $data;
+	}
+	function importModel() {
+		$model ['name'] = I ( 'model_name' );
+		$model ['addon'] = I ( 'model_addon' );
+
+		$dao = D ( 'Common/Model' );
+		$obj = $dao->getFileInfo ( $model );
+
+		if ($obj == false)
+			$this->error ( '获取模型文件出错' );
+		
+		// 增加到模型数据表
+		$model_id = $dao->add ( $obj->config );
+		// 字段增加
+		if (! empty ( $obj->fields )) {
+			foreach ( $obj->fields as $name => $f ) {
+				$f ['model_id'] = $model_id;
+				$f ['name'] = $name;
+				
+				$dao->addField ( $f );
+			}
+		}
+		
+		$this->success ( '导入成功', U ( 'index' ) );
 	}
 	function freshFiletoDB() {
 		set_time_limit ( 0 );

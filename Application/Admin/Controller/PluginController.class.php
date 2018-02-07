@@ -285,7 +285,7 @@ str;
 			}
 			if (! isset ( $order ))
 				$order = '';
-			$list = $this->lists ( $model->field ( $fields ), $map, $order );
+			$list = $this->lists_admin( $model->field ( $fields ), $map, $order );
 			$fields = array ();
 			foreach ( $list_grid as &$value ) {
 				// 字段:标题:链接
@@ -556,7 +556,7 @@ str;
 	public function hooks() {
 		$this->meta_title = '钩子列表';
 		$map = $fields = array ();
-		$list = $this->lists ( D ( "Hooks" )->field ( $fields ), $map );
+		$list = $this->lists_admin( D ( "Hooks" )->field ( $fields ), $map );
 		int_to_string ( $list, array (
 				'type' => C ( 'HOOKS_TYPE' ) 
 		) );

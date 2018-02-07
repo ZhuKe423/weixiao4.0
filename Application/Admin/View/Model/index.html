@@ -44,7 +44,7 @@
 			<td>{$vo.id} </td>
 			<td>{$vo.name}</td>
 			<td><a data-id="{$vo.id}" href="{:U('model/edit?id='.$vo['id'])}#2">{$vo.title}</a></td>
-            <td>{$vo.addon}</td>
+            <td>{$vo.addon_title}</td>
 			<td>
             <notempty name="vo.table_exists">
             <notempty name="vo.update_file"><a href="{:U('freshDBtoFile?model_id='.$vo['id'])}">更新文件</a>&nbsp;&nbsp;&nbsp;</notempty>
@@ -53,7 +53,7 @@
             <a href="{:U('attribute/index?model_id='.$vo['id'])}">字段管理</a>&nbsp;&nbsp;&nbsp;
 			<a href="{:U('model/edit?id='.$vo['id'])}#2">编辑</a>               
                 <else />
-<a href="{:U('freshFiletoDB?model_id='.$vo['id'])}">导入模型</a>
+<a href="{:U('importModel',['model_name'=>$vo['name'],'model_addon'=>$vo['addon']])}">导入模型</a>
                 </notempty>
                 &nbsp;&nbsp;&nbsp; <a href="{:U('model/del?ids='.$vo['id'])}" class="confirm ajax-get">删除</a>
             </td>

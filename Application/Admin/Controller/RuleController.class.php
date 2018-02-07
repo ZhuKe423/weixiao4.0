@@ -96,7 +96,7 @@ class RuleController extends AdminController {
 				'exp',
 				"!='wechat'" 
 		);
-		$list = $this->lists ( 'AuthRule', $map, 'id desc' );
+		$list = $this->lists_admin( 'AuthRule', $map, 'id desc' );
 		$list = int_to_string ( $list );
 		$this->assign ( '_list', $list );
 		$this->assign ( '_use_tip', true );
@@ -107,7 +107,7 @@ class RuleController extends AdminController {
 	 * 微信接口节点管理首页
 	 */
 	public function wechat() {
-		$list = $this->lists ( 'AppsAuth', '' );
+		$list = $this->lists_admin( 'AppsAuth', '' );
 		$list = int_to_string ( $list );
 		$this->assign ( '_list', $list );
 		$this->assign ( '_use_tip', true );
@@ -234,7 +234,7 @@ class RuleController extends AdminController {
 		$r_table = $prefix . (AuthGroupModel::AUTH_GROUP_ACCESS);
 		$model = M ()->table ( $l_table . ' m' )->join ( $r_table . ' a ON m.uid=a.uid' );
 		$_REQUEST = array ();
-		$list = $this->lists ( $model, array (
+		$list = $this->lists_admin( $model, array (
 				'a.group_id' => $group_id,
 				'm.status' => array (
 						'egt',

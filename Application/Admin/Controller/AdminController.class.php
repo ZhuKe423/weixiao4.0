@@ -1,4 +1,5 @@
 <?php
+
 // +----------------------------------------------------------------------
 // | OneThink [ WE CAN DO IT JUST THINK IT ]
 // +----------------------------------------------------------------------
@@ -23,6 +24,21 @@ class AdminController extends ManageBaseController {
 		if (method_exists ( $this, '_initialize' ))
 			$this->_initialize ();
 	}
+	private function initAdmin() {
+		$uid = session ( 'mid' );
+		
+		// 当前登录者
+		$GLOBALS ['mid'] = $this->mid = intval ( $uid );
+		$myinfo = get_userinfo ( $this->mid );
+		$GLOBALS ['myinfo'] = $myinfo;
+		
+		// 当前访问对象的uid
+		$GLOBALS ['uid'] = $this->uid = isset ( $_REQUEST ['uid'] ) && intval ( $_REQUEST ['uid'] == 0 ? $this->mid : $_REQUEST ['uid'] );
+		
+		$this->assign ( 'mid', $this->mid ); // 登录者
+		$this->assign ( 'uid', $this->uid ); // 访问对象
+		$this->assign ( 'myinfo', $GLOBALS ['myinfo'] ); // 访问对象
+	}
 	/**
 	 * 后台控制器初始化
 	 */
@@ -34,6 +50,8 @@ class AdminController extends ManageBaseController {
 		if (! UID) { // 还没登录 跳转到登录页面
 			$this->redirect ( 'Public/login' );
 		}
+		
+		$this->initAdmin ();
 		/* 读取数据库中的配置 */
 		$config = S ( 'DB_CONFIG_DATA' );
 		if (! $config) {
@@ -47,24 +65,24 @@ class AdminController extends ManageBaseController {
 		if (! IS_ROOT && C ( 'ADMIN_ALLOW_IP' )) {
 			// 检查IP地址访问
 			if (! in_array ( get_client_ip (), explode ( ',', C ( 'ADMIN_ALLOW_IP' ) ) )) {
-				$this->error( '140041:403:禁止访问' );
+				$this->error ( '140041:403:禁止访问' );
 			}
 		}
 		// 检测系统权限
 		if (! IS_ROOT) {
 			$access = $this->accessControl ();
 			if (false === $access) {
-				$this->error( '140042:403:禁止访问' );
+				$this->error ( '140042:403:禁止访问' );
 			} elseif (null === $access) {
 				// 检测访问权限
 				$rule = strtolower ( MODULE_NAME . '/' . CONTROLLER_NAME . '/' . ACTION_NAME );
 				if (! checkRule ( $rule )) {
-					$this->error( '140043:未授权访问!' );
+					$this->error ( '140043:未授权访问!' );
 				} else {
 					// 检测分类及内容有关的各项动态权限
 					$dynamic = $this->checkDynamic ();
 					if (false === $dynamic) {
-						$this->error( '140044:未授权访问!' );
+						$this->error ( '140044:未授权访问!' );
 					}
 				}
 			}
@@ -151,7 +169,7 @@ class AdminController extends ManageBaseController {
 		if (M ( $model )->where ( $where )->save ( $data ) !== false) {
 			$this->success ( $msg ['success'], $msg ['url'], $msg ['ajax'] );
 		} else {
-			$this->error( '140045:' . $msg ['error'], $msg ['url'], $msg ['ajax'] );
+			$this->error ( '140045:' . $msg ['error'], $msg ['url'], $msg ['ajax'] );
 		}
 	}
 	
@@ -242,7 +260,7 @@ class AdminController extends ManageBaseController {
 		$ids = I ( 'request.ids' );
 		$status = I ( 'request.status' );
 		if (empty ( $ids )) {
-			$this->error( '140046:请选择要操作的数据' );
+			$this->error ( '140046:请选择要操作的数据' );
 		}
 		
 		$map ['id'] = array (
@@ -269,7 +287,7 @@ class AdminController extends ManageBaseController {
 				) );
 				break;
 			default :
-				$this->error( '140047:参数错误' );
+				$this->error ( '140047:参数错误' );
 				break;
 		}
 	}
@@ -338,7 +356,7 @@ class AdminController extends ManageBaseController {
 	 *        
 	 * @return array|false 返回数据集
 	 */
-	public function lists($model, $where = array(), $order = '', $field = true) {
+	public function lists_admin($model, $where = array(), $order = '', $field = true) {
 		$options = array ();
 		$REQUEST = ( array ) I ( 'request.' );
 		if (is_string ( $model )) {

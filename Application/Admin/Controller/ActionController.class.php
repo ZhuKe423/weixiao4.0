@@ -22,7 +22,7 @@ class ActionController extends AdminController {
     public function actionLog(){
         //获取列表数据
         $map['status']    =   array('gt', -1);
-        $list   =   $this->lists('ActionLog', $map);
+        $list   =   $this->lists_admin('ActionLog', $map);
         int_to_string($list);
         foreach ($list as $key=>$value){
             $model_id                  =   get_document_field($value['model'],"name","id");

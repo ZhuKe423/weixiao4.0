@@ -45,7 +45,7 @@ class UserController extends AdminController {
 				'exp',
 				'IS NOT NULL' 
 		];
-		$list = $this->lists ( 'User', $map );
+		$list = $this->lists_admin( 'User', $map );
 		if (! empty ( $list )) {
 			foreach ( $list as &$vo ) {
 				$vo ['audit_text'] = $vo ['is_audit'] ? '通过' : '待审';
@@ -163,7 +163,7 @@ class UserController extends AdminController {
 						- 1 
 				) 
 		) );
-		$list = $this->lists ( $Action );
+		$list = $this->lists_admin( $Action );
 		int_to_string ( $list );
 		// 记录当前列表页的cookie
 		Cookie ( '__forward__', $_SERVER ['REQUEST_URI'] );
