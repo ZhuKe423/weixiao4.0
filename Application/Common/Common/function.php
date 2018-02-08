@@ -1391,6 +1391,8 @@ function get_token($token = NULL) {
 		} else {
 			$token = session ( 'token' );
 		}
+	} elseif (defined ( 'FROM_NOTICE' )) {
+		$token = defined ( 'NOTICE_TOKEN' ) ? NOTICE_TOKEN : '';
 	} else {
 		$token = D ( 'Common/Apps' )->getInfo ( WPID, 'token' );
 	}

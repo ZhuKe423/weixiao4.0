@@ -342,7 +342,7 @@ class WapController extends WapBaseController {
 		
 		$res ['msg'] = '';
 		// 获取access_token
-		$access_token = get_access_token ( $map ['token'] );
+		$access_token = get_access_token ( $info ['token'] );
 		if (empty ( $access_token )) {
 			addAutoCheckLog ( 'access_token', 'access_token获取失败', $info ['token'] );
 		} else {
@@ -380,14 +380,18 @@ class WapController extends WapBaseController {
 			addAutoCheckLog ( 'massage', '收发消息失败', $info ['token'] );
 		}
 		
-		$nextUrl = U ( 'check2' );
+		$nextUrl = U ( 'check2', array (
+				'token' => $info ['token'] 
+		) );
 		$this->assign ( 'nextUrl', $nextUrl );
 		$this->display ();
 	}
 	function check2() {
-		$token = get_token ();
+		$token = I ( 'token' );
 		
-		$openid = get_openid ();
+		// get_openid
+		$callback = GetCurUrl ();
+		$openid = OAuthWeixin ( $callback, $token, true );
 		if (empty ( $openid ) || $openid == '-1' || $openid == '-2') {
 			addAutoCheckLog ( 'openid', '获取openid失败', $token );
 		} else {
@@ -399,7 +403,7 @@ class WapController extends WapBaseController {
 		$this->display ();
 	}
 	function check3() {
-		$token = get_token ();
+		$token = I ( 'token' );
 		$msg = I ( 'msg' );
 		addAutoCheckLog ( 'jsapi', $msg, $token );
 	}
@@ -417,6 +421,7 @@ class WapController extends WapBaseController {
 		curl_setopt ( $ch, CURLOPT_CUSTOMREQUEST, "POST" );
 		curl_setopt ( $ch, CURLOPT_SSL_VERIFYPEER, FALSE );
 		curl_setopt ( $ch, CURLOPT_SSL_VERIFYHOST, FALSE );
+		curl_setopt ( $ch, CURLOPT_HTTPHEADER, $header );
 		curl_setopt ( $ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)' );
 		curl_setopt ( $ch, CURLOPT_FOLLOWLOCATION, 1 );
 		curl_setopt ( $ch, CURLOPT_AUTOREFERER, 1 );

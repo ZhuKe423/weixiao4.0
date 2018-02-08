@@ -62,17 +62,24 @@ class PublicBindController extends ManageBaseController {
 		
 		$this->display ();
 	}
-	// 用户授权后,获取公众号信息
+	// 用户授权后,获取公众号信息、或小程序信息
 	function after_auth() {
 		// auth_code=xxx&expires_in=600
 		$auth_code = I ( 'auth_code' );
 		$auth_info = D ( 'Addons://PublicBind/PublicBind' )->getAuthInfo ( $auth_code );
-		
 		$public_info = D ( 'Addons://PublicBind/PublicBind' )->getPublicInfo ( $auth_info ['authorization_info'] ['authorizer_appid'] );
-		
+		if (isset($public_info['authorizer_info']['MiniProgramInfo']) && !empty($public_info['authorizer_info']['MiniProgramInfo'])){
+		    //小程序
+		    $data['app_type']=1;
+		}else {
+		    //公众号
+		    $data['app_type']=0;
+		}
 		$map ['public_id'] = $data ['public_id'] = $data ['token'] = $public_info ['authorizer_info'] ['user_name'];
-		$data ['public_name'] = $public_info ['authorizer_info'] ['nick_name'];
+		$data ['public_name'] = $public_info ['authorizer_info'] ['nick_name'] ? $public_info ['authorizer_info'] ['nick_name'] :$public_info ['authorizer_info'] ['user_name'];
 		$data ['wechat'] = $public_info ['authorizer_info'] ['alias'];
+		$data ['headface_url']=$public_info['authorizer_info']['head_img'];
+		
 		if ($public_info ['authorizer_info'] ['service_type_info'] ['id'] == 2) { // 服务号
 			$data ['type'] = 2;
 		} else { // 订阅号
@@ -94,7 +101,8 @@ class PublicBindController extends ManageBaseController {
 		if ($info) {
 			M ( 'apps' )->where ( $map )->save ( $data );
 			D('Common/Apps')->clear($info['id']);
-			$url = U ( 'Home/Apps/lists' );
+			if (empty($url))
+			 $url = U ( 'Home/Apps/lists' );
 		} else {
 			
 			$param ['id'] = $link ['mp_id'] = M ( 'apps' )->add ( $data );
@@ -105,7 +113,8 @@ class PublicBindController extends ManageBaseController {
 			$map2 ['uid'] = $this->mid;
 			M ( 'manager' )->where ( $map2 )->setField ( 'has_public', 1 );
 			D ( 'Common/User' )->clear ( $this->mid );
-			$url = U ( 'Home/Apps/lists', $param );
+			if (empty($url))
+			 $url = U ( 'Home/Apps/lists', $param );
 		}
 		$key1 = 'pre_auth_code';
 		S ( $key1 ,null);

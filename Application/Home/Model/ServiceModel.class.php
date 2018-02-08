@@ -9,18 +9,6 @@ use Think\Model;
  */
 class ServiceModel extends Model {
 	var $tableName = 'user';
-	public function coursePayOk($res_data, $order) {
-		add_debug_log ( $res_data, 'coursePayOkpayok' );
-		
-		// 进行具体的业务操作
-		$map ['openid'] = $res_data ['openid'];
-		M ( 'course_buy' )->where ( $map )->setField ( 'is_pay', 1 );
-		
-		return [ 
-				'status' => 1,
-				'msg' => '' 
-		];
-	}
 	public function payok($res_data, $order) {
 		// 记录下日志
 		// array (

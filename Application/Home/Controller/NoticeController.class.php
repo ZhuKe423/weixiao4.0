@@ -10,6 +10,12 @@ class NoticeController extends Controller {
 		add_debug_log ( $res_data, 'notice_index' );
 		
 		$data = FromXml ( $res_data );
+		
+		if (isset ( $data ['appid'] )) {
+			$token = D ( 'Common/Apps' )->getInfoByAppid ( $data ['appid'], 'token' );
+			define ( 'NOTICE_TOKEN', $token );
+		}
+		
 		if (isset ( $data ['product_id'] )) {
 			// 这是属于扫码支付里的模式一的回调
 			$this->scan_callback ( $data );
@@ -25,19 +31,27 @@ class NoticeController extends Controller {
 <fee_type><![CDATA[CNY]]></fee_type>
 <is_subscribe><![CDATA[Y]]></is_subscribe>
 <mch_id><![CDATA[10065170]]></mch_id>
-<nonce_str><![CDATA[Spg93nV5Vo54YUGz]]></nonce_str>
+<nonce_str><![CDATA[5a7bc54c3758e]]></nonce_str>
 <openid><![CDATA[orgF0t4eiPzEhD4Iv0o9VoKNnkVo]]></openid>
-<out_trade_no><![CDATA[9320170708140141c]]></out_trade_no>
+<out_trade_no><![CDATA[1802081518060876337]]></out_trade_no>
 <result_code><![CDATA[SUCCESS]]></result_code>
 <return_code><![CDATA[SUCCESS]]></return_code>
-<sign><![CDATA[2E5F0CDA2B5A71D029CFD99C3F3A08A9]]></sign>
-<time_end><![CDATA[20170708140308]]></time_end>
+<sign><![CDATA[17217B486B4BFD8F0121F6767982AC88]]></sign>
+<time_end><![CDATA[20180208113440]]></time_end>
 <total_fee>1</total_fee>
-<trade_type><![CDATA[NATIVE]]></trade_type>
-<transaction_id><![CDATA[4007372001201707089545821048]]></transaction_id>
+<trade_type><![CDATA[JSAPI]]></trade_type>
+<transaction_id><![CDATA[4200000054201802089126952007]]></transaction_id>
 </xml>';
 		
 		$data = FromXml ( $res_data );
+		
+		$token = D ( 'Common/Apps' )->getInfoByAppid ( $data ['appid'], 'token' );
+		dump ( $token );
+		define ( 'NOTICE_TOKEN', $token );
+		dump ( NOTICE_TOKEN );
+		dump(defined ( 'FROM_NOTICE' ));
+		
+		dump ( get_token () );
 		if (isset ( $data ['product_id'] )) {
 			// 这是属于扫码支付里的模式一的回调
 			$this->scan_callback ( $data );
@@ -74,14 +88,14 @@ class NoticeController extends Controller {
 		if (count ( $arr ) != 3) {
 			$this->return_error ( 'callback格式出错' );
 		}
-		if(is_install($arr[0])){
-		    $mod = 'Addons://'.$arr [0] . '/' . $arr [1];
-		}else{
-		    $mod = $arr [0] . '/' . $arr [1];
+		if (is_install ( $arr [0] )) {
+			$mod = 'Addons://' . $arr [0] . '/' . $arr [1];
+		} else {
+			$mod = $arr [0] . '/' . $arr [1];
 		}
 		$act = $arr [2];
 		$res = D ( $mod )->$act ( $data, $payment );
-		if ($res ['status'] == 0) {
+		if (isset ( $res ['status'] ) && $res ['status'] == 0) {
 			$this->return_error ( $res ['msg'] );
 		} else {
 			$this->return_success ();

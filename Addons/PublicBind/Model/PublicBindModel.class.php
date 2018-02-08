@@ -154,7 +154,7 @@ class PublicBindModel extends Model {
 			
 			$data = post_data ( $url, $param );
 			if (! isset ( $data ['authorizer_info'] ['user_name'] )) {
-				$res ['msg'] = '获取公众号信息失败！';
+				$res ['msg'] = '获取公众号或小程序信息失败！';
 				return $res;
 			}
 			
@@ -162,5 +162,14 @@ class PublicBindModel extends Model {
 		}
 		
 		return $data;
+	}
+	/*
+	 * 获取代码模版库中的所有小程序代码模版
+	 */
+	function getTemplateList(){
+	    $url='https://api.weixin.qq.com/wxa/gettemplatelist?access_token='.$this->_get_component_access_token();
+	    $data = get_data($url);
+	    addWeixinLog($data,$url);
+	    return $data;
 	}
 }

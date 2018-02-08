@@ -21,6 +21,8 @@ define ( 'RUNTIME_PATH', './Runtime/' );
 define ( 'BIND_MODULE', 'Home' );
 define ( 'BIND_CONTROLLER', 'Notice' );
 define ( 'BIND_ACTION', 'index' );
+// 指定get_token的方式
+define ( 'FROM_NOTICE', true );
 /**
  * 引入核心入口
  * ThinkPHP亦可移动到WEB以外的目录

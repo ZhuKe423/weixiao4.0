@@ -27,12 +27,12 @@ class CreditModel extends Model {
 		
 		$res = $this->add ( $data );
 		if ($res) {
-			$info = get_followinfo ( $data ['uid'] );
+			$info = get_userinfo ( $data ['uid'] );
 			$save ['score'] = $info ['score'] + $data ['score'];
 			
 			$save ['experience'] = $info ['experience'] + $data ['experience'];
 			
-			D ( 'Common/Follow' )->update ( $data ['uid'], $save );
+			D ( 'Common/User' )->updateInfo ( $data ['uid'], $save );
 			// $this->updateFollowTotalCredit ( $data ['uid'] );
 		}
 		
