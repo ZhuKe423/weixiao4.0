@@ -46,12 +46,13 @@ class FollowModel extends Model {
 		}
 		$user = array_merge ( $user, $userData );
 		$user ['headimgurl'] = str_replace ( 'http:', '', $user ['headimgurl'] );
+		$old_uid = $uid;
 		$uid = $data ['uid'] = D ( 'Common/User' )->add ( $user );
 		
 		if ($has_subscribe !== false) {
 			$data ['has_subscribe'] = $has_subscribe;
 		}
-		if (! is_null ( $uid )) {
+		if (! is_null ( $old_uid )) {
 			M ( 'apps_follow' )->where ( $umap )->save ( $data );
 		} else {
 			M ( 'apps_follow' )->add ( $data );
