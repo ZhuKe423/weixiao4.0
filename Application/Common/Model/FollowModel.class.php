@@ -45,7 +45,7 @@ class FollowModel extends Model {
 			$userData = getWeixinUserInfo ( $openid );
 		}
 		$user = array_merge ( $user, $userData );
-		$user ['headimgurl'] = str_replace ( 'http:', '', $user ['headimgurl'] );
+		isset($user ['headimgurl']) && $user ['headimgurl'] = str_replace ( 'http:', '', $user ['headimgurl'] );
 		$old_uid = $uid;
 		$uid = $data ['uid'] = D ( 'Common/User' )->add ( $user );
 		
