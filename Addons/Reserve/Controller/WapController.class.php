@@ -131,7 +131,7 @@ class WapController extends WapBaseController {
 			$Model = $this->checkAttr ( $Model, $this->model ['id'], $fields );
 			$res = false;
 			$Model->create () && $res = $Model->$act ();
-			if ($res !== false ) {{
+			if ($res !== false ) {
 				// 增加积分
 				add_credit ( 'Reserve' );
 				if ($act == 'add') {
