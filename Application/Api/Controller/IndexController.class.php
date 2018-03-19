@@ -14,7 +14,15 @@ class IndexController extends Controller {
 		unset ( $plist );
 		
 		$list = M ( 'api' )->order ( 'id asc' )->select ();
+		$typeArr = [ 
+				'select' => '查询',
+				'add' => '增加',
+				'del' => '删除',
+				'update' => '更新' 
+		];
 		foreach ( $list as &$vo ) {
+			$vo ['method'] = $vo ['method'] == 1 ? 'GET' : 'POST';
+			$vo ['type'] = $typeArr [$vo ['type']];
 			if (isset ( $params [$vo ['id']] )) {
 				$vo = array_merge ( $params [$vo ['id']], $vo );
 			}

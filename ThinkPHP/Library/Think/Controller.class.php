@@ -916,7 +916,7 @@ abstract class Controller {
 	}
 	
 	// 获取模型列表数据
-	public function _get_model_list($model = null, $page = 0, $order = '', $all_field = false) {
+	public function _get_model_list($model = null, $page = 0, $order = '', $all_field = false, $parseData = true) {
 		if (empty ( $model ))
 			return false;
 		
@@ -942,7 +942,7 @@ abstract class Controller {
 		if (empty ( $order ) && isset ( $_REQUEST ['order'] )) {
 			$order = I ( 'order' ) . ' ' . I ( 'by' );
 		}
-		if ($model ['name'] != 'user') {
+		if ($model ['name'] != 'user' && $model ['name'] != 'manager') {
 			empty ( $fields ) || in_array ( 'id', $fields ) || array_push ( $fields, 'id' );
 			empty ( $order ) && $order = 'id desc';
 		} else {
@@ -957,7 +957,10 @@ abstract class Controller {
 		}
 		$data = M ( $name )->field ( $db_field )->where ( $map )->order ( $order )->page ( $page, $row )->select ();
 		// dump ( $data );
-		$data = $this->parseData ( $data, $dataTable->fields, $dataTable->list_grid, $dataTable->config );
+		if ($parseData) {
+			$data = $this->parseData ( $data, $dataTable->fields, $dataTable->list_grid, $dataTable->config );
+		}
+		
 		// dump ( $data );
 		// lastsql ();
 		$list_data ['list_data'] = $data;

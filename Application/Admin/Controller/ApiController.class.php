@@ -1,4 +1,5 @@
 <?php
+
 // +----------------------------------------------------------------------
 // | OneThink [ WE CAN DO IT JUST THINK IT ]
 // +----------------------------------------------------------------------
@@ -26,10 +27,11 @@ class ApiController extends AdminController {
 		$list_grid = $dataTable->list_grid;
 		$this->assign ( 'list_grid', $list_grid );
 		// dump ( $list_grid );
-		
 		$list_data = $this->_get_model_list ( $dataTable->config );
+		
+		$mods = M ( 'model' )->getFields ( 'title,name' );
 		foreach ( $list_data ['list_data'] as &$vo ) {
-			$vo ['url'] = SITE_URL . '/index.php?s=/Api/Api/index/mod/' . $vo ['mod'] . '/act/' . $vo ['url'] . '/access_token/ACCESS_TOKEN';
+			$vo ['url'] = SITE_URL . '/index.php?s=/Api/Api/index/mod/' . $mods [$vo ['mod']] . '/act/' . $vo ['url']; // . '/access_token/ACCESS_TOKEN';
 		}
 		// dump ( $list_data );
 		$this->assign ( $list_data );

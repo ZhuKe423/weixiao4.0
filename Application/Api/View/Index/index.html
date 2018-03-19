@@ -9,7 +9,7 @@
 	<volist name="list" id="api">
 	<h2 class="mt10 mb10"><a name="content{$api.id}">{$api.title}</a></h2>
 	<div class="tab-content api-style">
-		<div class="item-label">接口地址: {:SITE_URL}/index.php?s=/Api/Api/index/mod/{$api.mod}/act/{$api.url}/access_token/ACCESS_TOKEN</div> <div
+		<div class="item-label">接口地址: {:SITE_URL}/index.php?s=/Api/Api/index/mod/{$api.mod}/act/{$api.url}</div> <div
 			class="item-label">请求类型: {$api.method}</div> <div
 			class="item-label">接口类型: {$api.type}</div>
 		<notempty name="api.condtion">

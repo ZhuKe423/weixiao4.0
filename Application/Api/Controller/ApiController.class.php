@@ -7,7 +7,7 @@ use Think\ApiBaseController;
 class ApiController extends ApiBaseController {
 	function index() {
 		// 接口请求日志记录TODO
-		$param = I ();
+		$param = I ( 'request.' );
 		// dump ( $param );
 		// exit ();
 		if (! isset ( $param ['act'] )) {
@@ -21,7 +21,7 @@ class ApiController extends ApiBaseController {
 		$map ['mod'] = $mod;
 		$api_info = M ( 'api' )->where ( $map )->find ();
 		if (! $api_info) { // 自己写接口处理程序,并放到Api应用下的MODEL方法，防止访问其它文件出现任意文件上传漏洞
-			$res = D ( 'Api/'.$mod )->$act ( $param );
+			$res = D ( 'Api/' . $mod )->$act ( $param );
 			if ($debug) {
 				dump ( $debug );
 			} else {
@@ -100,7 +100,8 @@ class ApiController extends ApiBaseController {
 	}
 	private function param_condition($api_param, $param) {
 		if (! isset ( $api_param ['condition'] ) || empty ( $api_param ['condition'] )) {
-			$this->error ( '410015:请先在后台配置查询条件' );
+			return [ ];
+			// $this->error ( '410015:请先在后台配置查询条件' );
 		}
 		
 		$data = [ ];
@@ -243,9 +244,9 @@ class ApiController extends ApiBaseController {
 						'headimgurl' => $data ['avatarUrl'] 
 				];
 				isset ( $data ['unionid'] ) && $save ['unionid'] = $data ['unionid'];
-				$uid=session ( 'mid' );
+				$uid = session ( 'mid' );
 				if ($uid > 0) {
-					$res = D ( 'Common/User' )->updateInfo($uid,$save);
+					$res = D ( 'Common/User' )->updateInfo ( $uid, $save );
 					$save ['uid'] = $uid;
 					D ( 'Common/User' )->autoLogin ( $save );
 					echo api_return ( 0, $res );
@@ -431,7 +432,7 @@ class ApiController extends ApiBaseController {
 		$param ['openid'] = $openid;
 		$param ['mch_id'] = $info ['mch_id'];
 		$param ['partner_key'] = $info ['partner_key'];
-		$param ['attach'] = I('username');
+		$param ['attach'] = I ( 'username' );
 		
 		$order = D ( 'Common/Payment' )->weiapp_pay ( $appid, $param, 'Home/Service/payok' );
 		echo json ( $order );
@@ -505,7 +506,7 @@ class ApiController extends ApiBaseController {
 				echo api_error ( '登录失败' );
 		}
 	}
-	//卡券URL升级为小程序
+	// 卡券URL升级为小程序
 	function wxAppCard() {
 		$card_id = 'prgF0txhQxLw5fRWIy068GyPJcQk';
 		$token = 'gh_6d3bf5d72981';
@@ -517,27 +518,26 @@ class ApiController extends ApiBaseController {
 						'base_info' => [ 
 								'custom_url_name' => '小程序',
 								'custom_url' => 'https://leyao.tv/weishop/index.php?s=/Api/Api/wxAppCard',
-								'custom_app_brand_user_name' => $token.'@app',
+								'custom_app_brand_user_name' => $token . '@app',
 								'custom_app_brand_pass' => $app_page,
-								'center_app_brand_user_name' => $token.'@app',
+								'center_app_brand_user_name' => $token . '@app',
 								'center_app_brand_pass' => $app_page,
 								'custom_url_sub_title' => '点击进入',
 								'promotion_url_name' => '小程序',
 								'promotion_url' => 'https://leyao.tv/weishop',
-								'promotion_app_brand_user_name' => $token.'@app',
-								'promotion_app_brand_pass' => $app_page
+								'promotion_app_brand_user_name' => $token . '@app',
+								'promotion_app_brand_pass' => $app_page 
 						] 
 				] 
 		];
-		//dump($param);exit;
-	    $access_token = 'hbeiWYjv7UpvoXQ_aGBpf3o33uA_gRQCCCQsbERKjWqM8gn-pepjJayDTsO2Ts-xkvdteo7SCl41Fo4tPAZeGQZkvDxZdGMCaAxSbMFQLAdghp4l84MuO5J59rv0v-0rZOWeAIAODL';
-		$url = "https://api.weixin.qq.com/card/update?access_token=" .  $access_token;//get_access_token ($token);
-
-
+		// dump($param);exit;
+		$access_token = 'hbeiWYjv7UpvoXQ_aGBpf3o33uA_gRQCCCQsbERKjWqM8gn-pepjJayDTsO2Ts-xkvdteo7SCl41Fo4tPAZeGQZkvDxZdGMCaAxSbMFQLAdghp4l84MuO5J59rv0v-0rZOWeAIAODL';
+		$url = "https://api.weixin.qq.com/card/update?access_token=" . $access_token; // get_access_token ($token);
+		
 		$res = post_data ( $url, $param );
-		echo json($res);
+		echo json ( $res );
 	}
-	//用户领取卡券
+	// 用户领取卡券
 	function addCard() {
 		$card_id = 'prgF0txhQxLw5fRWIy068GyPJcQk';
 		$token = 'gh_6d3bf5d72981';
@@ -548,7 +548,7 @@ class ApiController extends ApiBaseController {
 		// $param ['code'] = '';
 		$param ['api_ticket'] = $ticket;
 		$param ['card_id'] = $card_id;
-		$param ['timestamp'] = NOW_TIME;//也可以用time（）获取时间戳
+		$param ['timestamp'] = NOW_TIME; // 也可以用time（）获取时间戳
 		$param ['nonce_str'] = uniqid ();
 		
 		// 将 api_ticket、timestamp、card_id、code、openid、nonce_str的value值进行字符串的字典序排序
@@ -564,17 +564,16 @@ class ApiController extends ApiBaseController {
 		
 		echo api_success ( $param );
 	}
-	function decrypt(){
-		$code = I('code');
-
-$access_token = 'hbeiWYjv7UpvoXQ_aGBpf3o33uA_gRQCCCQsbERKjWqM8gn-pepjJayDTsO2Ts-xkvdteo7SCl41Fo4tPAZeGQZkvDxZdGMCaAxSbMFQLAdghp4l84MuO5J59rv0v-0rZOWeAIAODL';
-		$url = 'https://api.weixin.qq.com/card/code/decrypt?access_token='.$access_token;
-
-		$param['encrypt_code'] = $code;
-
+	function decrypt() {
+		$code = I ( 'code' );
+		
+		$access_token = 'hbeiWYjv7UpvoXQ_aGBpf3o33uA_gRQCCCQsbERKjWqM8gn-pepjJayDTsO2Ts-xkvdteo7SCl41Fo4tPAZeGQZkvDxZdGMCaAxSbMFQLAdghp4l84MuO5J59rv0v-0rZOWeAIAODL';
+		$url = 'https://api.weixin.qq.com/card/code/decrypt?access_token=' . $access_token;
+		
+		$param ['encrypt_code'] = $code;
+		
 		$res = post_data ( $url, $param );
-		echo json_encode( $res );
+		echo json_encode ( $res );
 	}
-
 }
 
