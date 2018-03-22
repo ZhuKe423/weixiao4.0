@@ -2252,7 +2252,7 @@ CREATE TABLE `wp_file` (
   `savename` char(30) NOT NULL DEFAULT '' COMMENT '保存名称',
   `savepath` char(30) NOT NULL DEFAULT '' COMMENT '文件保存路径',
   `ext` char(5) NOT NULL DEFAULT '' COMMENT '文件后缀',
-  `mime` char(40) NOT NULL DEFAULT '' COMMENT '文件mime类型',
+  `mime` char(100) NOT NULL DEFAULT '' COMMENT '文件mime类型',
   `size` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '文件大小',
   `md5` char(32) DEFAULT '' COMMENT '文件md5',
   `sha1` char(40) NOT NULL DEFAULT '' COMMENT '文件 sha1编码',
