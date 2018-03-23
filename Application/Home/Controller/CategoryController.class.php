@@ -99,7 +99,7 @@ class CategoryController extends HomeController {
 			vendor ( 'PHPExcel.PHPExcel_IOFactory' );
 			vendor ( 'PHPExcel.Reader.Excel5' );
 			
-			$format = strtolower ( $extend ) == 'xls' ? 'Excel5' : 'excel2007';
+			$format = strtolower ( $extend ) == 'xls' ? 'Excel5' : 'Excel2007';
 			$objReader = \PHPExcel_IOFactory::createReader ( $format );
 			$objPHPExcel = $objReader->load ( $filename );
 			$objPHPExcel->setActiveSheetIndex ( 0 );
