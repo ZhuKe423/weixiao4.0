@@ -2807,7 +2807,8 @@ function add_request_log($url, $param = [], $res = [], $error_code = '', $msg = 
 	$log ['error_code'] = $error_code;
 	$log ['msg'] = $msg;
 	$log ['res'] = is_array ( $res ) ? var_export ( $res, true ) : $res;
-	if (strlen ( $log ['res'] >= 65535 )) {
+
+	if (strlen ( $log ['res']) >= 65535 ) {
 		$log ['res'] = substr ( $log ['res'], 0, 65530 );
 	}
 	$log ['server_ip'] = get_client_ip ();

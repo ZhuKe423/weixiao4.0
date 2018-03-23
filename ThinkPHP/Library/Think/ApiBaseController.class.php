@@ -178,5 +178,3 @@ class ApiBaseController extends Controller {
 		}
 	}
 }
-// 设置控制器别名 便于升级
-class_alias ( 'Think\Controller', 'Think\Action' );

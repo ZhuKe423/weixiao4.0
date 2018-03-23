@@ -37,10 +37,10 @@
 		         <div class="controls upload_file" >
 		          		<div  id="upload_file_check_file" class="uploadrow_file"></div>
 <!-- 		                            <input type="file" id="upload_file_check_file"> -->
-		                            <input type="hidden" name="check_file" id="check_file" value="{$info[check_file]}"/>
+		                            <input type="hidden" name="check_file" id="check_file" value="{$info['check_file']}"/>
 		                            <div class="upload-img-box">
 		                              <present name="info[check_file]">
-		                                <div class="upload-pre-file"><span class="upload_icon_all"></span>{$info[check_file]|get_table_field=###,'id','name','File'}</div>
+		                                <div class="upload-pre-file"><span class="upload_icon_all"></span>{$info['check_file']|get_table_field=###,'id','name','File'}</div>
 		                              </present>
 		                            </div>
 		         </div>

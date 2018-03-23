@@ -783,10 +783,10 @@ abstract class Controller {
 				
 				break;
 			case 'picture' :
-				$val = get_img_html ( $val );
+				$val = CONTROLLER_NAME == 'Api' ? get_cover_url ( $val ) : get_img_html ( $val );
 				break;
 			case 'file' :
-				$val = get_file_html ( $val );
+				$val = CONTROLLER_NAME == 'Api' ? get_file_url ( $val ) : get_file_html ( $val );
 				break;
 			case 'cascade' :
 				break;

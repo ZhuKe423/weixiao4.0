@@ -1309,6 +1309,8 @@ class Model {
 		// 自动填充
 		if (isset ( $_auto )) {
 			foreach ( $_auto as $auto ) {
+				if (! isset ( $data [$auto [0]] ))
+					continue;
 				// 填充因子定义格式
 				// array('field','填充内容','填充条件','附加规则',[额外参数])
 				if (empty ( $auto [2] ))

@@ -74,11 +74,14 @@ class ApiController extends ApiBaseController {
 				break;
 			default : // 查询
 				$map = $this->param_condition ( $api_param, $param );
-				if (isset ( $param ['is_one'] )) {
-					$res = $Model->where ( $map )->find ();
-				} else {
-					$order = $this->param_order ( $api_param, $param );
-					$res = $Model->where ( $map )->order ( $order )->select ();
+				$order = $this->param_order ( $api_param, $param );
+				$res = $Model->where ( $map )->order ( $order )->select ();
+				if (isset ( $param ['parseData'] )) {
+					$dataTable = D ( 'Common/Model' )->getFileInfo ( $api_info ['mod'] );
+					$res = $this->parseData ( $res, $dataTable->fields, $dataTable->list_grid, $dataTable->config );
+				}
+				if (isset ( $param ['is_one'] ) && isset ( $res [0] )) {
+					$res = $res [0];
 				}
 				break;
 		}
