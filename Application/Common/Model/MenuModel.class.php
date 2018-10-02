@@ -57,7 +57,7 @@ class MenuModel extends Model {
 				$cate ['url'] = U ( $m ['url'] );
 			}
 			
-			! empty ( $cate ['url'] ) && $needMdm && $cate ['url'] .= '&mdm=' . $cate ['pid'] . '|' . $cate ['id'];
+			! empty ( $cate ['url'] ) && $needMdm && $cate ['url'] .= '/mdm=' . $cate ['pid'] . '|' . $cate ['id'];
 			$cate ['addon_name'] = $m ['addon_name'];
 			$res ['core_side_menu'] [$cate ['pid']] [] = $cate;
 			$res ['default_data'] [$cate ['url']] = $param;
@@ -85,7 +85,7 @@ class MenuModel extends Model {
 				if (empty ( $cate ['url'] ) && ! empty ( $res ['core_side_menu'] [$m ['id']] )) {
 					$cate ['url'] = $res ['core_side_menu'] [$m ['id']] [0] ['url'];
 				}
-				$cate ['url'] .= '&mdm=' . $cate ['id'];
+				$cate ['url'] .= '/mdm=' . $cate ['id'];
 			} else {
 				if ($m ['url_type'] == 0) {
 					$cate ['url'] = $addonList [$m ['addon_name']] ['addons_url'];
@@ -100,9 +100,9 @@ class MenuModel extends Model {
 				}
 				if (! empty ( $cate ['url'] )) {
 					if (isset ( $res ['core_side_menu'] [$m ['id']] ) && $res ['core_side_menu'] [$m ['id']] [0] ['id']) {
-						$cate ['url'] .= '&mdm=' . $m ['id'] . '|' . $res ['core_side_menu'] [$m ['id']] [0] ['id'];
+						$cate ['url'] .= '/mdm=' . $m ['id'] . '|' . $res ['core_side_menu'] [$m ['id']] [0] ['id'];
 					} else {
-						$cate ['url'] .= '&mdm=' . $m ['id'];
+						$cate ['url'] .= '/mdm=' . $m ['id'];
 					}
 				}
 			}

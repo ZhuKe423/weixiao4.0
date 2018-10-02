@@ -53,7 +53,7 @@
 					data:{template:value,type:type},
 					type:"post",
 					dataType:"json",
-					success:function(data){ window.location.href = "{$next_url}&mdm={:I('mdm')}"; }
+					success:function(data){ window.location.href = "{$next_url}/mdm={:I('mdm')}"; }
 					})
 				}
 			});

@@ -113,7 +113,7 @@ class MaterialController extends HomeController {
 	function material_lists() {
 		$page = I ( 'p', 1, 'intval' );
 		$row = 20;
-		$search_url = U ( 'material_lists' ) . '&mdm=' . $_GET ['mdm'];
+		$search_url = U ( 'material_lists' ) . '/mdm=' . $_GET ['mdm'];
 		$this->assign ( 'search_url', $search_url );
 		
 		// $map ['manager_id'] = $this->mid;
@@ -1407,7 +1407,7 @@ class MaterialController extends HomeController {
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $model ['id'] );
 			if ($Model->create () && $id = $Model->add ()) {
-				$this->success ( '添加' . $model ['title'] . '成功！', U ( 'text_lists?model=' . $model ['name'] . '&mdm=' . $_GET ['mdm'] ) );
+				$this->success ( '添加' . $model ['title'] . '成功！', U ( 'text_lists?model=' . $model ['name'] . '/mdm=' . $_GET ['mdm'] ) );
 			} else {
 				$this->error ( '110130:' . $Model->getError () );
 			}
@@ -1455,7 +1455,7 @@ class MaterialController extends HomeController {
 			$res = false;
 			$Model->create () && $res = $Model->save ();
 			if ($res !== false) {
-				$this->success ( '保存' . $model ['title'] . '成功！', U ( 'text_lists?model=' . $model ['name'] . '&mdm=' . $_GET ['mdm'] ) );
+				$this->success ( '保存' . $model ['title'] . '成功！', U ( 'text_lists?model=' . $model ['name'] . '/mdm=' . $_GET ['mdm'] ) );
 			} else {
 				$this->error ( '110133:' . $Model->getError () );
 			}

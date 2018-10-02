@@ -162,7 +162,7 @@ class ShopVoteController extends ManageBaseController {
 			$Model = $this->checkAttr ( $Model, $model ['id'] );
 			if ($Model->create () && $vote_id = $Model->add ()) {
 				D ( 'Addons://Vote/ShopVoteOption' )->getOptions ( $_POST ['vote_id'], true );
-				$this->success ( '添加' . $model ['title'] . '成功！', U ( 'option_lists?model=' . $model ['name'] . '&vote_id=' . $_POST ['vote_id'] . '&mdm=' . $_GET ['mdm'] ) );
+				$this->success ( '添加' . $model ['title'] . '成功！', U ( 'option_lists?model=' . $model ['name'] . '&vote_id=' . $_POST ['vote_id'] . '/mdm=' . $_GET ['mdm'] ) );
 			} else {
 				$this->error ( '400439:' . $Model->getError () );
 			}
@@ -205,7 +205,7 @@ class ShopVoteController extends ManageBaseController {
 			if ($Model->create () && false !== $Model->save ()) {
 				D ( 'Addons://Vote/ShopVoteOption' )->getInfo ( $id, true );
 				D ( 'Addons://Vote/ShopVoteOption' )->getOptions ( $_POST ['vote_id'], true );
-				$this->success ( '保存' . $model ['title'] . '成功！', U ( 'option_lists?model=' . $model ['name'] . '&vote_id=' . $_POST ['vote_id'] . '&mdm=' . $_GET ['mdm'] ) );
+				$this->success ( '保存' . $model ['title'] . '成功！', U ( 'option_lists?model=' . $model ['name'] . '&vote_id=' . $_POST ['vote_id'] . '/mdm=' . $_GET ['mdm'] ) );
 			} else {
 				$this->error ( '400440:' . $Model->getError () );
 			}
