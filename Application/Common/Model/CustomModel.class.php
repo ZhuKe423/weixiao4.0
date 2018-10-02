@@ -195,7 +195,12 @@ class CustomModel extends Model {
 			return 0;
 		}
 		$param ['type'] = 'image';
-		$param ['media'] = '@' . realpath ( SITE_PATH . $path );
+		//$param ['media'] = '@' . realpath ( SITE_PATH . $path );
+		if (class_exists ( '\CURLFile' )) { // 关键是判断curlfile,官网推荐php5.5或更高的版本使用curlfile来实例文件
+			$param ['media'] = new \CURLFile ( realpath (  SITE_PATH . $path ) );
+		} else {
+			$param ['media'] = '@' .realpath ( SITE_PATH . $path );
+		}			
 		$url = 'https://api.weixin.qq.com/cgi-bin/media/upload?access_token=' . get_access_token ();
 		$res = post_data ( $url, $param, true );
 		if (isset ( $res ['errcode'] ) && $res ['errcode'] != 0) {
@@ -215,7 +220,12 @@ class CustomModel extends Model {
 				return 0;
 			}
 			$param ['type'] = $type;
-			$param ['media'] = '@' . realpath ( SITE_PATH . $path );
+			//$param ['media'] = '@' . realpath ( SITE_PATH . $path );
+		if (class_exists ( '\CURLFile' )) { // 关键是判断curlfile,官网推荐php5.5或更高的版本使用curlfile来实例文件
+			$param ['media'] = new \CURLFile ( realpath (  SITE_PATH . $path ) );
+		} else {
+			$param ['media'] = '@' .realpath ( SITE_PATH . $path );
+		}				
 			$url = 'https://api.weixin.qq.com/cgi-bin/media/upload?access_token=' . get_access_token ();
 			$res = post_data ( $url, $param, 'file', true, [ ], 0 );
 			if (isset ( $res ['errcode'] ) && $res ['errcode'] != 0) {
@@ -246,7 +256,12 @@ class CustomModel extends Model {
 			$path = '/Public/Home/images/spec_img_add.jpg';
 		}
 		$param ['type'] = 'thumb';
-		$param ['media'] = '@' . realpath ( SITE_PATH . $path );
+		//$param ['media'] = '@' . realpath ( SITE_PATH . $path );
+		if (class_exists ( '\CURLFile' )) { // 关键是判断curlfile,官网推荐php5.5或更高的版本使用curlfile来实例文件
+			$param ['media'] = new \CURLFile ( realpath (  SITE_PATH . $path ) );
+		} else {
+			$param ['media'] = '@' .realpath ( SITE_PATH . $path );
+		}			
 		$url = 'https://api.weixin.qq.com/cgi-bin/media/upload?access_token=' . get_access_token ();
 		$res = post_data ( $url, $param, true );
 		if (isset ( $res ['errcode'] ) && $res ['errcode'] != 0) {
@@ -267,7 +282,12 @@ class CustomModel extends Model {
 				return '';
 			}
 			$param ['type'] = $type;
-			$param ['media'] = '@' . realpath ( $path );
+			//$param ['media'] = '@' . realpath ( $path );
+			if (class_exists ( '\CURLFile' )) { // 关键是判断curlfile,官网推荐php5.5或更高的版本使用curlfile来实例文件
+				$param ['media'] = new \CURLFile ( realpath (  $path  ) );
+			} else {
+				$param ['media'] = '@' .realpath ( $path  );
+			}			
 			if ($type == 'video') {
 				$param ['description'] ['title'] = $title;
 				$param ['description'] ['introduction'] = $introduction;

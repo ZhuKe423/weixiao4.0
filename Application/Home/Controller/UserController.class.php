@@ -15,7 +15,12 @@ namespace Home\Controller;
  */
 class UserController extends HomeController {
 	function __construct() {
-		$this->need_login = false;
+	    if (ACTION_NAME == 'profile'){
+	        $this->need_login = true;
+	    }else {
+	        $this->need_login = false;
+	    }
+		
 		$this->need_appinfo = false;
 		parent::__construct ();
 	}

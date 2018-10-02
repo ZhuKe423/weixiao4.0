@@ -1599,7 +1599,7 @@ function execute_sql_file($sql_path) {
 	// 开始安装
 	foreach ( $sql as $value ) {
 		$value = trim ( $value );
-		if (empty ( $value ) || strpos ( $sql, $prefix . 'attribute ' ) !== false)
+		if (empty ( $value ) || strpos ( $value, $prefix . 'attribute ' ) !== false)
 			continue;
 		
 		$res = M ()->execute ( $value );
@@ -2722,15 +2722,14 @@ function post_data($url, $param, $type = 'json', $return_array = true, $useCert 
 	// 设置超时
 	curl_setopt ( $ch, CURLOPT_TIMEOUT, $timeOut );
 	
-	/*
-	 * if (class_exists ( '/CURLFile' )) { // php5.5跟php5.6中的CURLOPT_SAFE_UPLOAD的默认值不同
-	 * curl_setopt ( $ch, CURLOPT_SAFE_UPLOAD, true );
-	 * } else {
-	 * if (defined ( 'CURLOPT_SAFE_UPLOAD' )) {
-	 * curl_setopt ( $ch, CURLOPT_SAFE_UPLOAD, false );
-	 * }
-	 * }
-	 */
+	if (class_exists ( '/CURLFile' )) { // php5.5跟php5.6中的CURLOPT_SAFE_UPLOAD的默认值不同
+		curl_setopt ( $ch, CURLOPT_SAFE_UPLOAD, true );
+	} else {
+		if (defined ( 'CURLOPT_SAFE_UPLOAD' )) {
+			curl_setopt ( $ch, CURLOPT_SAFE_UPLOAD, false );
+		}
+	}
+	
 	curl_setopt ( $ch, CURLOPT_URL, $url );
 	curl_setopt ( $ch, CURLOPT_POST, true );
 	curl_setopt ( $ch, CURLOPT_SSL_VERIFYPEER, false );
@@ -2807,8 +2806,8 @@ function add_request_log($url, $param = [], $res = [], $error_code = '', $msg = 
 	$log ['error_code'] = $error_code;
 	$log ['msg'] = $msg;
 	$log ['res'] = is_array ( $res ) ? var_export ( $res, true ) : $res;
-
-	if (strlen ( $log ['res']) >= 65535 ) {
+	
+	if (strlen ( $log ['res'] ) >= 65535) {
 		$log ['res'] = substr ( $log ['res'], 0, 65530 );
 	}
 	$log ['server_ip'] = get_client_ip ();

@@ -168,7 +168,12 @@ class WeixinModel extends Model {
 	/* 上传多媒体文件 */
 	public function uploadFile($file, $type = 'image', $acctoken = '') {
 		$post_data ['type'] = $type; // 媒体文件类型，分别有图片（image）、语音（voice）、视频（video）和缩略图（thumb）
-		$post_data ['media'] = '@' . $file;
+		//$post_data ['media'] = '@' . $file;
+		if (class_exists ( '\CURLFile' )) { // 关键是判断curlfile,官网推荐php5.5或更高的版本使用curlfile来实例文件
+			$post_data ['media'] = new \CURLFile ( realpath (  '@' . $file ) );
+		} else {
+			$post_data ['media'] = '@' .realpath ( '@' . $file );
+		}			
 		
 		$url = "https://file.api.weixin.qq.com/cgi-bin/media/upload?access_token=$acctoken&type=image";
 		$ch = curl_init ();

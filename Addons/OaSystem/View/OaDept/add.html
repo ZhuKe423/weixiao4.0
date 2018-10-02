@@ -1,0 +1,60 @@
+<extend name="Home@Base/common" />
+<block name="body">
+    <div class="span9 page_message">
+        <section id="contents"> <include file="Home@Addons/_nav" />
+            <div class="tab-content">
+                <php> $post_url || $post_url = U('add?model='.$model['id'], $get_param);</php>
+                <form class="form-horizontal form-center" method="post" action="{$post_url}" id="form">
+                    <div class="form-item cf toggle-title">
+                        <label class="item-label"> <span class="need_flag">*</span>部门编号<span class="check-tips"></span></label>
+                        <div class="controls">
+                            <input type="text" value="{$data.dept_no}" name="dept_no" class="text" placeholder="请填部门名称">
+                        </div>
+                    </div>
+                    <div class="form-item cf">
+                        <label class="item-label"> <span class="need_flag">*</span> 部门名称 </label>
+                        <div class="controls">
+                            <input type="text" value="{$data.name}" name="name" class="text" placeholder="请填部门名称">
+                        </div>
+                    </div>
+                    <div class="form-item cf">
+                        <label class="item-label"> <span class="need_flag">*</span>部门简称<span class="check-tips"></span></label>
+                        <div class="controls">
+                            <input type="text" value="{$data.short_name}" name="short_name" class="text" placeholder="请填部门简称">
+                        </div>
+                    </div>
+                    <div class="form-item cf">
+                        <label class="item-label"> <span class="need_flag">*</span>部门等级<span class="check-tips"></span></label>
+                        <div class="controls">
+                            <select name="dept_grade_id">
+                                <volist name="grade" id="vo">
+                                    <option value="{$vo.id}">{$vo.name}</option>
+                                </volist>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-item cf">
+                        <label class="item-label"> <span class="need_flag">*</span>父级部门<span class="check-tips"></span></label>
+                        <div class="controls">
+                            <select name="pid">
+                                <volist name="dept" id="vo">
+                                    <option value="{$vo.id}">{$vo.name}</option>
+                                </volist>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-item cf">
+                        <label class="item-label"> <span class="need_flag">*</span> 备注说明 </label>
+                        <div class="controls">
+                            <input type="text" value="{$data.remark}" name="remark" class="text" placeholder="请填部门名称">
+                        </div>
+                    </div>
+                    <div class="form-item cf">
+                        <button class="home_btn submit-btn ajax-post" id="submit"
+                                type="submit" target-form="form-horizontal">添 加</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+</block>

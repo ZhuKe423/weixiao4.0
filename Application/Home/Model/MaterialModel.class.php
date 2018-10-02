@@ -84,7 +84,12 @@ class MaterialModel extends Model {
 		}
 		
 		$param ['type'] = 'thumb';
-		$param ['media'] = '@' . realpath ( SITE_PATH . $path );
+		//$param ['media'] = '@' . realpath ( SITE_PATH . $path );
+		if (class_exists ( '\CURLFile' )) { // 关键是判断curlfile,官网推荐php5.5或更高的版本使用curlfile来实例文件
+			$param ['media'] = new \CURLFile ( realpath (  SITE_PATH . $path ) );
+		} else {
+			$param ['media'] = '@' .realpath ( SITE_PATH . $path );
+		}			
 		if ($from =='sendall'){
 			$param ['type'] = 'image';
 		    $url = 'https://api.weixin.qq.com/cgi-bin/media/upload?access_token=' . get_access_token ();

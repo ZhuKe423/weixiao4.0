@@ -75,7 +75,7 @@ class TransfersModel extends Model {
 		isset ( $more_param ['act_mod'] ) && $recode ['act_mod'] = $more_param ['act_mod'];
 		$recode ['status'] = $cron ? 1 : 0;
 		$recode ['cTime'] = NOW_TIME;
-		$recode ['partner_trade_no'] = $appid . date ( 'Ymd' ) . $this->getRandStr (); // mchid+yyyymmdd+10位一天内不能重复的数字
+		$recode ['partner_trade_no'] = date ( 'Ymd' ) . $this->getRandStr (); // mchid+yyyymmdd+10位一天内不能重复的数字
 		
 		unset ( $more_param ['act_id'], $more_param ['act_mod'] );
 		$recode ['more_param'] = serialize ( $more_param );

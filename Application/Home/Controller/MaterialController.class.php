@@ -515,7 +515,12 @@ class MaterialController extends HomeController {
 		}
 		
 		$param ['type'] = 'thumb';
-		$param ['media'] = '@' . realpath ( SITE_PATH . $path );
+// 		$param ['media'] = '@' . realpath ( SITE_PATH . $path );
+		if (class_exists ( '\CURLFile' )) { // 关键是判断curlfile,官网推荐php5.5或更高的版本使用curlfile来实例文件
+			$param ['media'] = new \CURLFile ( realpath (  SITE_PATH . $path  ) );
+		} else {
+			$param ['media'] = '@' .realpath ( SITE_PATH . $path  );
+		}
 		$url = 'https://api.weixin.qq.com/cgi-bin/material/add_material?access_token=' . get_access_token ();
 		$res = post_data ( $url, $param, true );
 		
@@ -523,9 +528,11 @@ class MaterialController extends HomeController {
 			addWeixinLog ( error_msg ( $res, '封面图上传' ), '_thumb_media_id' );
 			return '';
 		}
-		
-		$map ['cover_id'] = $cover_id;
-		M ( 'material_news' )->where ( $map )->setField ( 'thumb_media_id', $res ['media_id'] );
+		if ($res['media_id']){
+			$map ['cover_id'] = $cover_id;
+			M ( 'material_news' )->where ( $map )->setField ( 'thumb_media_id', $res ['media_id'] );
+			
+		}
 		
 		return $res ['media_id'];
 	}
@@ -547,10 +554,15 @@ class MaterialController extends HomeController {
 		$path = $cover ['path'];
 		
 		$param ['type'] = 'image';
-		$param ['media'] = '@' . realpath ( SITE_PATH . $path );
-		
+// 		$param ['media'] = '@' . realpath ( SITE_PATH . $path );
+		if (class_exists ( '\CURLFile' )) { // 关键是判断curlfile,官网推荐php5.5或更高的版本使用curlfile来实例文件
+			$param ['media'] = new \CURLFile ( realpath (  SITE_PATH . $path  ) );
+		} else {
+			$param ['media'] = '@' .realpath ( SITE_PATH . $path  );
+		}
 		$url = 'https://api.weixin.qq.com/cgi-bin/material/add_material?access_token=' . get_access_token ();
 		$res = post_data ( $url, $param, true );
+
 		if (isset ( $res ['errcode'] ) && $res ['errcode'] != 0) {
 			addWeixinLog ( error_msg ( $res, '图片素材上传' ), '_image_media_id' );
 			return '';
@@ -626,7 +638,7 @@ class MaterialController extends HomeController {
 	function picture_lists() {
 		// $config=get_addon_config('Wecome');
 		// dump($config);
-		$this->assign ( 'normal_tips', '温馨提示：图片大小不超过2M,    格式: bmp, png, jpeg, jpg, gif' );
+		$this->assign ( 'normal_tips', '温馨提示：图片大小不超过2M,    支持PNG\JPEG\JPG\GIF格式' );
 		$map ['is_use'] = 1;
 		// $map ['manager_id'] = $this->mid;
 		$map ['token'] = get_token ();
@@ -676,6 +688,7 @@ class MaterialController extends HomeController {
 		// $map ['manager_id'] = $this->mid;
 		$map ['token'] = get_token ();
 		$list = M ( 'material_image' )->limit ( 10 )->where ( $map )->field ( 'id,cover_id' )->order ( 'cTime desc' )->select ();
+
 		if (empty ( $list )) {
 			$url = U ( 'picture_lists' );
 			$this->jump ( $url, '上传素材完成' );
@@ -690,6 +703,7 @@ class MaterialController extends HomeController {
 				) )->save ( $save );
 			}
 		}
+
 		$url = U ( 'syc_image_to_wechat' );
 		$this->jump ( $url, '上传本地素材到微信中，请勿关闭' );
 	}
@@ -776,7 +790,7 @@ class MaterialController extends HomeController {
 		$this->ajaxReturn ( $voiceMaterial );
 	}
 	function voice_lists() {
-		$this->assign ( 'normal_tips', '温馨提示：语音大小不超过2M，长度不超过60秒，支持mp3/wma/wav/amr格式' );
+		$this->assign ( 'normal_tips', '温馨提示：语音大小不超过2M，长度不超过60秒，支持AMR\MP3格式' );
 		
 		// $map ['manager_id'] = $this->mid;
 		$map ['token'] = get_token ();
@@ -890,7 +904,7 @@ class MaterialController extends HomeController {
 			$this->assign ( 'fields', $fields );
 			
 			$this->assign ( 'post_url', U ( 'voice_add' ) );
-			$this->assign ( 'UploadFileExts', '*.mp3;*.wma;*.wav;*.amr' );
+			$this->assign ( 'UploadFileExts', '*.mp3;*.amr' );
 			
 			$this->display ( 'add' );
 		}
@@ -928,7 +942,13 @@ class MaterialController extends HomeController {
 			$this->check_file_size ( $_POST ['file_id'], 2 );
 			$Model = D ( parse_name ( get_table_name ( $model ['id'] ), 1 ) );
 			// 获取模型的字段信息
-			$Model = $this->checkAttr ( $Model, $model ['id'] );
+// 			$Model = $this->checkAttr ( $Model, $model ['id'] );
+			if (empty($_POST['file_id'])){
+				$this->error('请上传文件');
+			}
+			if (empty($data['media_id'])){
+				$_POST ['media_id'] = $this->_get_file_media_id ( $_POST ['file_id'], 'voice' );
+			}
 			$res = false;
 			$Model->create () && $res = $Model->save ();
 			if ($res !== false) {
@@ -940,11 +960,13 @@ class MaterialController extends HomeController {
 			$fields = get_model_attribute ( $model ['id'] );
 			$fields ['introduction'] ['is_show'] = 0;
 			$fields ['title'] ['is_show'] = 0;
+			$fields['file_id']['validate_file_exts']='mp3,amr';
+			$fields['file_id']['validate_file_size']='2097152';
 			$this->assign ( 'fields', $fields );
 			$this->assign ( 'data', $data );
 			
 			$this->assign ( 'post_url', U ( 'voice_edit' ) );
-			$this->assign ( 'UploadFileExts', '*.mp3;*.wma;*.wav;*.amr' );
+			$this->assign ( 'UploadFileExts', '*.mp3;*.amr' );
 			
 			$this->display ( 'Addons:edit' );
 		}
@@ -1112,6 +1134,10 @@ class MaterialController extends HomeController {
 			$Model = D ( parse_name ( get_table_name ( $model ['id'] ), 1 ) );
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $model ['id'] );
+			if (empty($data['media_id'])){
+				$_POST ['media_id'] = $this->_get_file_media_id ( $_POST ['file_id'], 'video', $_POST ['title'], $_POST ['introduction'] );
+			}
+			
 			$res = false;
 			$Model->create () && $res = $Model->save ();
 			if ($res !== false) {
@@ -1304,7 +1330,12 @@ class MaterialController extends HomeController {
 			}
 			$param ['title'] = $title;
 			$param ['type'] = $type;
-			$param ['media'] = '@' . realpath ( $path );
+// 			$param ['media'] = '@' . realpath ( $path );
+			if (class_exists ( '\CURLFile' )) { // 关键是判断curlfile,官网推荐php5.5或更高的版本使用curlfile来实例文件
+				$param ['media'] = new \CURLFile ( realpath (  $path ) );
+			} else {
+				$param ['media'] = '@' .realpath ( $path );
+			}
 			if ($type == 'video') {
 				$param ['description'] ['title'] = $title;
 				$param ['description'] ['introduction'] = $introduction;

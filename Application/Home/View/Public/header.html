@@ -14,7 +14,7 @@
                 <ul>
                 <php> if(isset($myPublics)) { </php>
                 <volist name='myPublics' id='vo'>
-                	<li><a href="{:U('home/index/main', array('wpid'=>$vo[mp_id]))}">{$vo.public_name}</a></li>
+                	<li><a href="{:U('home/index/main', array('wpid'=>$vo['mp_id']))}">{$vo.public_name}</a></li>
                     </volist>
                 </ul>
                 <php> } </php>

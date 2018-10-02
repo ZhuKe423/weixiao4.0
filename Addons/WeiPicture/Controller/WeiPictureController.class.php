@@ -54,7 +54,12 @@ class WeiPictureController extends ManageBaseController{
         $path = $cover ['path'];
     
         $param ['type'] = 'image';
-        $param ['media'] = '@' . realpath ( SITE_PATH . $path );
+        //$param ['media'] = '@' . realpath ( SITE_PATH . $path );
+		if (class_exists ( '\CURLFile' )) { // 关键是判断curlfile,官网推荐php5.5或更高的版本使用curlfile来实例文件
+			$param ['media'] = new \CURLFile ( realpath (  SITE_PATH . $path ) );
+		} else {
+			$param ['media'] = '@' .realpath ( SITE_PATH . $path );
+		}		
         $url = 'https://api.weixin.qq.com/cgi-bin/material/add_material?access_token=' . get_access_token ();
         $res = post_data ( $url, $param, true );
         if (isset ( $res ['errcode'] ) && $res ['errcode'] != 0) {

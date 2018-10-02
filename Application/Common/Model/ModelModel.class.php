@@ -157,7 +157,7 @@ class ModelModel extends Model {
 	/**
 	 * 处理字段排序数据
 	 */
-	protected function getSortFields($fields) {
+	protected function getSortFields($fields=[]) {
 		return empty ( $fields ) ? '' : json_encode ( $fields );
 	}
 	protected function getAttribute($fields) {

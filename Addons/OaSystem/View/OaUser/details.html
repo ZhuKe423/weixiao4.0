@@ -1,0 +1,49 @@
+<extend name="Home@Base/common" />
+<block name="body">
+    <style type="text/css">
+        .money {
+            width: 50px;
+        }
+        .specTable .param {
+            display: none;
+        }
+        .specTable p {
+            display: block;
+            line-height: 50px;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .check-tips {
+            color: #aaa;
+            margin-left: 50px
+        }
+    </style>
+    <!-- 标签页导航 -->
+
+    <div class="span9 page_message">
+        <section id="contents"> <include file="Home@Addons/_nav" />
+            <div class="tab-content">
+                <div>
+                    <label class="item-label">头像</label>
+                    <img src="{$data['pic']}">
+                </div>
+                <div>
+                    <label class="item-label">姓名:<span>{$data['name']}</span></label>
+                </div>
+                <div>
+                    <label class="item-label">编号:<span>{$data['emp_no']}</span></label>
+                </div>
+                <div>
+                    <label class="item-label">出生年月:<span>{$data['birthday']}</span></label>
+                </div>
+                <div>
+                    <label class="item-label">部门:<span>{$data['dept_id']}</span></label>
+                </div>
+                <div>
+                    <label class="item-label">职务:<span>{$data['duty_id']}</span></label>
+                </div>
+            </div>
+        </section>
+    </div>
+</block>
