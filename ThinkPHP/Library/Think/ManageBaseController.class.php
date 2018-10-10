@@ -265,7 +265,6 @@ class ManageBaseController extends Controller {
 		$this->meta_title = '设置插件-' . $data->info ['title'];
 		$db_config = D ( 'Common/AddonConfig' )->get ( MODULE_NAME );
 		$addon ['config'] = include $data->config_file;
-		
 		if (IS_POST) {
 			foreach ( $addon ['config'] as $k => $vv ) {
 				if ($vv ['type'] == 'material') {
@@ -298,7 +297,7 @@ class ManageBaseController extends Controller {
 			}
 		}
 		$this->assign ( 'data', $addon );
-		if ($addon ['custom_config'])
+        if ($addon ['custom_config'])
 			$this->assign ( 'custom_config', $this->fetch ( $addon ['addon_path'] . $addon ['custom_config'] ) );
 		$this->display ();
 	}

@@ -28,18 +28,28 @@ class SmsModel extends Model{
 	//$from_type发送短信的用途 'card':会员卡手机认证
 	function sendSms($to,$from_type){
 		$this->config = getAddonConfig('Sms');
+        if (C ( 'TOKEN_ON' )) {
+            $data['__hash__'] = I('post.__hash__');
+        }
+
 		if(strlen($to)!=11){
 			$res['result'] = 0;
 			$res['msg'] = "请检查手机号是否填写正确";
 		}else{
-			if($this->config ['type']==1){
-				//云之讯
-				$res = $this->_sendUcpassSms($to);
-			}else if($this->config ['type']==2){
-			    $res = $this->_sendTencentSms($to);
-			}else{
-				$res = "配置参数出错";
-			}
+            if ($this->autoCheckToken($data)) {
+                if($this->config ['type']==1){
+                    //云之讯
+                    $res = $this->_sendUcpassSms($to);
+                }else if($this->config ['type']==2){
+                    $res = $this->_sendTencentSms($to);
+                }else{
+                    $res = "配置参数出错";
+                }
+            }
+            else {
+                $res = "非法操作";
+            }
+
 		}
 		return $res;
 	}
@@ -104,7 +114,7 @@ class SmsModel extends Model{
 	}
 	
 	//云通讯服务  此方法暂时没有测试过
-	function _sendCloopenSms($to){
+	function _sendCloopenSms($to, $from_type = 'card'){
 		require_once VENDOR_PATH . 'CCPRestSmsSDK.php';
 		// 初始化REST SDK
 		$rest = new REST ( 'app.cloopen.com', '8883', '2013-12-26' );
@@ -220,7 +230,7 @@ class SmsModel extends Model{
 	        
 	        $singleSender = new \SmsSender\SmsSingleSender($appid, $appkey);
 	        //四位验证码
-	        $code =rand(0000,9999);
+	        $code =rand(000000,999999);
 	        $params[] = $code;
 	        $result = $singleSender->sendWithParam("86", $to, $templId, $params, $sign, "", "");
 	        $rsp = json_decode($result, true);

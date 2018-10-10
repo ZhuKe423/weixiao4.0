@@ -122,34 +122,54 @@ class WapController extends WapBaseController {
 	// 第一步绑定手机号
 	function bind_mobile() {
 		if (IS_POST) {
-			
+            // 验证码判断
+            $check = D('Addons://Sms/Sms')->checkSms(I ( 'mobile' ), I('code'));
+            if ($check ['result'] == 0) {
+                $this->error($check ['msg']);
+                return;
+            }
 			$map ['mobile'] = I ( 'mobile' );
-			$dao = D ( 'Common/Follow' );
+            $token = get_token();
+            $openid = get_openid();
+
+            $dao = D ( 'Common/Follow' ); //实际操作的是wp_user表！！
 			// 判断是否已经注册过
 			$user = $dao->where ( $map )->find ();
 			if (! $user) {
-				$uid = $dao->init_follow_by_mobile ( $map ['mobile'] );
+				$uid = $dao->init_follow_by_mobile ( $openid, $token, $map ['mobile'] );
 				$dao->where ( $map )->setField ( 'status', 0 );
-				
 				$user = $dao->where ( $map )->find ();
 			}
 			
-			$map2 ['openid'] = get_openid ();
-			if ($map2 ['openid'] != - 1) {
-				$map2 ['token'] = get_token ();
+			$map2 ['openid'] = $openid;
+            if ($map2 ['openid'] != - 1) {
+				$map2 ['token'] = $token;
 				$uid2 = M ( 'apps_follow' )->where ( $map2 )->getField ( 'uid' );
 				if (! $uid2) {
 					$map2 ['mobile'] = $map ['mobile'];
 					$map2 ['uid'] = $user ['id'];
 					M ( 'apps_follow' )->add ( $map2 );
 				}
-			} else {
+				else { // 增加更新操作！
+                    $data = M('apps_follow')->where ( $map2 )->find();
+                    $data['mobile'] = $map['mobile'];
+                    M('apps_follow')->where ( $map2 )->save($data);
+				    /*dump($data);
+				    dump(M('apps_follow')->getLastSql());*/
+                }
+			} else { //openid 未取到，则按手机号搜！
 				$uid = M ( 'apps_follow' )->where ( $map )->getField ( 'uid' );
 				if (! $uid) {
 					$data ['mobile'] = $map ['mobile'];
 					$data ['uid'] = $user ['id'];
 					M ( 'apps_follow' )->add ( $data );
 				}
+				else { // 增加更新操作！
+                    $data ['mobile'] = $map ['mobile'];
+                    $data ['uid'] = $uid;
+                    M( 'apps_follow')->save($data);
+                    /*dump(M('apps_follow')->getLastSql());*/
+                }
 			}
 			
 			session ( 'mid', $user ['id'] );
@@ -162,14 +182,14 @@ class WapController extends WapBaseController {
 					$url = U ( 'userCenter' );
 				}
 			} else {
-				$url = U ( 'bind_info' );
+				$url = U ( 'userCenter' );
 			}
 			
 			$this->success ( '绑定成功', $url );
 		} else {
-			if ($this->mid > 0) {
+			/*if ($this->mid > 0) {
 				redirect ( U ( 'userCenter' ) );
-			}
+			}*/
 			$this->assign ( 'meta_title', '绑定手机' );
 			$this->display ();
 		}

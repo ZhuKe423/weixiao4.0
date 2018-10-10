@@ -46,7 +46,7 @@ class WxyStudentCourseTable {
             'is_show' => 1,
             'placeholder' => '请输入内容'
         ],
-        'arrange_id' => [
+        'lesson_id' => [
             'title' => '排课号',
             'field' => 'int(10) DEFAULT "1"',
             'type' => 'string',

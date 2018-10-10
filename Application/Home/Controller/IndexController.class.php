@@ -397,4 +397,18 @@ class IndexController extends HomeController {
 		M ( 'error_log' )->add ( $data );
 		echo 'success';
 	}
+
+	//发送短信验证
+    function sendMsg() {
+	    if (IS_POST) {
+	        $mobile = I('post.mobile');
+            $res = D ( 'Addons://Sms/Sms' )->sendSms ( $mobile, 'card' );
+            $this->ajaxReturn ( $res, 'JSON' );
+        }
+        else {
+            /*$res = D ( 'Addons://Sms/Sms' )->sendSms ( 13308204040, 'card' );
+            dump($res);*/
+	        $this->ajaxReturn('Should be running in post method only!');
+        }
+    }
 }
