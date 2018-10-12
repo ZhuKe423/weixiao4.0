@@ -1,5 +1,4 @@
 <?php
-
 // +----------------------------------------------------------------------
 // | OneThink [ WE CAN DO IT JUST THINK IT ]
 // +----------------------------------------------------------------------
@@ -17,6 +16,14 @@ use Think\Model;
  * @author 麦当苗儿 <zuojiazi@vip.qq.com>
  */
 class UserModel extends Model {
+    protected $insertFields = array (
+        'nickname',
+        'password',
+        'email',
+        'mobile',
+        'truename',
+        'is_audit'
+    );
 	protected $_validate = array (
 			array (
 					'nickname',
@@ -85,12 +92,17 @@ class UserModel extends Model {
 				'email' => $email,
 				'mobile' => $mobile,
 				'truename' => $truename,
-				'is_audit' => C ( 'REG_AUDIT' ) 
+				'is_audit' => C ( 'REG_AUDIT' )
 		);
-		
+
 		// 验证手机
 		empty ( $mobile ) || $data ['mobile'] = $mobile;
-		/* 添加用户 */
+		$data = $this->_deal_nickname ( $data );
+        if (C ( 'TOKEN_ON' )) {
+            $data['__hash__'] = I('post.__hash__');
+        }
+
+        /* 添加用户 */
 		if ($this->create ( $data )) {
 			$uid = $this->add ();
 			return $uid ? $uid : 0; // 0-未知错误，大于0-注册成功
@@ -99,6 +111,7 @@ class UserModel extends Model {
 		}
 	}
 	function addUser($data) {
+		$data = $this->_deal_nickname ( $data );
 		$res = $this->add ( $data );
 		return $res;
 	}
@@ -207,7 +220,6 @@ class UserModel extends Model {
 				'username' => $user ['nickname'],
 				'last_login_time' => $user ['last_login_time'] 
 		);
-		
 		session ( 'manager_id', $user ['uid'] );
 		session ( 'mid', $user ['uid'] );
 		session ( 'user_auth', $auth );
@@ -248,6 +260,7 @@ class UserModel extends Model {
 					$userInfo ['groups'] [$g ['group_id']] = $g;
 				}
 			}
+			
 			// 公众号粉丝信息
 			$userInfo ['tokens'] = array ();
 			$tokens = M ( 'apps_follow' )->where ( "uid='$uid'" )->field ( true )->select ();
@@ -275,7 +288,8 @@ class UserModel extends Model {
 			);
 			$userInfo ['sex_name'] = isset ( $sexArr [$userInfo ['sex']] ) ? $sexArr [$userInfo ['sex']] : '';
 			$userInfo ['sex_alias'] = isset ( $sexArr2 [$userInfo ['sex']] ) ? $sexArr2 [$userInfo ['sex']] : '';
-			
+            $userInfo = $this->_deal_nickname ( $userInfo, 1 );
+
 			// 获取标签信息
 			$tag_map ['uid'] = $uid;
 			$userInfo ['tag_ids'] = M ( 'user_tag_link' )->where ( $tag_map )->getFields ( 'tag_id' );
@@ -315,6 +329,8 @@ class UserModel extends Model {
 		if (empty ( $uid ))
 			return false;
 		
+		$save = $this->_deal_nickname ( $save );
+		
 		$map ['uid'] = $uid;
 		$res = $this->where ( $map )->save ( $save );
 		if ($res) {
@@ -345,6 +361,8 @@ class UserModel extends Model {
 			$this->error = '验证出错：密码不正确！';
 			return false;
 		}
+		
+		$data = $this->_deal_nickname ( $data );
 		
 		// 更新用户信息
 		$data = $this->create ( $data );
@@ -377,16 +395,26 @@ class UserModel extends Model {
 		}
 		return false;
 	}
+	function _deal_nickname($data, $type = 0) {
+		if (isset ( $data ['nickname'] )) {
+            $data ['nickname']= mb_convert_encoding ( $data ['nickname'], 'UTF-8' );
+		    //$data ['nickname'] = deal_emoji ( $data ['nickname'], $type );
+		}
+		
+		return $data;
+	}
 	function searchUser($key) {
 		if (empty ( $key ))
 			return 0;
 		
+		$key2 = str_replace ( '\u', '\\\\\\\\u', trim ( deal_emoji ( $key, 0 ), '"' ) );
+		
 		// 搜索用户表
-		$where = "nickname LIKE '%{$key}%' OR truename LIKE '%{$key}%' OR mobile LIKE '%{$key}%'";
+		$where = "nickname LIKE '%$key%' OR nickname LIKE '%$key2%' OR truename LIKE '%$key%' OR truename LIKE '%$key2%'";
 		$uids = ( array ) $this->where ( $where )->getFields ( 'uid' );
 		// 搜索用户名备注
 		$where2 = "remark LIKE '%$key%'";
-		$uids2 = ( array ) M ( 'apps_follow' )->where ( $where2 )->getFields ( 'uid' );
+		$uids2 = ( array ) M ( 'public_follow' )->where ( $where2 )->getFields ( 'uid' );
 		
 		// 搜索标签
 		$where3 = "title LIKE '%$key%'";

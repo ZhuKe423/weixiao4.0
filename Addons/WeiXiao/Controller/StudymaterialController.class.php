@@ -1,9 +1,9 @@
 <?php
 
 namespace Addons\WeiXiao\Controller;
-use Home\Controller\AddonsController;
+use Think\ManageBaseController;
 
-class StudymaterialController extends AddonsController{
+class StudymaterialController extends ManageBaseController{
     protected $model;
     protected $token;
     protected $school;
@@ -23,10 +23,7 @@ class StudymaterialController extends AddonsController{
         exit();
         $this->model || $this->error ( '模型不存在！' );
         */
-
         $this->assign ( 'model', $this->model );
-
-
     }
 
     /**
@@ -86,7 +83,6 @@ class StudymaterialController extends AddonsController{
         $this->assign('list_grids', $grids);
         $this->assign('list_data', $data);
         $this->meta_title = $this->model ['title'] . '列表';
-
         $this->display();
     }
 
@@ -114,6 +110,11 @@ class StudymaterialController extends AddonsController{
 
         }
         else {
+            $fields = get_model_attribute ( $this->model ['id'] );
+
+            $this->assign ( 'fields', $fields );
+            $this->meta_title = '新增' . $this->model ['title'];
+
             $this->display();
         }
 

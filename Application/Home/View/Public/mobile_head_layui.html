@@ -27,10 +27,17 @@
 	<script type="text/javascript" src="__ROOT__/minify.php?f=__JS__/prefixfree.min.js,__JS__/m/dialog.js,__JS__/m/flipsnap.min.js,__JS__/m/mobile_module.js&v={:SITE_VERSION}"></script>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">-->
     <link rel="stylesheet" href="__STATIC__/layui/css/layui.css"  media="all">
+    <link rel="stylesheet" href="__STATIC__/layui/css/global.css"  media="all">
+    <link rel="stylesheet" href="__STATIC__/layui/css/independents.css?ver1.1"  media="all">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link href="__STATIC__/MUI/css/mui.min.css" rel="stylesheet" />
 </head>
-	
+    <script src="__STATIC__/MUI/js/mui.min.js"></script>
+    <script type="text/javascript">
+        mui.init()
+    </script>
     <div id="top-alert" class="fixed alert alert-error" style="display: none;">
       <button class="close fixed" style="margin-top: 4px;">&times;</button>
       <div class="alert-content"></div>

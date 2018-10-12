@@ -1062,9 +1062,9 @@ function simpleColorPicker(_this,callback){
 	*/
 	function openSelectUsers(dataUrl,count,callback){
 		if(count==1){
-			dataUrl = dataUrl+'&isAjax=ajax&isRadio=1';
+			dataUrl = dataUrl+'/isAjax/ajax/isRadio/1';
 		}else{
-			dataUrl = dataUrl+'&isAjax=1';
+			dataUrl = dataUrl+'/isAjax/1';
 		}
 		var $contentHtml = $('<div><div class="goods_dialog" style="padding:10px; height:530px;overflow-y:hidden;overflow-x:hidden;"><div class="mt_10"><iframe id="usersIframe" name="usersIframe" style="height:530px;width:100%; border:none" border="0" src="'+dataUrl+'"></iframe></div></div><div class="btn_bar"><a href="javascript:;" class="btn confirm_btn">确定</a>&nbsp;&nbsp;<a href="javascript:;" class="border-btn cancel_btn">取消</a></div></div>');
 		$.Dialog.open("选择用户",{width:1000,height:640},$contentHtml);
