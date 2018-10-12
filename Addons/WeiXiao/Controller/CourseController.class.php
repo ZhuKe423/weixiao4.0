@@ -6,7 +6,7 @@
  * Time: 13:35
  */
 
-namespace Addons\UserCenter\Controller;
+namespace Addons\WeiXiao\Controller;
 
 use Think\ManageBaseController;
 

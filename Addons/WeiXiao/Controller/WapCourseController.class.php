@@ -14,4 +14,8 @@ class WapCourseController extends WapBaseController
     function admin() {
         $this->display ();
     }
+
+    function course() {
+
+    }
 }
