@@ -105,7 +105,7 @@ return array(
 		// 文件上传相关配置
 		'DOWNLOAD_UPLOAD' => array (
 				'maxSize' => 62914560, // 60M 上传的文件大小限制 (0-不做限制)
-				'exts' => 'jpg,gif,png,jpeg,zip,rar,tar,gz,7z,doc,docx,txt,xml,xls,xlsx,csv,pem,amr,mp3,mp4,bmp,wma,wav', // 允许上传的文件后缀
+				'exts' => 'pdf,jpg,gif,png,jpeg,zip,rar,tar,gz,7z,doc,docx,txt,xml,xls,xlsx,csv,pem,amr,mp3,mp4,bmp,wma,wav', // 允许上传的文件后缀
 				'rootPath' => './Uploads/Download/' 
 		) ,
         'LOAD_EXT_FILE' => "func_oa",
@@ -118,8 +118,8 @@ return array(
 		'email_password' => 'cuctjvnkxrtkbjei',
 		'email_sender_name' => '微学校（家长能随时掌握的学校）',
 		'email_sender_email' => '5811751@qq.com',
-
-        'TOKEN_ON'      =>    true,  // 是否开启令牌验证 默认关闭
+        
+        'TOKEN_ON'      =>    false,  // 是否开启令牌验证 默认关闭
         'TOKEN_NAME'    =>    '__hash__',    // 令牌验证的表单隐藏字段名称，默认为__hash__
         'TOKEN_TYPE'    =>    'md5',  //令牌哈希验证规则 默认为MD5
         'TOKEN_RESET'   =>    true,  //令牌验证出错后是否重置令牌 默认为true

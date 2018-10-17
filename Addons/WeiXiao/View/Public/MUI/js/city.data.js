@@ -1,0 +1,218 @@
+var cityData = [{
+	value: '110000',
+	text: '视频',
+	children: [{
+		value: "110101",
+		text: "在线视频"
+	}, ]
+}, {
+	value: '120000',
+	text: '社交',
+	children: [{
+		value: "120101",
+		text: "婚恋"
+	}, {
+		value: "120102",
+		text: "社区"
+	}, {
+		value: "120103",
+		text: "表情头像"
+	}, {
+		value: "120104",
+		text: "娱乐"
+	}]
+}, {
+	value: '130000',
+	text: '阅读',
+	children: [{
+		value: "130100",
+		text: "资讯"
+	}, {
+		value: "130200",
+		text: "杂志"
+	}, {
+		value: "130300",
+		text: "听书"
+	}, {
+		value: "130400",
+		text: "漫画"
+	}, {
+		value: "130500",
+		text: "电子书"
+	}]
+}, {
+	value: '140000',
+	text: '购物',
+	children: [{
+		value: "140100",
+		text: "商城"
+	}, {
+		value: "140200",
+		text: "团购"
+	}, {
+		value: "140300",
+		text: "福利"
+	}, {
+		value: "140400",
+		text: "二手"
+	}]
+}, {
+	value: '旅游',
+	text: '内蒙古',
+	children: [{
+		value: "150100",
+		text: "旅行"
+	}, {
+		value: "150200",
+		text: "攻略"
+	}, {
+		value: "150300",
+		text: "酒店住宿"
+	}]
+}, {
+	value: '210000',
+	text: '音乐',
+	children: [{
+		value: "210100",
+		text: "在线音乐"
+	}]
+}, {
+	value: '220000',
+	text: '出行',
+	children: [{
+		value: "220100",
+		text: "交通"
+	}, {
+		value: "220200",
+		text: "航班"
+	}]
+}, {
+	value: '230000',
+	text: '金融',
+	children: [{
+		value: "230100",
+		text: "理财"
+	}, {
+		value: "230200",
+		text: "创投"
+	}]
+}, {
+	value: '310000',
+	text: '教育',
+	children: [{
+		value: "310101",
+		text: "单词字典"
+	}, {
+		value: "310103",
+		text: "儿童教育"
+	}, {
+		value: "310104",
+		text: "驾考"
+	}, {
+		value: "310105",
+		text: "学习"
+	}]
+}, {
+	value: '320000',
+	text: '图像',
+	children: [{
+		value: "320100",
+		text: "美化滤镜"
+	}, {
+		value: "320200",
+		text: "摄影"
+	}]
+}, {
+	value: '330000',
+	text: '工具',
+	children: [{
+		value: "330100",
+		text: "天气"
+	}, {
+		value: "330200",
+		text: "日历"
+	}, {
+		value: "330300",
+		text: "时钟"
+	}, {
+		value: "330400",
+		text: "查询"
+	}, {
+		value: "330500",
+		text: "计算器"
+	}, {
+		value: "330600",
+		text: "名片"
+	}, {
+		value: "330700",
+		text: "购票"
+	}]
+}, {
+	value: '340000',
+	text: '生活',
+	children: [{
+		value: "340100",
+		text: "家装"
+	}, {
+		value: "340200",
+		text: "汽车"
+	}, {
+		value: "340300",
+		text: "美食"
+	}, {
+		value: "340400",
+		text: "票务"
+	}, {
+		value: "340500",
+		text: "房产"
+	}, {
+		value: "340600",
+		text: "家政服务"
+	}]
+}, {
+	value: '350000',
+	text: '健康',
+	children: [{
+		value: "350100",
+		text: "运动"
+	}, {
+		value: "350200",
+		text: "健康"
+	}]
+}, {
+	value: '360000',
+	text: '母婴',
+	children: [{
+		value: "360100",
+		text: "经期"
+	}, {
+		value: "360200",
+		text: "育儿"
+	}, {
+		value: "360300",
+		text: "美妆"
+	}]
+}, {
+	value: '370000',
+	text: '体育',
+	children: [{
+		value: "370100",
+		text: "足球"
+	}, {
+		value: "370200",
+		text: "综合"
+	}, {
+		value: "370300",
+		text: "篮球"
+	}]
+}, {
+	value: '410000',
+	text: '办公',
+	children: [{
+		value: "410100",
+		text: "存储"
+	}, {
+		value: "410200",
+		text: "办公软件"
+	}]
+}]

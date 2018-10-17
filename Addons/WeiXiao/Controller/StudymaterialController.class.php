@@ -89,12 +89,16 @@ class StudymaterialController extends ManageBaseController{
     public function add() {
         //$this->assign('token',$this->token);
         if (IS_POST) {
+            $data['type'] = I('post.type');
             $data['stage'] = I('post.stage');
             $data['subject'] = I('post.subject');
-            $data['fileid'] = I('post.file');
+            $data['fileid'] = I('post.file_id');
             $data['title'] = I('post.title');
             $data['description'] = I('post.description');
+            $data['image_id'] = I('post.image_id');
+            $data['image_material'] = I('post.image_material');
             $data['token'] = $this->token;
+
             $model = D('WxyStudyMaterial');
             $map['fileid'] = $data['fileid'];
             if ($model->where($map)->select()) {

@@ -1,27 +1,80 @@
 <extend name="Home@Base/common" />
 <block name="body">
-<style type="text/css">
-.money {
-	width: 50px;
-}
-.specTable .param {
-	display: none;
-}
-.specTable p {
-	display: block;
-	line-height: 50px;
-}
-.text-center {
-	text-align: center;
-}
-.check-tips {
-	color: #aaa;
-	margin-left:2px;
-}
-.cf{
-	margin-left:20px;
-}
-</style>
+    <style type="text/css">
+        .money {
+            width: 50px;
+        }
+
+        .specTable .param {
+            display: none;
+        }
+
+        .specTable p {
+            display: block;
+            line-height: 50px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .check-tips {
+            color: #aaa;
+            margin-left: 2px;
+        }
+
+        .cf {
+            margin-left: 20px;
+        }
+        .image_material {
+            border: 1px dashed #ddd;
+            width: 308px;
+            height: 196px;
+            background: #eee;
+            text-align: center;
+            color: #333;
+            display: block;
+            float: left;
+            margin-left: 50px;
+            position: relative;
+        }
+
+        .image_material .select_image {
+            line-height: 196px;
+            display: block;
+            height: 200px;
+        }
+
+        .image_material .delete {
+            position: absolute;
+            bottom: 3px;
+            left: 3px;
+            display: none
+        }
+
+        .voice_wrap {
+            width: 308px;
+            float: left
+        }
+
+        .video_wrap {
+            width: 222px;
+        }
+
+        #video_area {
+            height: 250px
+        }
+
+        .appmsg_area .select_video {
+            height: 240px;
+            line-height: 240px;
+            cursor: pointer
+        }
+
+        #voice_area .delete {
+            display: none;
+        }
+    </style>
   <!-- 标签页导航 -->
   <div class="span9 page_message">
     <section id="contents">
@@ -62,23 +115,34 @@
                     </select>
             </div>
             <div class="form-item cf">
+                <label class="item-label"><span class="need_flag">*</span>阶段（小学、初中、高中或通用）{$token}<span class="check-tips"></span></label>
+                <div class="controls">
+                    <select name="type">
+                        <option value="真题">真题</option>
+                        <option value="模拟题">模拟题</option>
+                        <option value="专题">专题</option>
+                        <option value="学校方法">学习方法</option>
+                        <option value="通用">通用</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-item cf">
                     <label class="item-label"><span class="need_flag">*</span>标题<span class="check-tips"></span></label>
                     <div class="controls">
                       <input type="text" class="text input-large" name="title" value="{$data.title}">
                     </div>
-                  </div>  
-            <div class="form-item cf">
-                  		<label class="item-label"><span class="need_flag">*</span>资料文件<span class="check-tips">文件大小控制在5M以内</span></label>
-                        <div class="controls upload_file" rel="file" data-max="1" title="点击上传文件">
-                            <input type="file" id="upload_file_file">
-                            <input type="hidden" name="file" value="{$data.fileid}"/>
-                            <div class="upload-img-box"><present name="data[$field['name']]">
-                                <div class="upload-pre-file"><span class="upload_icon_all"></span>{$data[$field['name']]|get_table_field=###,'id','name','File'}</div>
-                            </present>
-                            </div>
-                        </div>
+            </div>
 
-                  </div>
+            <div class="form-item cf">
+                <label class="item-label"><span class="need_flag">*</span>资料文件<span class="check-tips">文件大小控制在20M以内</span></label>
+                <div class="controls">
+                    <div class="controls upload_file">
+                        <div  id="upload_file_file_id" class="uploadrow_file"></div>
+                        <input type="hidden" name="file_id" id="file_id" value="" data-fileexts='pdf,doc,docx,ppt,pptx' data-maxsize='20971520'/>
+                        <div class="upload-img-box"></div>
+                    </div>
+                </div>
+            </div>
                   
             <div class="form-item cf">
                     <label class="item-label"><span class="need_flag">*</span>描述<span class="check-tips"></span></label>
@@ -87,7 +151,29 @@
                       <textarea class="text input-large" name="description" >{$data.description}</textarea>
                       </label>
                     </div>
-                  </div> 
+            </div>
+            <div class="form-item cf">
+                <label class="item-label">封面图片
+                    <span class="check-tips"></span>
+                </label>
+                <div class="controls uploadrow2" data-max="1" title="点击修改图片" rel="image_id" style="float: left;">
+                    <input type="file" id="upload_picture_image_id">
+                    <input type="hidden" name="image_id" id="cover_id_image_id" value="{$data['image_id']}"/>
+                    <div class="upload-img-box">
+                        <notempty name="data['image_id']">
+                            <div class="upload-pre-item2"><img width="100" height="100" src="{$data['image_id']|get_cover_url}"/></div>
+                            <em class="edit_img_icon">&nbsp;</em>
+                        </notempty>
+                    </div>
+                </div>
+                <div class='image_material' id='image_material'>
+                    <input type="hidden" name="image_material" id="cover_id_image" value="{$data.image_material}"/>
+                    <a class="select_image" href="javascript:;"  onClick="pick_material()">从素材库选择图片</a>
+                    <div class="image_wrap"></div>
+                    <a class="delete" href="javascript:;" style="left: 15px;">删除</a>
+                </div>
+            </div>
+
             <div class="form-item cf toggle-prize_type" style="display:none">
               			<label class="item-label"><span class="need_flag">*</span>是否允许编辑<span class="check-tips"></span></label>
               			<div class="controls">
@@ -100,7 +186,8 @@
             </div>
 
     <div class="form-item form_bh">
-      <input type="hidden" name="id" value="{$data.id}">
+      <!--<input type="hidden" name="id" value="{$data.id}">-->
+      <input type="hidden" value="" name="file_title" id="file_title" class="text input-large">
       <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">确 定</button>
     </div>
   </form>
@@ -118,13 +205,13 @@
     '; </php>
   <link href="__STATIC__/datetimepicker/css/dropdown.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
   <script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.min.js"></script> 
-  <script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js?v={:SITE_VERSION}" charset="UTF-8"></script> 
+  <script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js?v={:SITE_VERSION}" charset="UTF-8"></script>
   <script type="text/javascript">
 $('#submit').click(function(){
     $('#form').submit();
 });
 
-$(function(){
+/*$(function(){
     initUploadFile();
 	
     $('.time').datetimepicker({
@@ -138,7 +225,20 @@ $(function(){
 	
 	$('.select_type').each(function(){ select_type(this); });
 	$('.select_type').change(function(){ select_type(this); });
-});
+});*/
+
+/*$(function(){
+
+    initUploadFile(function(data,name){
+        var old_title = $('#file_title').val();
+        if(old_title==''){
+            var title = data.name.replace('.'+data.ext, '');
+            $('#file_title').val(title);
+        }
+    });
+    showTab();
+
+});*/
 
 function show_more(_this){	
 	var obj = $(_this).parent();
@@ -166,5 +266,166 @@ function show_more(_this){
 		$.Dialog.close();
 	})
 }
+
+function pick_material() {
+    $.WeiPHP.openSelectAppMsg('{:U("Home/Material/picture_data")}',selectImageCallback,'选择图片素材');
+}
+
+$(function () {
+    var str_image = '<div class="appmsg_item"><div class="main_img"><img src="" width="200px" height="200px"/></div></div><div class="hover_area"></div>';
+    var material_image = "";
+    if (material_image != 0) {
+        $('.image_wrap').html(str_image).show();
+        $('.select_image').hide();
+        $('.image_material .delete').show();
+    }
+    initUploadImg({
+        width: 100, height: 100, callback: function () {
+            $('.image_wrap').html('').hide();
+            $('.select_image').show();
+            $('.image_material .delete').hide();
+            $('input[name="image_material"]').val(0);
+        }
+    });
+
+    initUploadFile(function(data,name){
+        var old_title = $('#file_title').val();
+        if(old_title==''){
+            var title = data.name.replace('.'+data.ext, '');
+            $('#file_title').val(title);
+        }
+    });
+    showTab();
+
+    $('.time').datetimepicker({
+        format: 'yyyy-mm-dd hh:ii',
+        language: "zh-CN",
+        minView: 0,
+        autoclose: true
+    });
+    $('.date').datetimepicker({
+        format: 'yyyy-mm-dd',
+        language: "zh-CN",
+        minView: 2,
+        autoclose: true
+    });
+    showTab();
+
+    $('.toggle-data').each(function () {
+        var data = $(this).attr('toggle-data');
+        if (data == '') return true;
+
+        if ($(this).is(":selected") || $(this).is(":checked")) {
+            change_event(this)
+        }
+    });
+
+    $('.toggle-data').bind("click", function () {
+        change_event(this)
+    });
+
+    $('.image_material .delete').click(function () {
+        $('.image_wrap').html('').hide();
+        $('.select_image').show();
+        $('.image_material .delete').hide();
+        $('input[name="image_material"]').val(0);
+    })
+    $('#voice_area .delete').click(function () {
+        $('.voice_wrap').html('').hide();
+        $('#voice_area .select_appmsg').show();
+        $('#voice_area .delete').hide();
+        $('input[name="voice_id"]').val(0);
+    })
+    $('#video_area .delete').click(function () {
+        $('.video_wrap').html('').hide();
+        $('#video_area .select_appmsg').show();
+        $('#video_area .delete').hide();
+        $('input[name="video_id"]').val(0);
+    })
+    $type = "image";
+    if ($type == 'voice') {
+        var voice_html = '';
+        var voiceid = $("input[name='voice_id']").val();
+        if (voiceid) {
+            $.post("http://www.jzk12.com/weiphp40/w18/Home/Material/ajax_voice_by_id", {'voice_id': voiceid}, function (vo) {
+                if (vo) {
+                    voice_html += '<div class="picture_item"><div class="sound_item" onclick="playSound(\'sound_' + voiceid + '\',this);"><img class="icon_sound" src="/weiphp40/Public/Home/images/icon_sound.png"><p class="audio_name">' + vo['title'] + '<span class="fr colorless">' + vo['playtime'] + '</span></p><audio id="sound_' + voiceid + '" src="' + vo['file_path'] + '"></audio></div><div class="hover_area"></div></div>';
+                    $('.voice_wrap').html(voice_html).show();
+                    $('#voice_area .select_appmsg').hide();
+                    $('#voice_area .delete').show();
+                }
+            });
+        }
+    } else if ($type == 'video') {
+        var video_html = '';
+        var videoid = $("input[name='video_id']").val();
+        if (videoid) {
+            $.post("http://www.jzk12.com/weiphp40/w18/Home/Material/ajax_video_by_id", {'video_id': videoid}, function (vo) {
+                if (vo) {
+                    video_html += '<div class="picture_item"><div class="video_item"><p class="title">' + vo['title'] + '</p> <p class="ctime colorless">' + vo['cTime'] + '</p><div class="video_area"><video src="' + vo['file_url'] + '" controls="controls">您的浏览器不支持 video 标签。</video></div><p></p></div></div>';
+                    $('.video_wrap').html(video_html).show();
+                    $('#video_area .select_appmsg').hide();
+                    $('#video_area .delete').show();
+                }
+            });
+        }
+    }
+
+});
+
+function selectImageCallback(_this) {
+    $('.image_wrap').html($(_this).html()).show();
+    $('.select_image').hide();
+    $('.image_material .delete').show();
+    $('input[name="image_material"]').val($(_this).data('id'));
+    $("input[name='image_id']").val(0);
+    $('.upload-pre-item2').hide();
+    $.Dialog.close();
+}
+/*function selectText() {
+    $.WeiPHP.openSelectLists("http://www.jzk12.com/weiphp40/w18/Home/Material/text_lists", 1, '选择素材', function (data) {
+        if (data && data.length > 0) {
+            for (var i = 0; i < data.length; i++) {
+                var id = data[i]['id'];
+                if (id) {
+                    $.post("http://www.jzk12.com/weiphp40/w18/Home/Material/get_content_by_id", {'id': id}, function (d) {
+                        $("textarea[name='content']").text(d);
+                    })
+                }
+            }
+        }
+    })
+}
+function selectVoiceCallback(_this) {
+    $(_this).find('.icon_sound').attr('src', IMG_PATH + '/icon_sound.png');
+    $('.voice_wrap').html($(_this).html()).show();
+    $('#voice_area .select_appmsg').hide();
+    $('#voice_area .delete').show();
+    $('input[name="voice_id"]').val($(_this).data('id'));
+    $.Dialog.close();
+}
+function selectVideoCallback(_this) {
+    $('.video_wrap').html($(_this).html()).show();
+    $('#video_area .select_appmsg').hide();
+    $('#video_area .delete').show();
+    $('input[name="video_id"]').val($(_this).data('id'));
+    $.Dialog.close();
+}
+function playSound(id, obj) {
+    var audio = document.getElementById(id);
+    if (audio.paused) {
+        audio.play();
+        $(obj).find('img').attr('src', IMG_PATH + '/icon_sound_play.gif');
+        audio.addEventListener('ended', function () {
+//	 			alert('over');
+            $(obj).find('img').attr('src', IMG_PATH + '/icon_sound.png');
+        }, false);
+        return;
+    }
+    audio.pause();
+    $(obj).find('img').attr('src', IMG_PATH + '/icon_sound.png');
+
+}*/
+
 </script>
 </block>

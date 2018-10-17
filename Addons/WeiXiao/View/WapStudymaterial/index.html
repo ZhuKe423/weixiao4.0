@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <link href="{:ADDON_PUBLIC_PATH}/MUI/css/mui.min.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="{:ADDON_PUBLIC_PATH}/MUI/css/style.css?v={:SITE_VERSION}" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{:ADDON_PUBLIC_PATH}/MUI/css/iconfont/iconfont.css?v={:SITE_VERSION}">
+    <script type="text/javascript"> 
+        !function(J){function H(){var d=E.getBoundingClientRect().width;var e=(d/7.5>100*B?100*B:(d/7.5<42?42:d/7.5));E.style.fontSize=e+"px",J.rem=e}var G,F=J.document,E=F.documentElement,D=F.querySelector('meta[name="viewport"]'),B=0,A=0;if(D){var y=D.getAttribute("content").match(/initial\-scale=([\d\.]+)/);y&&(A=parseFloat(y[1]),B=parseInt(1/A))}if(!B&&!A){var u=(J.navigator.appVersion.match(/android/gi),J.navigator.appVersion.match(/iphone/gi)),t=J.devicePixelRatio;B=u?t>=3&&(!B||B>=3)?3:t>=2&&(!B||B>=2)?2:1:1,A=1/B}if(E.setAttribute("data-dpr",B),!D){if(D=F.createElement("meta"),D.setAttribute("name","viewport"),D.setAttribute("content","initial-scale="+A+", maximum-scale="+A+", minimum-scale="+A+", user-scalable=no"),E.firstElementChild){E.firstElementChild.appendChild(D)}else{var s=F.createElement("div");s.appendChild(D),F.write(s.innerHTML)}}J.addEventListener("resize",function(){clearTimeout(G),G=setTimeout(H,300)},!1),J.addEventListener("pageshow",function(b){b.persisted&&(clearTimeout(G),G=setTimeout(H,300))},!1),H()}(window);
+        if (typeof(M) == 'undefined' || !M){
+            window.M = {};
+        }
+    </script>
+    <script type="text/javascript" src="{:ADDON_PUBLIC_PATH}/MUI/js/mui.js?v={:SITE_VERSION}"></script>
+	<script type="text/javascript" src="//res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	<script type="text/javascript">
+        var SITE_URL = "{:SITE_URL}";
+        var  IMG_PATH = "{:SITE_URL}/Public/Home/images";
+        var  STATIC_PATH = "{:SITE_URL}/static";
+        wx.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: "{$jsapiParams.appId}", // 必填，公众号的唯一标识
+            timestamp: '{$jsapiParams.timestamp}', // 必填，生成签名的时间戳
+            nonceStr: '{$jsapiParams.nonceStr}', // 必填，生成签名的随机串
+            signature: '{$jsapiParams.signature}',// 必填，签名，见附录1
+            jsApiList: [
+                'onMenuShareTimeline',
+                'onMenuShareAppMessage',
+                'onMenuShareQQ',
+                'onMenuShareWeibo',
+                'openLocation',
+                'hideOptionMenu',
+                'closeWindow'
+            ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        });
+	</script>
+</head>
+<body>
+	
+	<!-- 主界面不动、菜单移动 -->
+	<!-- 侧滑导航根容器 -->
+	<div id="offCanvasWrapper" class="mui-off-canvas-wrap mui-draggable">
+	  <!-- 菜单容器 -->
+	  <aside class="mui-off-canvas-left" id="offCanvasSide">
+	    <div id="offCanvasSideScroll" class="mui-scroll-wrapper">
+	      <div class="mui-scroll">
+	        
+			<div id="menu-backdrop" class="menu-backdrop"></div>
+	      </div>
+	    </div>
+	  </aside>
+	  <!-- 主页面容器 -->
+	  <div class="mui-inner-wrap">
+	    <!-- 主页面标题 -->
+	    <header class="mui-bar mui-bar-nav header">
+	    	<a class="mui-icon mui-action-menu mui-icon-bars mui-pull-left"  href="#offCanvasSide" ></a>
+		    <h1 class="mui-title"><a href=""><img src="{:ADDON_PUBLIC_PATH}/MUI/images/haha_logo.png"/></a></h1>
+		    <a class="mui-icon mui-icon-search mui-pull-right" href="search.html"></a>
+	    </header>
+	    
+		<!--<nav class="m-bar mui-bar-tab footer">
+			<ul class="footer-page clearfix">
+				<li class="mui-tab-item active">
+					<a href="index.html">
+						<i class="iconfont icon-index"></i>
+						<p>首页</p>
+					</a>
+				</li>
+				<li class="mui-tab-item">
+					<a href="entrance.html">
+						<i class="iconfont icon-computer"></i>
+						<p>自助评估</p>
+					</a>
+				</li>
+				<li class="mui-tab-item">
+					<a href="ask.html">
+						<i class="iconfont icon-ask"></i>
+						<p>咨询帮助</p>
+					</a>
+				</li>
+				<li class="mui-tab-item">
+					<a href="user-center.html">
+						<i class="iconfont icon-person1"></i>
+						<p>个人中心</p>
+					</a>
+				</li>
+			</ul>
+		</nav>-->
+		
+	    <div id="offCanvasContentScroll" class="mui-content mui-scroll-wrapper">
+	      <div class="mui-scroll">
+	        <!-- 主界面具体展示内容 -->
+			<div class="mui-content">
+				<!--图片轮播-->
+				
+				<!--导航-->
+				<!--<ul class="nav">
+					<li>
+						<a href="evaluation.html">
+							<img src="{:ADDON_PUBLIC_PATH}/MUI/images/icon.png" />
+							<p>学业评估</p>
+						</a>
+					</li>
+					<li>
+						<a href="category.html">
+							<img src="{:ADDON_PUBLIC_PATH}/MUI/images/icon3.png" />
+							<p>高中</p>
+						</a>
+					</li>
+					<li>
+						<a href="ranking.html">
+							<img src="{:ADDON_PUBLIC_PATH}/MUI/images/icon2.png" />
+							<p>排行榜</p>
+						</a>
+					</li>
+					<li>
+						<a href="special.html">
+							<img src="{:ADDON_PUBLIC_PATH}/MUI/images/icon1.png" />
+							<p>中考专题</p>
+						</a>
+					</li>
+				</ul>-->
+				<!--
+			        	作者：flexpad2011@gmail.com
+			        	时间：2017-06-04
+			        	描述：中考新闻
+			        -->
+			    <!--每日精选-->
+				<div class="index-title">
+					<span>每日精选</span>
+					<!--<a href="">显示全部<i class="mui-icon mui-icon-arrowright"></i></a>-->
+				</div>
+				<div class="classify">
+					<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+						<div class="mui-scroll">
+							<a href="{:addons_url('WeiXiao://WapStudymaterial/detail')}" class="item">
+								<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx1.PNG" />
+								<p>学习笔记</p>
+							</a>
+							<a href="storedetail.html" class="item">
+								<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx4.png" />
+								<p>解题方法</p>
+							</a>
+							<a href="storedetail.html" class="item">
+								<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx2.jpg" />
+								<p>书签</p>
+							</a>							
+							<a href="storedetail.html" class="item">
+								<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx5.jpg" />
+								<p>每日练</p>
+							</a>
+							<a href="storedetail.html" class="item">
+								<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx6.png" />
+								<p>邮件订阅</p>
+							</a>
+						</div>
+					</div>
+				</div>
+				
+				<!--题库-->
+				<div class="index-title">
+					<span>题库</span>
+					<a href="">显示全部<i class="mui-icon mui-icon-arrowright"></i></a>
+				</div>
+				<ul class="mui-table-view fresh-comment">
+					<volist name="data" id="vo">
+						<li>
+							<a href="{:addons_url('WeiXiao://WapStudymaterial/detail', $vo.id)}">
+								<img src="{$vo.image_id|get_square_url=200}" />
+								<div class="text">
+									<h2>{$vo.title}</h2>
+									<p>{$vo.description}</p>
+								</div>
+								<div class="score">
+									<span>8.5</span>分
+								</div>
+							</a>
+						</li>
+					</volist>
+				</ul>
+				<!--专题推荐-->
+				<div class="index-title">
+					<span>题库专题</span>
+					<a href="">显示全部<i class="mui-icon mui-icon-arrowright"></i></a>
+				</div>
+				<div class="special">
+					<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+						<div class="mui-scroll">
+							<a href="specialdetail.html" class="item"><img src="{:ADDON_PUBLIC_PATH}/MUI/images/tj1.png" /></a>
+							<a href="specialdetail.html" class="item"><img src="{:ADDON_PUBLIC_PATH}/MUI/images/tj.png" /></a>
+							<a href="specialdetail.html" class="item"><img src="{:ADDON_PUBLIC_PATH}/MUI/images/tj4.png" /></a>
+							<a href="specialdetail.html" class="item"><img src="{:ADDON_PUBLIC_PATH}/MUI/images/tj3.png" /></a>
+						</div>
+					</div>
+				</div>
+				<!--广告-->
+				<div class="advantage">
+					<a href=""><img src="{:ADDON_PUBLIC_PATH}/MUI/images/advantage.jpg" /></a>
+				</div>
+				
+			</div>		
+	
+	      </div>
+	    </div>  
+	    <div class="mui-off-canvas-backdrop"></div>
+	  </div>
+	</div>
+	<script type="text/javascript" charset="utf-8">
+	    mui.init();
+	    //侧滑容器父节点
+		var offCanvasWrapper = mui('#offCanvasWrapper');
+		
+		//主界面容器
+		var offCanvasInner = offCanvasWrapper[0].querySelector('.mui-inner-wrap');
+		 //菜单容器
+		var offCanvasSide = document.getElementById("offCanvasSide");
+		
+		 //移动效果是否为整体移动
+		var moveTogether = false;
+		 //侧滑容器的class列表，增加.mui-slide-in即可实现菜单移动、主界面不动的效果；
+		var classList = offCanvasWrapper[0].classList;
+		offCanvasWrapper.offCanvas().refresh();
+
+		 //主界面和侧滑菜单界面均支持区域滚动；
+		mui('#offCanvasSideScroll').scroll();
+		mui('#offCanvasContentScroll').scroll();
+		 //实现ios平台原生侧滑关闭页面；
+		if (mui.os.plus && mui.os.ios) {
+			mui.plusReady(function() { //5+ iOS暂时无法屏蔽popGesture时传递touch事件，故该demo直接屏蔽popGesture功能
+				plus.webview.currentWebview().setStyle({
+					'popGesture': 'none'
+				});
+			});
+		}
+	</script>
+	
+	
+	<!--
+    	作者：flexpad2011@gmail.com
+    	时间：2017-06-04
+    	描述：侧滑菜单
+    -->
+	<!--显示下拉-->
+	
+	
+
+	<script type="text/javascript" src="__STATIC__/jquery-2.0.3.min.js?v={:SITE_VERSION}"></script>
+    <!--<script type="text/javascript" src="{:ADDON_PUBLIC_PATH}/MUI/js/jquery-1.10.1.min.js?v={:SITE_VERSION}" ></script>-->
+	<!--<script type="text/javascript" src="js/mui.js"></script>-->
+    <script type="text/javascript" src="{:ADDON_PUBLIC_PATH}/MUI/js/app.js?v={:SITE_VERSION}" ></script>
+    <!--<script type="text/javascript" scr="school/js/basic.js"></script>-->
+</body>
+</html>

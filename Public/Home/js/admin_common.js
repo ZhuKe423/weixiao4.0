@@ -601,7 +601,7 @@ function uploadImgDialog(obj,opts){
 	var maxCount = parseInt($(obj).data('max'));
 	var field = $(obj).attr('rel');
 	uploadObj = obj;
-	$uploadHtml = '<div><div class="upload_dialog" style="height:520px;overflow-y:hidden;overflow-x:hidden;"><div><iframe id="goodsIframe" name="goodsIframe" style="height:520px;width:100%; border:none" border="0" src="'+UPLOAD_DIALOG_URL+'&max='+maxCount+'&field='+field+'"></iframe></div></div></div>';
+	$uploadHtml = '<div><div class="upload_dialog" style="height:520px;overflow-y:hidden;overflow-x:hidden;"><div><iframe id="goodsIframe" name="goodsIframe" style="height:520px;width:100%; border:none" border="0" src="'+UPLOAD_DIALOG_URL+'/max/'+maxCount+'/field/'+field+'"></iframe></div></div></div>';
 	$.Dialog.open("上传图片",{width:800,height:560},$uploadHtml);
 }
 
@@ -641,6 +641,7 @@ function initUploadFile(callback){
 		        }
 			
 			});
+			console.log('uploader: ', uploader);
 			var uploadImgWidth = $("#upload_file_"+name).width()
 			$('.webuploader-pick').height(uploadImgWidth).width(uploadImgWidth);
 			/**
@@ -676,6 +677,7 @@ function initUploadFile(callback){
 }								
 function onUploadFileSuccess(file, data, name){
 	if(data.status){
+		console.log(name);
 		$("input[name="+name+"]").val(data.id);
 		$("input[name="+name+"]").parent().find('.upload-img-box').html(
 			"<div class=\"upload-pre-file\"><span class=\"upload_icon_all\"></span>" + data.name + "</div>"
@@ -851,9 +853,9 @@ function simpleColorPicker(_this,callback){
 	function openSelectAppMsg(dataUrl,callback,title){
 		var count=1;
 		if(count==1){
-			dataUrl = dataUrl+'&isAjax=ajax&isRadio=1';
+			dataUrl = dataUrl+'/isAjax/ajax/isRadio/1';
 		}else{
-			dataUrl = dataUrl+'&isAjax=1';
+			dataUrl = dataUrl+'/isAjax/1';
 		}
 		var $contentHtml = $('<div class="appmsg_dialog" style="padding:10px; max-height:560px;overflow-y:auto;overflow-x:hidden;">'+
 			'<iframe id="usersIframe" name="usersIframe" style="height:530px;width:100%; border:none" border="0" src="'+dataUrl+'"><ul class="mt_10"><center><br/><br/><br/><img src="'+IMG_PATH+'/loading.gif"/></center></ul></iframe></div>');
@@ -882,9 +884,9 @@ function simpleColorPicker(_this,callback){
 	function openSelectAppText(dataUrl,callback,title){
 		var count=1;
 		if(count==1){
-			dataUrl = dataUrl+'&isAjax=ajax&isRadio=1';
+			dataUrl = dataUrl+'/isAjax/ajax/isRadio/1';
 		}else{
-			dataUrl = dataUrl+'&isAjax=1';
+			dataUrl = dataUrl+'/isAjax/1';
 		}
 		var $contentHtml = $('<div><div class="goods_dialog" style="padding:10px; height:530px;overflow-y:hidden;overflow-x:hidden;"><div class="mt_10"><iframe id="usersIframe" name="usersIframe" style="height:530px;width:100%; border:none" border="0" src="'+dataUrl+'"></iframe></div></div><div class="btn_bar"><a href="javascript:;" class="btn confirm_btn">确定</a>&nbsp;&nbsp;<a href="javascript:;" class="border-btn cancel_btn">取消</a></div></div>');
 		$.Dialog.open(title?title:"选择文本素材",{width:1000,height:640},$contentHtml);
@@ -967,7 +969,7 @@ function simpleColorPicker(_this,callback){
 	*/
 	/* 选择商品 */
 	function openSelectGoods(dataUrl,callback){
-		var $contentHtml = $('<div><div class="goods_dialog" style="padding:10px; height:530px;overflow-y:hidden;overflow-x:hidden;"><div class="mt_10"><iframe id="goodsIframe" name="goodsIframe" style="height:530px;width:100%; border:none" border="0" src="'+dataUrl+'&isAjax=ajax"></iframe></div></div><div class="btn_bar"><a href="javascript:;" class="btn confirm_btn">确定</a>&nbsp;&nbsp;<a href="javascript:;" class="border-btn cancel_btn">取消</a></div></div>');
+		var $contentHtml = $('<div><div class="goods_dialog" style="padding:10px; height:530px;overflow-y:hidden;overflow-x:hidden;"><div class="mt_10"><iframe id="goodsIframe" name="goodsIframe" style="height:530px;width:100%; border:none" border="0" src="'+dataUrl+'/isAjax/ajax"></iframe></div></div><div class="btn_bar"><a href="javascript:;" class="btn confirm_btn">确定</a>&nbsp;&nbsp;<a href="javascript:;" class="border-btn cancel_btn">取消</a></div></div>');
 		$.Dialog.open("选择商品",{width:1000,height:640},$contentHtml);
 		
 		$('.cancel_btn',$contentHtml).click(function(){
@@ -994,7 +996,7 @@ function simpleColorPicker(_this,callback){
 	}
     /* 选择门店 */
 	function openSelectShops(dataUrl,callback){
-		var $contentHtml = $('<div><div class="goods_dialog" style="padding:10px; height:530px;overflow-y:auto;overflow-x:hidden;"><div class="mt_10"><iframe id="shopsIframe" name="shopsIframe" style="height:530px;width:100%; border:none" border="0" src="'+dataUrl+'&isAjax=ajax"></iframe></div></div><div class="btn_bar"><a href="javascript:;" class="btn confirm_btn">确定</a>&nbsp;&nbsp;<a href="javascript:;" class="border-btn cancel_btn">取消</a></div></div>');
+		var $contentHtml = $('<div><div class="goods_dialog" style="padding:10px; height:530px;overflow-y:auto;overflow-x:hidden;"><div class="mt_10"><iframe id="shopsIframe" name="shopsIframe" style="height:530px;width:100%; border:none" border="0" src="'+dataUrl+'/isAjax/ajax"></iframe></div></div><div class="btn_bar"><a href="javascript:;" class="btn confirm_btn">确定</a>&nbsp;&nbsp;<a href="javascript:;" class="border-btn cancel_btn">取消</a></div></div>');
 		$.Dialog.open("选择门店",{width:640,height:640},$contentHtml);
 		
 		$('.cancel_btn',$contentHtml).click(function(){
@@ -1021,9 +1023,9 @@ function simpleColorPicker(_this,callback){
 	 */
 	function openSelectLists(dataUrl,count,title,callback){
 		if(count==1){
-			dataUrl = dataUrl+'&isAjax=ajax&isRadio=1';
+			dataUrl = dataUrl+'/isAjax/ajax/isRadio/1';
 		}else{
-			dataUrl = dataUrl+'&isAjax=1';
+			dataUrl = dataUrl+'/isAjax/1';
 		}
 		var $contentHtml = $('<div><div class="goods_dialog" style="padding:10px; height:530px;overflow-y:hidden;overflow-x:hidden;"><div class="mt_10"><iframe id="usersIframe" name="usersIframe" style="height:530px;width:100%; border:none" border="0" src="'+dataUrl+'"></iframe></div></div><div class="btn_bar"><a href="javascript:;" class="btn confirm_btn">确定</a>&nbsp;&nbsp;<a href="javascript:;" class="border-btn cancel_btn">取消</a></div></div>');
 		$.Dialog.open(title,{width:1000,height:640},$contentHtml);
@@ -1223,7 +1225,7 @@ function simpleColorPicker(_this,callback){
 	}
 	/* 框架形式打开提交对话框 */
 	function openSubmitDialog(title,url,w,h){
-		var $contentHtml = $('<div><div class="goods_dialog" style="padding:0 10px;height:'+h+'px;overflow:hidden"><div class="mt_10"><iframe id="goodsIframe" name="goodsIframe" style="height:'+h+'px;width:100%; border:none" border="0" src="'+url+'&isAjax=ajax"></iframe></div></div></div>');
+		var $contentHtml = $('<div><div class="goods_dialog" style="padding:0 10px;height:'+h+'px;overflow:hidden"><div class="mt_10"><iframe id="goodsIframe" name="goodsIframe" style="height:'+h+'px;width:100%; border:none" border="0" src="'+url+'/isAjax/ajax"></iframe></div></div></div>');
 		$.Dialog.open(title,{width:w,height:h+40},$contentHtml);
 	}
 	//danmu

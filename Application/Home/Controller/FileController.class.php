@@ -55,7 +55,7 @@ class FileController extends HomeController {
 		$file_driver = C ( 'DOWNLOAD_UPLOAD_DRIVER' );
 		$setting = array (
 				'maxSize' => 50242880, // 5M 上传的文件大小限制 (0-不做限制)
-				'exts' => 'jpg,gif,png,jpeg,zip,rar,tar,gz,7z,doc,docx,txt,xml,xls,xlsx,csv,pem,amr,mp3,mp4', // 允许上传的文件后缀
+				'exts' => 'pdf,jpg,gif,png,jpeg,zip,rar,tar,gz,7z,doc,docx,txt,xml,xls,xlsx,csv,pem,amr,mp3,mp4', // 允许上传的文件后缀
 				'rootPath' => './',
 				'name_nochange' => 1 
 		);

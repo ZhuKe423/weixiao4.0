@@ -334,7 +334,7 @@ $(function(){
 					}
 					break;
 				case 'editor' :
-					$html .= "<label class='textarea'><textarea name='{$name}' style='width:405px;height:100px;'>{$value}</textarea>";
+					$html .= "<label class='textarea'><textarea name='{$name}' style='width:900px;height:200px;'>{$value}</textarea>";
 					function_exists ( 'mysql_real_escape_string' ) && $value = mysql_real_escape_string ( $value );
 					$html .= "{:hook ( 'adminArticleEdit', [ 'name' => '{$name}', 'value' => '{$value}' ] )}  </label>";
 					break;
