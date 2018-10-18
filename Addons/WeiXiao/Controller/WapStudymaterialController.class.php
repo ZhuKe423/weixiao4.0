@@ -47,6 +47,11 @@ class WapStudymaterialController extends WapBaseController
 
     public function detail()
     {
+        $map['token'] = $this->token;
+        $map['id'] = (I('id') == '')? 1 : I('id');
+        $model = D('WxyStudyMaterial');
+        $data = $model->where($map)->find();
+        $this->assign('data', $data);
         $this->display();
     }
 

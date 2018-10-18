@@ -1,45 +1,9 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-	    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-	    <title></title>
-	    <link href="{:ADDON_PUBLIC_PATH}/MUI/css/mui.min.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css"/>
-	    <link rel="stylesheet" href="{:ADDON_PUBLIC_PATH}/MUI/css/style.css?v={:SITE_VERSION}" type="text/css" />
-	    <script type="text/javascript"> 
-	        !function(J){function H(){var d=E.getBoundingClientRect().width;var e=(d/7.5>100*B?100*B:(d/7.5<42?42:d/7.5));E.style.fontSize=e+"px",J.rem=e}var G,F=J.document,E=F.documentElement,D=F.querySelector('meta[name="viewport"]'),B=0,A=0;if(D){var y=D.getAttribute("content").match(/initial\-scale=([\d\.]+)/);y&&(A=parseFloat(y[1]),B=parseInt(1/A))}if(!B&&!A){var u=(J.navigator.appVersion.match(/android/gi),J.navigator.appVersion.match(/iphone/gi)),t=J.devicePixelRatio;B=u?t>=3&&(!B||B>=3)?3:t>=2&&(!B||B>=2)?2:1:1,A=1/B}if(E.setAttribute("data-dpr",B),!D){if(D=F.createElement("meta"),D.setAttribute("name","viewport"),D.setAttribute("content","initial-scale="+A+", maximum-scale="+A+", minimum-scale="+A+", user-scalable=no"),E.firstElementChild){E.firstElementChild.appendChild(D)}else{var s=F.createElement("div");s.appendChild(D),F.write(s.innerHTML)}}J.addEventListener("resize",function(){clearTimeout(G),G=setTimeout(H,300)},!1),J.addEventListener("pageshow",function(b){b.persisted&&(clearTimeout(G),G=setTimeout(H,300))},!1),H()}(window);
-	        if (typeof(M) == 'undefined' || !M){
-	            window.M = {};
-	        }
-	    </script>
-		<script type="text/javascript" src="//res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-		<script type="text/javascript">
-            var SITE_URL = "{:SITE_URL}";
-            var  IMG_PATH = "{:SITE_URL}/Public/Home/images";
-            var  STATIC_PATH = "{:SITE_URL}/static";
-            wx.config({
-                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                appId: "{$jsapiParams.appId}", // 必填，公众号的唯一标识
-                timestamp: '{$jsapiParams.timestamp}', // 必填，生成签名的时间戳
-                nonceStr: '{$jsapiParams.nonceStr}', // 必填，生成签名的随机串
-                signature: '{$jsapiParams.signature}',// 必填，签名，见附录1
-                jsApiList: [
-                    'onMenuShareTimeline',
-                    'onMenuShareAppMessage',
-                    'onMenuShareQQ',
-                    'onMenuShareWeibo',
-                    'openLocation',
-                    'hideOptionMenu',
-                    'closeWindow'
-                ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-            });
-		</script>
-	</head>
+	<include file="Home@Public/mobile_head_mui"/>
 	<body>
 		<header class="mui-bar mui-bar-nav header">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" href="material_list.html"></a>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" href="{:U('index')}"></a>
 		    <a class="mui-icon mui-icon-bars mui-pull-right" href="javascript:;" id="menu-btn"></a>
-		    <h1 class="mui-title"><a href=""><img src="{:ADDON_PUBLIC_PATH}/MUI/images/haha_logo.png"/></a></h1>
+		    <h1 class="mui-title"><a href=""><img src="{:ADDON_PUBLIC_PATH}/MUI/images/haha_logo_t.png"/></a></h1>
 		</header>
 		<!--显示下拉-->
 		<div id="menu-wrapper" class="menu-wrapper ">
@@ -53,45 +17,24 @@
 		</div>
 		<div id="menu-backdrop" class="menu-backdrop"></div>
 		<div class="mui-content article ">
-			<h2 class="article-title">附近的小程序功能发布 微信真能打通线上服务与线下场景吗？</h2>
+			<h2 class="article-title">{$data['title']}</h2>
 			<div class="article-text">
-				试题来源：<a href="">学校真题</a>
+				试题来源：<a href="">{$data['type']}</a>
 				<label class="time">上传时间</label>
 				<!--<label class="view">2</label>-->
 			</div>
 			<div class="evaluating">
 				<div class="evaluating-top">
-					<span class="logo fl">
-						<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx3.jpg" />
-					</span>
 					<div class="right fr">
-						<span class="score">8.5<small>分</small></span>
-						<a href="storedetail.html" class="btn">查看详情</a>
+						<span class="score"></span>
 					</div>
-					<div class="middle">
-						<h2>感恩笔记本</h2>
-						<p>感恩笔记本-用感恩的心看世界，记录生命给予的</p>
+					<div class="mui-left">
+						<h5>资料说明</h5>
 					</div>
 				</div>
-				<div class="evaluating-bot">
-					<img src="{:ADDON_PUBLIC_PATH}/MUI/images/ewm.jpg" />
-					<p>保存二维码，前往微信扫一扫，体验小程序</p>
+				<div class="mui-content-padded ">
+					{$data['description']}
 				</div>
-			</div>
-			<div class="mui-content-padded">
-				<p>继昨天微信小程序推出群共享功能之后，今天又接连发布了附近的小程序功能。进一步完善线下场景服务。/p>
-				<p>附近的小程序，顾名思义，就是有小程序的商户，可以将门店小程序或普通小程序展示在“附近”。当用户走到某个地点，</p>
-				<p><strong>打开“发现→小程序→附近的小程序”，即可将目前所处地的附近的小程序收入囊中</strong></p>
-				<p><br/></p>
-				<p>
-					<img src="{:ADDON_PUBLIC_PATH}/MUI/images/content.gif"  />
-				</p>
-				<p><br/></p>
-				<p>图片全屏后，双击或双指缩放均可对图片进行放大、缩小操作，左右滑动可查看同组(data-preview-group相同的图片为一组)其它图片，点击会关闭预览</p>
-				<p><br/></p>
-				<p>
-					<img src="{:ADDON_PUBLIC_PATH}/MUI/images/xinwen.jpg" />
-				</p>
 			</div>
 		</div>
 		
@@ -103,23 +46,23 @@
 				<div class="classify">
 					<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
 						<div class="mui-scroll">
-							<a href="storedetail.html" class="item">
+							<a href="" class="item">
 								<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx6.png" />
 								<p>邮件订阅</p>
 							</a>
-							<a href="storedetail.html" class="item">
+							<a href="{$data['fileid']|get_file_url}" class="item">
 								<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx1.PNG" />
 								<p>下载</p>
 							</a>
-							<a href="storedetail.html" class="item">
+							<a href="" class="item">
 								<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx4.png" />
 								<p>解题方法</p>
 							</a>
-							<a href="storedetail.html" class="item">
+							<a href="" class="item">
 								<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx2.jpg" />
 								<p>书签</p>
 							</a>							
-							<a href="storedetail.html" class="item">
+							<a href="" class="item">
 								<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx5.jpg" />
 								<p>每日练</p>
 							</a>							
@@ -132,8 +75,19 @@
 				<span></span>
 				<i></i>
 			</h2>
-			<a href=""><img src="{:ADDON_PUBLIC_PATH}/MUI/images/advantage.jpg" /></a>
+			<a href=""><img src="{:ADDON_PUBLIC_PATH}/MUI/images/haha_sig1.png" /></a>
 		</div>
+		<script type="text/javascript" charset="utf-8">
+            mui.init({
+                getstureConfig: {
+                    longtap: true,
+                    doubletap: true,
+                    swipe: true,
+                    drag: true,
+                    hold: true,
+                    release: true
+                }});
+		</script>
 		<script type="text/javascript" src="__STATIC__/jquery-2.0.3.min.js?v={:SITE_VERSION}"></script>
 		<!--<script type="text/javascript" src="{:ADDON_PUBLIC_PATH}/MUI/js/jquery-1.10.1.min.js?v={:SITE_VERSION}" ></script>-->
 		<script type="text/javascript" src="{:ADDON_PUBLIC_PATH}/MUI/js/mui.min.js?v={:SITE_VERSION}"></script>

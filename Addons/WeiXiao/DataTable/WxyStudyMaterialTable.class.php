@@ -18,14 +18,50 @@ class WxyStudyMaterialTable {
 	
 	// 列表定义
 	public $list_grid = [
-			'' => [
-					'title' => '订阅人数',
+			'subject' => [
+					'title' => '科目',
+					'come_from' => 0,
+					'width' => '',
+					'is_sort' => 1,
+					'name' => 'subject',
+					'function' => '',
+					'href' => [ ]
+			],
+			'title' => [
+					'title' => '标题',
 					'come_from' => 0,
 					'width' => '',
 					'is_sort' => 0,
-					'name' => '',
+					'name' => 'title',
 					'function' => '',
 					'href' => [ ]
+			],
+			'type' => [
+					'title' => '资料类型',
+					'come_from' => 0,
+					'width' => '',
+					'is_sort' => 0,
+					'name' => 'type',
+					'function' => '',
+					'href' => [ ]
+			],
+			'urls' => [
+					'title' => '操作',
+					'come_from' => 1,
+					'width' => '',
+					'is_sort' => 0,
+					'href' => [
+							'0' => [
+									'title' => '编辑',
+									'url' => '[EDIT]'
+							],
+							'1' => [
+									'title' => '删除',
+									'url' => '[DELETE]'
+							]
+					],
+					'name' => 'urls',
+					'function' => ''
 			]
 	];
 	
@@ -70,8 +106,8 @@ class WxyStudyMaterialTable {
 					'title' => '订阅人数',
 					'type' => 'string',
 					'field' => 'int(10) NULL',
-					'is_show' => 1,
-					'placeholder' => '请输入内容'
+					'is_show' => 0,
+					'is_must' => 0
 			],
 			'stage' => [
 					'title' => '阶段',
@@ -109,7 +145,7 @@ class WxyStudyMaterialTable {
 					'field' => 'int(10) NULL',
 					'remark' => '图片素材',
 					'is_show' => 1,
-					'is_must' => 0
+					'placeholder' => '请输入内容'
 			]
 	];
 }	
