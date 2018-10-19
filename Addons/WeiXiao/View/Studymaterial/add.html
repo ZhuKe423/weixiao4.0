@@ -79,18 +79,18 @@
   <div class="span9 page_message">
     <section id="contents">
       <ul class="tab-nav nav">
-        <li class=""><a href="{:U('lists')}">学习资料</a></li>
-        <li class="current"><a href="javascript:;">学生资料编辑<b class="arrow fa fa-sort"></b></a></li>
+        <li class=""><a href="{:U('lists')}">资料列表</a></li>
+        <li class="current"><a href="javascript:;">资料编辑<b class="arrow fa fa-sort"></b></a></li>
       </ul>
       <div class="tab-content"> 
         <!-- 表单 -->
         <form id="form" action="{:U('add?model='.$model['id'], $get_param)}" method="post" class="form-horizontal">
             <div class="form-item cf">
-                    <label class="item-label"><span class="need_flag">*</span>阶段（小学、初中、高中或通用）{$token}<span class="check-tips"></span></label>
+                    <label class="item-label"><span class="need_flag">*</span>科目<span class="check-tips"></span></label>
                     <div class="controls">
                         <select name="stage">
-                            <option value="小学">小学</option>
                             <option value="初中">初中</option>
+                            <option value="小学">小学</option>
                             <option value="高中">高中</option>
                             <option value="政策">政策</option>
                             <option value="通用">通用</option>
@@ -98,11 +98,11 @@
                     </div>
             </div>
             <div class="form-item cf">
-                    <label class="item-label"><span class="need_flag">*</span>科目<span class="check-tips"></span></label>
+                    <label class="item-label"><span class="need_flag">*</span>阶段（小学、初中、高中或通用）<span class="check-tips"></span></label>
 
                     <select name="subject">
-                        <option value="语文">语文</option>
                         <option value="数学">数学</option>
+                        <option value="语文">语文</option>
                         <option value="英语">英语</option>
                         <option value="理综">理综</option>
                         <option value="物理">物理</option>
@@ -115,7 +115,7 @@
                     </select>
             </div>
             <div class="form-item cf">
-                <label class="item-label"><span class="need_flag">*</span>阶段（小学、初中、高中或通用）{$token}<span class="check-tips"></span></label>
+                <label class="item-label"><span class="need_flag">*</span>资料类型<span class="check-tips"></span></label>
                 <div class="controls">
                     <select name="type">
                         <option value="真题">真题</option>
