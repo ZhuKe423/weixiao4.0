@@ -36,58 +36,94 @@
 					{$data['description']}
 				</div>
 			</div>
-		</div>
-		
-		<!--每日精选-->
-				<div class="index-title">
-					<span>订阅、下载</span>
-					<!--<a href="">显示全部<i class="mui-icon mui-icon-arrowright"></i></a>-->
-				</div>
-				<div class="classify">
-					<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
-						<div class="mui-scroll">
-							<a href="#popover" id="openPopover" class="item">
-								<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx6.png" />
-								<p>邮件订阅</p>
-							</a>
-							<a href="{$data['fileid']|get_file_url}" class="item">
-								<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx1.PNG" />
-								<p>下载</p>
-							</a>
-							<a href="" class="item">
-								<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx4.png" />
-								<p>解题方法</p>
-							</a>
-							<a href="" class="item">
-								<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx2.jpg" />
-								<p>书签</p>
-							</a>							
-							<a href="" class="item">
-								<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx5.jpg" />
-								<p>每日练</p>
-							</a>							
-						</div>
+			<!--每日精选-->
+			<div class="index-title">
+				<span>订阅、下载</span>
+				<!--<a href="">显示全部<i class="mui-icon mui-icon-arrowright"></i></a>-->
+			</div>
+			<div class="classify">
+				<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					<div class="mui-scroll">
+						<a href="#popover" id="openPopover" class="item">
+							<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx6.png" />
+							<p>邮件订阅</p>
+						</a>
+						<a href="{$data['fileid']|get_file_url}" class="item">
+							<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx1.PNG" />
+							<p>下载</p>
+						</a>
+						<a href="" class="item">
+							<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx4.png" />
+							<p>解题方法</p>
+						</a>
+						<a href="" class="item">
+							<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx2.jpg" />
+							<p>书签</p>
+						</a>
+						<a href="" class="item">
+							<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx5.jpg" />
+							<p>每日练</p>
+						</a>
 					</div>
 				</div>
+			</div>
+			<!--弹出层-->
+			<div id="popover" class="mui-popover mui-popover-bottom mui-popover-action">
+			<if condition="($user['has_subscribe'] eq 0)">
+				<ul class="mui-table-view">
 
-		<!--弹出层-->
-		<div id="popover" class="mui-popover">
-			<ul class="mui-table-view">
-				<li class="mui-table-view-cell"><a href="#">Item1</a></li>
-				<li class="mui-table-view-cell"><a href="#">Item2</a></li>
-				<li class="mui-table-view-cell"><a href="#">Item3</a></li>
-				<li class="mui-table-view-cell"><a href="#">Item4</a></li>
-				<li class="mui-table-view-cell"><a href="#">Item5</a></li>
-			</ul>
+					<li class="mui-table-view-cell">
+						<b>请扫描二维码关注哈哈教育公众号后再进行下载！</b>
+					</li>
+					<li class="mui-table-view-cell">
+						<a href="#popover"><b>返回</b></a>
+					</li>
+				</ul>
+			<else/>
+				<empty name="user['email']">
+					<form class="mui-input-group">
+						<!-- 可选择菜单 -->
+						<ul class="mui-table-view">
+
+							<li class="mui-table-view-cell">
+								<input type="text" name="email" value="{$user['email']}" class="mui-input-clear" placeholder="请输入电子邮箱">
+							</li>
+							<li class="mui-table-view-cell">
+								<a href="javascript:void(0);" onClick="mailbook()"><b>确认发送</b></a>
+							</li>
+							<li class="mui-table-view-cell">
+								<a href="#popover"><b>取消发送</b></a>
+							</li>
+						</ul>
+						<input type="hidden" name="docid" value="{$docid}" class="mui-input-clear" placeholder="请输入电子邮箱">
+					</form>
+				<else/>
+					<form class="mui-input-group">
+						<!-- 可选择菜单 -->
+						<ul class="mui-table-view">
+							<li class="mui-table-view-cell">
+								<input type="text" name="email" value="{$user['email']}" class="mui-input-clear" placeholder="你已注册过的邮箱">
+							</li>
+							<li class="mui-table-view-cell">
+								<a href="javascript:void(0);" onClick="mailbook()"><b>确认发送</b></a>
+							</li>
+							<li class="mui-table-view-cell">
+								<a href="#popover"><b>取消发送</b></a>
+							</li>
+						</ul>
+						<input type="hidden" name="docid" value="{$docid}" class="mui-input-clear" placeholder="请输入电子邮箱">
+					</form>
+				</empty>
+			</if>
 		</div>
-
-		<!--广告位-->
-		<div class="guanggao">
+			<!--广告位-->
+			<div class="guanggao">
 			<h2>
 				<span></span>
 				<i></i>
 			</h2>
 			<a href=""><img src="{:ADDON_PUBLIC_PATH}/MUI/images/haha_sig1.png" /></a>
+		</div>
 		</div>
 		<script type="text/javascript" charset="utf-8">
             mui.init({
@@ -99,10 +135,54 @@
                     hold: true,
                     release: true
                 }});
+            function isEmail(strEmail) {
+                apos = strEmail.indexOf("@");
+                dotpos = strEmail.lastIndexOf(".");
+                if(apos<1 || dotpos-apos < 2){
+                    return false;
+                } else {
+                    return true;
+				}
+
+            }
+            function mailbook(){
+                var email0 = "{$user['email']}";
+                var has_subscribe = "{$user['has_subscribe']}";
+                var email = $('input[name="email"]').val();
+				var docid = $('input[name="docid"]').val();
+                mui('.mui-popover-bottom').popover('hide');
+                if(!isEmail(email)) {
+                    mui.alert('请检查电子邮箱格式', '输入错误', function() {
+                    });
+                    return;
+                }
+
+                if (!has_subscribe) {
+                    mui.alert('请关注哈哈教育公众号，再进行下载！', '错误提醒', function() {
+                    });
+                    return;
+				}
+                var url = "{:U('WeiXiao/WapStudymaterial/send')}";
+				var is_old = false;
+                if (email0 == email) {is_old = true}
+
+                $.post(url,{email:email, docid:docid, is_old: is_old},function(res){
+                    //TODO
+					console.log(res.status);
+					if (res.status) {
+					    mui.toast('此文档已通过电子邮件发送到你邮箱里，请查收！');
+                    }
+                    else {
+                        mui.alert('出错啦，请检查邮箱格式并关注公众号！', '出错啦', function() {
+                        });
+					}
+                });
+            }
+
 		</script>
 		<script type="text/javascript" src="__STATIC__/jquery-2.0.3.min.js?v={:SITE_VERSION}"></script>
 		<!--<script type="text/javascript" src="{:ADDON_PUBLIC_PATH}/MUI/js/jquery-1.10.1.min.js?v={:SITE_VERSION}" ></script>-->
-		<script type="text/javascript" src="{:ADDON_PUBLIC_PATH}/MUI/js/mui.min.js?v={:SITE_VERSION}"></script>
+		<!--<script type="text/javascript" src="{:ADDON_PUBLIC_PATH}/MUI/js/mui.min.js?v={:SITE_VERSION}"></script>-->
 	    <script type="text/javascript" src="{:ADDON_PUBLIC_PATH}/MUI/js/app.js?v={:SITE_VERSION}" ></script>
 	</body>
 </html>
