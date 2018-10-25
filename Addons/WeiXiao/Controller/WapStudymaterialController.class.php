@@ -42,7 +42,11 @@ class WapStudymaterialController extends WapBaseController
 
     public function index() {
         $model = D('WxyStudyMaterial');
-        $data = $model->order('id desc')->limit(0,10)->select();
+        $cat1 = I('cat1');
+        $cat2 = I('cat2');
+        $cat1 == '' || $map['type'] = $this->cat1[$cat1];
+        $cat2 == '' || $map['stage'] = $this->cat2[$cat2];
+        $data = $model->where($map)->order('id desc')->limit(0,10)->select();
         foreach($data as $key=>$vo) {
             if ((intval($vo['image_id']) == 0) && intval($vo['image_material'])) {
                 $cover = D('material_image')->where('id = '. $vo['image_material'])->find();
@@ -53,6 +57,9 @@ class WapStudymaterialController extends WapBaseController
                 $data[$key]['image_id'] = 934; //logo
             }
         }
+
+        $this->assign('cat1', $cat1);
+        $this->assign('cat2', $cat2);
         $this->assign('data', $data);
         //dump($data);
         $this->display();
@@ -68,7 +75,7 @@ class WapStudymaterialController extends WapBaseController
 
             $map['token'] = $this->token;
             $cat1 == '' || $map['type'] = $this->cat1[$cat1];
-            $cat2 == '' || $map['stage'] = $this->cat1[$cat2];
+            $cat2 == '' || $map['stage'] = $this->cat2[$cat2];
             $row = isset ( $_REQUEST ['list_row'] ) ? intval ( $_REQUEST ['list_row'] ) : 12;
             $data = $model->where($map)->order('id desc')->page ( $page, $row )->select();
             foreach($data as $key=>$vo) {
@@ -89,6 +96,8 @@ class WapStudymaterialController extends WapBaseController
             $page = I('page');
             $cat1 = I('cat1');
             $cat2 = I('cat2');
+            $this->assign('cat1', $cat1);
+            $this->assign('cat2', $cat2);
             $this->display('lists');
         }
 

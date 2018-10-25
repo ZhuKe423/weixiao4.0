@@ -17,47 +17,118 @@ class WxyStudentCardTable {
 	];
 	
 	// 列表定义
-	public $list_grid = [ ];
+	public $list_grid = [
+			'studentno' => [
+					'title' => '学号',
+					'come_from' => 0,
+					'width' => '',
+					'is_sort' => 0,
+					'name' => 'studentno',
+					'function' => '',
+					'href' => [ ]
+			],
+			'name' => [
+					'title' => '姓名',
+					'come_from' => 0,
+					'width' => '',
+					'is_sort' => 0,
+					'name' => 'name',
+					'function' => '',
+					'href' => [ ]
+			],
+			'grade' => [
+					'title' => '年级',
+					'come_from' => 0,
+					'width' => '',
+					'is_sort' => 0,
+					'name' => 'grade',
+					'function' => '',
+					'href' => [ ]
+			],
+			'phone' => [
+					'title' => '联系电话',
+					'come_from' => 0,
+					'width' => '',
+					'is_sort' => 0,
+					'name' => 'phone',
+					'function' => '',
+					'href' => [ ]
+			],
+			'phone_bck' => [
+					'title' => '备用电话',
+					'come_from' => 0,
+					'width' => '',
+					'is_sort' => 0,
+					'name' => 'phone_bck',
+					'function' => '',
+					'href' => [ ]
+			],
+			'pay_status' => [
+					'title' => '缴费情况',
+					'come_from' => 0,
+					'width' => '',
+					'is_sort' => 0,
+					'name' => 'pay_status',
+					'function' => '',
+					'href' => [ ]
+			],
+			'urls' => [
+					'title' => '操作',
+					'come_from' => 1,
+					'width' => '',
+					'is_sort' => 0,
+					'href' => [
+							'0' => [
+									'title' => '编辑',
+									'url' => '[EDIT]'
+							],
+							'1' => [
+									'title' => '删除',
+									'url' => '[DELETE]'
+							]
+					],
+					'name' => 'urls',
+					'function' => ''
+			]
+	];
 	
 	// 字段定义
 	public $fields = [
 			'token' => [
 					'title' => '机构Token',
-					'type' => 'string',
 					'field' => 'varchar(100) NOT NULL',
-					'remark' => '机构Token',
-					'is_show' => 0,
-					'is_must' => 1
+					'type' => 'string',
+					'is_must' => 1,
+					'placeholder' => '请输入内容'
 			],
 			'studentno' => [
 					'title' => '学号',
-					'field' => 'varchar(20) NULL',
 					'type' => 'string',
-					'remark' => '学号',
+					'field' => 'varchar(20) NULL',
 					'is_show' => 1,
 					'placeholder' => '请输入内容'
 			],
 			'name' => [
 					'title' => '姓名',
-					'field' => 'varchar(50) NULL',
 					'type' => 'string',
-					'remark' => '姓名',
+					'field' => 'varchar(50) NULL',
 					'is_show' => 1,
 					'placeholder' => '请输入内容'
 			],
 			'gender' => [
 					'title' => '性别',
-					'field' => 'tinyint(2) DEFAULT \"1\"',
-					'type' => 'string',
-					'remark' => '性别',
+					'type' => 'radio',
+					'field' => 'tinyint(2) NULL',
+					'extra' => '男
+女',
+					'value' => 1,
 					'is_show' => 1,
-					'placeholder' => '请输入内容'
+					'is_must' => 0
 			],
 			'school' => [
 					'title' => '学校',
-					'field' => 'varchar(100) NULL',
 					'type' => 'string',
-					'remark' => '学校',
+					'field' => 'varchar(100) NULL',
 					'is_show' => 1,
 					'placeholder' => '请输入内容'
 			],
@@ -65,23 +136,18 @@ class WxyStudentCardTable {
 					'title' => '入学年份',
 					'field' => 'int(10) NULL',
 					'type' => 'string',
-					'remark' => '入学年份',
-					'is_show' => 1,
 					'placeholder' => '请输入内容'
 			],
 			'class_id' => [
 					'title' => '班号',
 					'field' => 'int(10) NULL',
 					'type' => 'string',
-					'remark' => '班号',
-					'is_show' => 1,
 					'placeholder' => '请输入内容'
 			],
 			'grade' => [
 					'title' => '年级',
-					'field' => 'varchar(20) NULL',
 					'type' => 'string',
-					'remark' => '年级',
+					'field' => 'varchar(20) NULL',
 					'is_show' => 1,
 					'placeholder' => '请输入内容'
 			],
@@ -89,63 +155,55 @@ class WxyStudentCardTable {
 					'title' => '联系电话',
 					'field' => 'varchar(40) NULL',
 					'type' => 'string',
-					'remark' => '联系电话',
-					'is_show' => 1,
 					'placeholder' => '请输入内容'
 			],
 			'phone_bck' => [
 					'title' => '备用电话',
 					'field' => 'varchar(40) NULL',
 					'type' => 'string',
-					'remark' => '备用电话',
-					'is_show' => 1,
 					'placeholder' => '请输入内容'
 			],
 			'enrolled' => [
 					'title' => '是否就读',
 					'field' => 'varchar(10) NULL',
 					'type' => 'string',
-					'remark' => '缴费就读',
-					'is_show' => 1,
 					'placeholder' => '请输入内容'
 			],
 			'lesson_done' => [
 					'title' => '已学课时',
 					'field' => 'int(10) NULL',
 					'type' => 'string',
-					'remark' => '已学课时数',
-					'is_show' => 1,
 					'placeholder' => '请输入内容'
 			],
 			'oid' => [
 					'title' => '机构ID',
 					'field' => 'varchar(100) NULL',
 					'type' => 'string',
-					'remark' => '机构ID',
-					'is_show' => 1,
 					'placeholder' => '请输入内容'
 			],
 			'sid' => [
 					'title' => '学生标识',
-					'type' => 'string',
 					'field' => 'int(11) NULL',
-					'remark' => '学生标识',
-					'is_show' => 1,
+					'type' => 'string',
 					'placeholder' => '请输入内容'
 			],
 			'uid' => [
 					'title' => '用户ID',
-					'type' => 'string',
 					'field' => 'int(11) NULL',
-					'remark' => '用户ID',
-					'is_show' => 1,
+					'type' => 'string',
 					'placeholder' => '请输入内容'
 			],
 			'timestamp' => [
 					'title' => '时标',
-					'type' => 'string',
 					'field' => 'datetime NULL',
-					'remark' => '创建时标',
+					'type' => 'string',
+					'placeholder' => '请输入内容'
+			],
+			'pay_status' => [
+					'title' => '缴费情况',
+					'type' => 'string',
+					'field' => 'varchar(100) NULL',
+					'remark' => '缴费情况（已缴、未缴）',
 					'is_show' => 1,
 					'placeholder' => '请输入内容'
 			]

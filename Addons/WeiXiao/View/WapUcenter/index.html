@@ -1,0 +1,174 @@
+<include file="Home@Public/mobile_head_mui"/>
+<body style="background: #efeff4;">
+<div class="mui-content">
+    <header class="mui-bar mui-bar-nav header">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" href="material_list.html"></a>
+        <a class="mui-icon mui-icon-bars mui-pull-right" href="javascript:;" id="menu-btn"></a>
+        <h1 class="mui-title"><a href=""><img src="{:ADDON_PUBLIC_PATH}/MUI/images/haha_logo.png"/></a></h1>
+    </header>
+    <!--显示下拉-->
+    <div id="menu-wrapper" class="menu-wrapper ">
+        <div id="menu" class="menu">
+            <a class="current" href="">首页</a>
+            <a href="">测评</a>
+            <a href="">专题</a>
+            <a href="">排行榜</a>
+            <a href="">类别</a>
+        </div>
+    </div>
+    <div id="menu-backdrop" class="menu-backdrop"></div>
+
+    <div class="mui-content">
+        <ul class="mui-table-view mui-grid-view ucenter-profile-head">
+            <li class="mui-table-view-cell mui-col-sm-12 mui-col-xs-12">
+            </li>
+            <li class="mui-table-view-cell  mui-col-sm-2 mui-col-xs-3">
+                <empty name="user['headimgurl']">
+                    <img class="ucenter-avatar-icon" src="__STATIC__/face/default_head.png">
+                <else/>
+                    <img class="ucenter-avatar-icon" src="{$user['headimgurl']}">
+                </empty>
+            </li>
+
+            <li class="mui-table-view-cell  mui-col-sm-2 mui-col-xs-3">
+                <p class="ucenter-user-nick">{$user['nickname']}</p>
+            </li>
+            <li class="mui-table-view-cell mui-col-sm-3 mui-col-xs-4">
+                <p class="ucenter-user-nick">ID {$user['uid']}</p>
+            </li>
+            <li class="mui-table-view-cell mui-col-sm-12 mui-col-xs-12">
+                <if condition="$user['has_subscribe'] neq 1">
+                    <p class="ucenter-user-nick">你尚未关注{$school}微校公众号，为获取更多功能服务，请尽快关注</p>
+                </if>
+            </li>
+        </ul>
+        <ul class="mui-table-view mui-grid-view">
+            <li class="mui-table-view-cell mui-col-sm-2 mui-col-xs-2">
+                <img class="ucenter-li-icon" src="{:ADDON_PUBLIC_PATH}/MUI/images/indent.png">
+            </li>
+            <li class="mui-table-view-cell mui-col-sm-2 mui-col-xs-2">
+                <p>课表</p>
+            </li>
+            <li class="mui-table-view-cell mui-col-sm-2 mui-col-xs-2">
+                <img class="ucenter-li-icon" src="{:ADDON_PUBLIC_PATH}/MUI/images/clt.png">
+            </li>
+            <li class="mui-table-view-cell mui-col-sm-2 mui-col-xs-2">
+                <p>收藏</p>
+            </li>
+            <li class="mui-table-view-cell mui-col-sm-2 mui-col-xs-2">
+                <img class="ucenter-li-icon" src="{:ADDON_PUBLIC_PATH}/MUI/images/rcm.png">
+            </li>
+            <li class="mui-table-view-cell mui-col-sm-2 mui-col-xs-2">
+                <p>推荐</p>
+            </li>
+        </ul>
+
+        <ul class="mui-table-view">
+            <li class="mui-table-view-cell">
+                <a class="mui-navigate-right" href="{:U('bind_phone')}">
+                    手机验证
+                </a>
+            </li>
+            <li class=" mui-table-view-cell">
+                <a class="mui-navigate-right">
+                    <span class="mui-badge mui-badge-danger">{$bind_count}</span>
+                    绑定学员（右侧数字为绑定人数）
+                </a>
+            </li>
+            <li class="mui-table-view-cell mui-collapse">
+                <a class="mui-navigate-right">
+                    <!--<span class="mui-badge mui-badge-danger">3</span>-->
+                    学员资料
+                </a>
+                <ul class="mui-table-view mui-table-view-chevron">
+                    <volist name="student" id="vo">
+                        <li class="mui-table-view-cell"><a class="mui-navigate-right" href="#">{$vo.name}</a>
+                        </li>
+                    </volist>
+                </ul>
+            </li>
+            <li class="mui-table-view-cell mui-collapse"><a class="mui-navigate-right" href="#">上课记录</a>
+                <ul class="mui-table-view mui-table-view-chevron">
+                    <li class="mui-table-view-cell"><a class="mui-navigate-right" href="#">数学秋季班</a>
+                    </li>
+                    <li class="mui-table-view-cell"><a class="mui-navigate-right" href="#">语文春季班</a>
+                    </li>
+                    <li class="mui-table-view-cell"><a class="mui-navigate-right" href="#">英语暑假班</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <div class="mui-card">
+            <div class="mui-card-header ucenter-small-title">
+                <!--专题推荐-->
+                <span>热门课程</span>
+                <a href="">显示全部<i class="mui-icon mui-icon-arrowright"></i></a>
+            </div>
+            <div class="mui-card-content">
+                <div class="mui-slider">
+                    <div class="mui-slider-group mui-slider-loop">
+                        <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一个图文表格) -->
+                        <div class="mui-slider-item mui-slider-item-duplicate">
+                            <ul class="mui-table-view mui-grid-view">
+                                <li class="mui-table-view-cell mui-media mui-col-xs-6">
+                                    <a href="#"><img class="mui-media-object" src="{:ADDON_PUBLIC_PATH}/MUI/images/tj.png">
+                                    </a>
+                                </li>
+                                <li class="mui-table-view-cell mui-media mui-col-xs-6">
+                                    <a href="#"><img class="mui-media-object" src="{:ADDON_PUBLIC_PATH}/MUI/images/tj1.png">
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="mui-slider-item">
+                            <ul class="mui-table-view mui-grid-view">
+                                <li class="mui-table-view-cell mui-media mui-col-xs-6">
+                                    <a href="#"><img class="mui-media-object" src="{:ADDON_PUBLIC_PATH}/MUI/images/tj2.jpg">
+                                    </a>
+                                </li>
+                                <li class="mui-table-view-cell mui-media mui-col-xs-6">
+                                    <a href="#"><img class="mui-media-object" src="{:ADDON_PUBLIC_PATH}/MUI/images/tj4.png">
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="mui-slider-item mui-slider-item-duplicate">
+                            <ul class="mui-table-view mui-grid-view">
+                                <li class="mui-table-view-cell mui-media mui-col-xs-6">
+                                    <a href="#"><img class="mui-media-object" src="{:ADDON_PUBLIC_PATH}/MUI/images/tj.png">
+                                    </a>
+                                </li>
+                                <li class="mui-table-view-cell mui-media mui-col-xs-6">
+                                    <a href="#"><img class="mui-media-object" src="{:ADDON_PUBLIC_PATH}/MUI/images/tj1.png">
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="mui-slider-item">
+                            <ul class="mui-table-view mui-grid-view">
+                                <li class="mui-table-view-cell mui-media mui-col-xs-6">
+                                    <a href="#"><img class="mui-media-object" src="{:ADDON_PUBLIC_PATH}/MUI/images/tj2.jpg">
+                                    </a>
+                                </li>
+                                <li class="mui-table-view-cell mui-media mui-col-xs-6">
+                                    <a href="#"><img class="mui-media-object " src="{:ADDON_PUBLIC_PATH}/MUI/images/tj4.png">
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript " src="__STATIC__/jquery-2.0.3.min.js?v={:SITE_VERSION}"></script>
+
+<script type="text/javascript " src="{:ADDON_PUBLIC_PATH}/MUI/js/app.js?v={:SITE_VERSION}"></script>
+<script type="text/javascript ">
+    mui.init()
+</script>
+</body>
+
+</html>

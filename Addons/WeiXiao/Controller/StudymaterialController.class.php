@@ -73,6 +73,7 @@ class StudymaterialController extends ManageBaseController{
 
             $model = D('WxyStudyMaterial');
             $map['fileid'] = $data['fileid'];
+            $map['token'] = $this->token;
             if ($model->where($map)->select()) {
                 $this->error("文件已经存在，请重新上传文件。");
             }
@@ -102,7 +103,7 @@ class StudymaterialController extends ManageBaseController{
             $data['type'] = I('post.type');
             $data['stage'] = I('post.stage');
             $data['subject'] = I('post.subject');
-            $data['fileid'] = I('post.file_id');
+            $data['fileid'] = I('post.fileid');
             $data['title'] = I('post.title');
             $data['description'] = I('post.description');
             $data['image_id'] = I('post.image_id');
@@ -111,16 +112,14 @@ class StudymaterialController extends ManageBaseController{
 
             $model = D('WxyStudyMaterial');
             $map['fileid'] = $data['fileid'];
+            $map['token'] = $this->token;
+            //dump($map);
             if ($model->where($map)->select()) {
-                $this->error("文件已经存在，请重新上传文件。");
+                $model->where($map)->save($data);
+                $this->success("资料已更新，请检查。", U('lists'));
             }
             else
-                if ($data['fileid'] != 0) {
-                    $model->add($data);
-                    $this->success("资料提交成功，刷新后可继续提交");
-                }
-                else
-                    $this->error("文件上传错误，请成功上传文件后再提交表单");
+                $this->error("文件上传错误，请成功上传文件后再提交表单");
 
         }
         else {

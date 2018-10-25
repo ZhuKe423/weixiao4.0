@@ -2167,7 +2167,7 @@ function int_to_string(&$data, $map = array('status'=>array(1=>'正常',-1=>'删
 	}
 	return $data;
 }
-function importFormExcel($attach_id, $column, $dateColumn = array()) {
+function importFormExcel($attach_id, $column, $dateColumn = array(), $start_row = 2) {
 	$attach_id = intval ( $attach_id );
 	$res = array (
 			'status' => 0,
@@ -2213,11 +2213,11 @@ function importFormExcel($attach_id, $column, $dateColumn = array()) {
 	$objPHPExcel->setActiveSheetIndex ( 0 );
 	$sheet = $objPHPExcel->getSheet ( 0 );
 	$highestRow = $sheet->getHighestRow (); // 取得总行数
-	for($j = 2; $j <= $highestRow; $j ++) {
+    for($j = $start_row; $j <= $highestRow; $j ++) {
 		$addData = array ();
 		foreach ( $column as $k => $v ) {
 			if ($dateColumn) {
-				foreach ( $dateColumn as $d ) {
+                foreach ( $dateColumn as $d ) {
 					if ($k == $d) {
 						$addData [$v] = gmdate ( "Y-m-d H:i:s", PHPExcel_Shared_Date::ExcelToPHP ( $objPHPExcel->getActiveSheet ()->getCell ( "$k$j" )->getValue () ) );
 					} else {
@@ -2236,6 +2236,8 @@ function importFormExcel($attach_id, $column, $dateColumn = array()) {
 		
 		if (! $isempty)
 			$result [$j] = $addData;
+		else
+            continue;  //add this line to avoid endless circulation but the data row shall be full filed.
 	}
 	$res ['status'] = 1;
 	$res ['data'] = $result;

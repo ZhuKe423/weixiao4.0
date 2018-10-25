@@ -11,10 +11,10 @@
 			  <!-- 菜单具体展示内容 -->
 			  <div id="menu-slider" class="menu-wrapper">
 				  <div id="menu" class="menu">
-					  <a class="" href="index.html">高中资料</a>
-					  <a href="">初中资料</a>
-					  <a href="">小学资料</a>
-					  <a href="">综合资料</a>
+					  <a class="" href="{:U('index?cat2=1')}">高中资料</a>
+					  <a href="{:U('index?cat2=2')}">初中资料</a>
+					  <!--<a href="{:U('index?cat2=3')}">小学资料</a>-->
+					  <!--<a href="{:U('index?cat2=4')}">综合资料</a>-->
 				  </div>
 			  </div>
 			<div id="menu-backdrop" class="menu-backdrop"></div>
@@ -105,22 +105,24 @@
 				<div class="classify">
 					<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
 						<div class="mui-scroll">
-							<a href="" class="item">
-								<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx4.png" />
+							<a href="{:U('lists?cat1=1')}" class="item">
+								<img src="{:ADDON_PUBLIC_PATH}/MUI/images/zhentibaodian1.jpg" />
 								<p>真题宝典</p>
 							</a>
-							<a href="" class="item">
-								<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx2.jpg" />
+							<a href="{:U('lists?cat1=2')}" class="item">
+								<img src="{:ADDON_PUBLIC_PATH}/MUI/images/qiaosimiaojie1.jpg" />
 								<p>巧思妙解</p>
-							</a>							
-							<a href="" class="item">
-								<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx5.jpg" />
+							</a>
+							<a href="{:U('lists?cat1=3')}" class="item">
+								<img src="{:ADDON_PUBLIC_PATH}/MUI/images/meizhouyibo1.jpg" />
 								<p>每周一拨</p>
 							</a>
-							<a href="" class="item">
-								<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx6.png" />
+							<a href="{:U('lists?cat1=4')}" class="item">
+								<img src="{:ADDON_PUBLIC_PATH}/MUI/images/dengnilaihai1.jpg" />
 								<p>等你来嗨</p>
 							</a>
+							<input type="hidden" name="cat1" value="{$cat1}" class="mui-input-clear">
+							<input type="hidden" name="cat2" value="{$cat2}" class="mui-input-clear">
 						</div>
 					</div>
 				</div>
@@ -128,7 +130,7 @@
 				<!--题库-->
 				<div class="index-title">
 					<span>题库列表</span>
-					<a href="">显示全部<i class="mui-icon mui-icon-arrowright"></i></a>
+					<a href="{:U('lists?cat1=' . $cat1. '&cat2=' . $cat2)}">显示全部<i class="mui-icon mui-icon-arrowright"></i></a>
 				</div>
 				<ul class="mui-table-view fresh-comment">
 					<volist name="data" id="vo">
@@ -164,11 +166,9 @@
 				</div>
 				<!--广告-->
 				<div class="advantage">
-					<a href=""><img src="{:ADDON_PUBLIC_PATH}/MUI/images/haha_sig1.png" /></a>
+					<a href=""><img src="{:ADDON_PUBLIC_PATH}/MUI/images/haha_sig3.jpg" /></a>
 				</div>
-				
-			</div>		
-	
+			</div>
 	      </div>
 	    </div>  
 	    <div class="mui-off-canvas-backdrop"></div>

@@ -1,3 +1,20 @@
+@media screen and (min-width: 320px) {html{font-size:40px;}}
+@media screen and (min-width: 360px) {html{font-size:45px;}}
+@media screen and (min-width: 375px) {html{font-size:46.875px;}}
+@media screen and (min-width: 400px) {html{font-size:50px;}}
+@media screen and (min-width: 414px) {html{font-size:51.75px;}}
+@media screen and (min-width: 440px) {html{font-size:55px;}}
+@media screen and (min-width: 480px) {html{font-size:60px;}}
+@media screen and (min-width: 520px) {html{font-size:65px;}}
+@media screen and (min-width: 560px) {html{font-size:70px;}}
+@media screen and (min-width: 600px) {html{font-size:75px;}}
+@media screen and (min-width: 640px) {html{font-size:80px;}}
+@media screen and (min-width: 680px) {html{font-size:85px;}}
+@media screen and (min-width: 720px) {html{font-size:90px;}}
+@media screen and (min-width: 760px) {html{font-size:95px;}}
+@media screen and (min-width: 800px) {html{font-size:100px;}}
+@media screen and (min-width: 960px) {html{font-size:120px;}}
+
 body, html, div, blockquote, img, label, p, h1, h2, h3, h4, h5, h6, pre, ul, ol,
 li, dl, dt, dd, form, a, fieldset, input, th, td,i
 {margin: 0; padding: 0; border: 0; outline: none; font-style: normal; font-weight: normal;}
@@ -48,8 +65,8 @@ img{max-width: 100%; width: auto; height: auto; vertical-align: top; border: 0;}
 .special .mui-segmented-control.mui-scroll-wrapper .mui-scroll{ height: 2.2rem;}
 .special .mui-segmented-control.mui-scroll-wrapper{ height: 2.2rem;}
 .classify{padding:.3rem; background: #fff;}
-.classify .mui-segmented-control.mui-scroll-wrapper .mui-scroll{ height: 2.2rem;}
-.classify .mui-segmented-control.mui-scroll-wrapper{ height:2.2rem;}
+.classify .mui-segmented-control.mui-scroll-wrapper .mui-scroll{ height: 2.0rem;}
+.classify .mui-segmented-control.mui-scroll-wrapper{ height:2.0rem;}
 .classify .item{width: 1.52rem;  display: inline-block; margin-left: 1px; margin-right: 8px; box-shadow: 0 0 0.05rem 0 rgba(0,0,0,.16); 
  border-radius: .06rem;     padding: 7.5px; margin-top: .02rem;}
 .classify .item img{max-width: 1.2rem; width: 1.2rem; height: 1.2rem; border-radius: .1rem;}
@@ -550,4 +567,32 @@ img{max-width: 100%; width: auto; height: auto; vertical-align: top; border: 0;}
 	position: fixed;
 	z-index: 5;
 	background: whitesmoke;
+}
+
+.ucenter-profile-head {
+	background: url(../images/bkg25.png) no-repeat;
+	-moz-background-size: 100% 100%;
+	background-size: 100% 100%;
+}
+.ucenter-avatar-icon {
+	border-radius: 50%;
+	border: 3px solid #eee;
+	overflow: hidden;
+}
+.ucenter-user-nick {
+	color: white;
+}
+.ucenter-li-icon {
+	height: 50%;
+	width: 50%;
+}
+.ucenter-small-title mui-icon-arrowright:before {
+	font-size:14px;
+}
+.ucenter-small-title {
+	font-size:14px;
+}
+
+.ucenter-menu a {
+	line-height: 2.2rem;
 }

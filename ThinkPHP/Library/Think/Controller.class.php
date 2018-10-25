@@ -599,8 +599,11 @@ abstract class Controller {
 			$Model = D ( parse_name ( get_table_name ( $model ['id'] ), 1 ) );
 			// 获取模型的字段信息
 			$Model = $this->checkAttr ( $Model, $model ['id'] );
-			$Model->create ();
-			$Model->getError () || $id = $Model->add ();
+            $data['token'] = get_token();
+            $data = $Model->create ();
+            $data['m_role'] = 1;
+
+			$Model->getError () || $id = $Model->add($data);
 			
 			if ($id) {
 				$this->_saveKeyword ( $model, $id );

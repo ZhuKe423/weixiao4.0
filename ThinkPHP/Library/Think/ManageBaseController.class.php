@@ -146,15 +146,19 @@ class ManageBaseController extends Controller {
 			return false;
 		
 		$uid = session ( 'mid' );
-		
+
+
 		// 当前登录者
 		$GLOBALS ['mid'] = $this->mid = intval ( $uid );
 		$myinfo = get_userinfo ( $this->mid );
 		$GLOBALS ['myinfo'] = $myinfo;
 		
 		// 当前访问对象的uid
-		$GLOBALS ['uid'] = $this->uid = isset ( $_REQUEST ['uid'] ) && intval ( $_REQUEST ['uid'] == 0 ? $this->mid : $_REQUEST ['uid'] );
-		
+		$GLOBALS ['uid'] = $this->uid = intval ( isset ( $_REQUEST ['uid'] ) ? $_REQUEST ['uid'] : $this->mid);
+		/*if ($this->uid != $this->mid) {
+		    return false;
+        }*/
+
 		$this->assign ( 'mid', $this->mid ); // 登录者
 		$this->assign ( 'uid', $this->uid ); // 访问对象
 		$this->assign ( 'myinfo', $GLOBALS ['myinfo'] ); // 访问对象
