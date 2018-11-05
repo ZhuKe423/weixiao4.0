@@ -69,6 +69,7 @@ class StudymaterialController extends ManageBaseController{
             $data['description'] = I('post.description');
             $data['image_id'] = I('post.image_id');
             $data['image_material'] = I('post.image_material');
+            $data['problem_type'] = (I('post.type')== "真题宝典") ? I('post.problem_type') : "";
             $data['token'] = $this->token;
 
             $model = D('WxyStudyMaterial');
@@ -103,15 +104,17 @@ class StudymaterialController extends ManageBaseController{
             $data['type'] = I('post.type');
             $data['stage'] = I('post.stage');
             $data['subject'] = I('post.subject');
-            $data['fileid'] = I('post.fileid');
+            $data['fileid'] = I('post.file_id');
             $data['title'] = I('post.title');
             $data['description'] = I('post.description');
             $data['image_id'] = I('post.image_id');
             $data['image_material'] = I('post.image_material');
+            $data['problem_type'] = (I('post.type')== "真题宝典") ? I('post.problem_type') : "";
             $data['token'] = $this->token;
+            $data['id'] = I('post.id');
 
             $model = D('WxyStudyMaterial');
-            $map['fileid'] = $data['fileid'];
+            $map['id'] = $data['id'];
             $map['token'] = $this->token;
             //dump($map);
             if ($model->where($map)->select()) {
@@ -123,19 +126,17 @@ class StudymaterialController extends ManageBaseController{
 
         }
         else {
-            /*$fields = get_model_attribute ( $this->model ['id'] );
-            $this->assign ( 'fields', $fields );
-            //$this->meta_title = '新增' . $this->model ['title'];
+            $model = D('WxyStudyMaterial');
             $map['id'] = I('id');
             $map['token'] = $this->token;
-            $model = D('WxyStudyMaterial');
             $data = $model->where($map)->find();
-            if ($data != NUll ) {
-                $this->display('add');
-                $this->assign('data', $data);
+            $this->assign('data', $data);
+            if ($data['fileid']) {
+                $file_name = get_file_title($data['fileid']);
             }
-            else $this->error('记录不存在，请确认ID号');*/
-            parent::common_edit($this->model);
+            $this->assign('file_name', $file_name);
+            $this->display();
+            //parent::common_edit($this->model);
         }
     }
 

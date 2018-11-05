@@ -2,7 +2,10 @@
 	<style>
 		.mui-row .mui-btn {
 			margin-top: 3px;
-			width: 100px;
+			width: 120px;
+		}
+		.ucenter-btn {
+			margin-top: 3px;
 		}
 	</style>
 
@@ -49,19 +52,19 @@
 					</li>
 				</ul>
 
-				
-
 				<div class="mui-content-padded" style="margin: 5px;">
-					<form class="mui-input-group">
+					<form class="mui-input-group" method="post" action="{:addons_url('WeiXiao://WapUcenter/bind_phone')}">
 
 						<div class="mui-input-row">
-							<input name="mobile" type="text" placeholder="手机号码" value="{$user['mobile']}">
+							<input id="mobile" name="mobile" type="text" placeholder="手机号码" value="{$user['mobile']}">
 						</div>
 						<div class="mui-input-row mui-row">
 							<div class="mui-col-sm-6 mui-col-xs-6">
-								<input type="text" class="mui-input-clear" placeholder="验证码">
+								<input type="text" value="" name="code" class="mui-input-clear" placeholder="验证码">
 							</div>
-							<div class="mui-col-sm-5 mui-col-xs-5"><button id="submit" class="mui-btn mui-btn-primary mui-btn-outlined mui-text-center">获取验证码</button>
+							<div class="mui-col-sm-5 mui-col-xs-5">
+								<button id="send_btn" type="button" class="mui-btn mui-btn-primary mui-btn-outlined mui-text-center" onclick="sendmsg()">获取验证码
+								</button>
 							</div>
 							<div class="mui-col-sm-1 mui-col-xs-1">
 							</div>
@@ -69,8 +72,8 @@
 						<div class="mui-button-row">
 						</div>
 						<div class="mui-button-row">
-							<button type="button" class="mui-btn mui-btn-primary" onclick="return false;">确认</button>&nbsp;&nbsp;
-							<button type="button" class="mui-btn mui-btn-danger" onclick="return false;">取消</button>
+							<button type="submit" class="mui-btn mui-btn-primary">确认</button>&nbsp;&nbsp;
+							<button type="button" class="mui-btn mui-btn-danger" >取消</button>
 						</div>
 						<div class="mui-button-row">
 						</div>
@@ -149,10 +152,11 @@
 			mui.init();
 
             var reSentTime = 60;
+
             function sendmsg(){
                 if($('#send_btn').hasClass('gray_btn'))return;
                 if($('input[name="mobile"]').size()>0 && $('input[name="mobile"]').val().length!=11){
-                    $.Dialog.fail("请填写正确的手机号码!");
+                    mui.toast('请输入正确的手机号码!');
                     return;
                 }
 
@@ -168,6 +172,7 @@
                 var url = "{:U('Home/Index/sendMsg')}";
 
                 $.post(url,{mobile:mobile, __hash__: hash},function(res){
+                    return;
                     //TODO
 					/*console.log("HASH is: ", hash);
 					 console.log("Return is: ", res);*/
@@ -190,12 +195,12 @@
                 // $('#form').submit();
                 //判断
                 if($('input[name="mobile"]').size()>0 && $('input[name="mobile"]').val().length!=11){
-                    $.Dialog.fail("请填写正确的手机号码!");
+                    mui.toast('请输入正确的手机号码!');
                     return;
                 }
 
 
-                $.Dialog.loading();
+                //$.Dialog.loading();
                 $.ajax({
                     url:'{$post_url}',
                     type:'post',
@@ -206,10 +211,10 @@
                         //$.Dialog.close();
                         if(json.status==1){
 
-                            $.Dialog.success(json.info);
+                            mui.toast(json.info);
                             //alert('2');
                         }else{
-                            $.Dialog.fail(json.info);
+                            mui.toast(json.info);
                             //alert('3');
                         }
                         if(json.url!=""){
@@ -219,7 +224,8 @@
                         }
                     },
                     error:function(){
-                        $.Dialog.close();
+                        mui.toast("出错啦！");
+						//$.Dialog.close();
                         //$.Dialog.fail();
                     }
                 });

@@ -44,6 +44,7 @@ class WapUcenterController extends WapBaseController
             $this->assign('bind_count', $bind_count);
             $this->assign('student', $student);
             $this->assign('school', $this->school);
+            $this->assign('page_title', '【'. $this->school . '】：个人中心');
             $this->display();
         }
     }
@@ -113,7 +114,7 @@ class WapUcenterController extends WapBaseController
             } else {
                 $url = U ( 'index' );
             }
-
+            $url = addons_url("WeiXiao://WapUcenter/index");
             $this->success ( '绑定成功', $url );
         } else {
             $map['uid'] = $this->uid;
@@ -124,6 +125,7 @@ class WapUcenterController extends WapBaseController
             }
             $follow = M("apps_follow")->where($map)->find();
             $user = M("user")->where($map)->find();
+            $user['mobile'] = $follow['mobile']; //Mobile is stored in apps_follow table and can be updated.
             if (($follow == NUll) || ($user == NULL )) { //Not subscribed or not in WeiXin
                 $this->error("请微信中打开！");
                 return;
@@ -136,6 +138,7 @@ class WapUcenterController extends WapBaseController
                 $this->assign('student', $student);
                 $this->assign ( 'meta_title', '绑定手机' );
                 $this->assign('school', $this->school);
+                $this->assign('page_title', '【'. $this->school . '】：手机验证');
                 $this->display ('bind_phone');
             }
            ;

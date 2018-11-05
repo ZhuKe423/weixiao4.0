@@ -21,7 +21,16 @@ class WapStudymaterialController extends WapBaseController
                         '8' =>'学习方法',
                         '9' =>'通用'];
 
-    protected $cat2 = ['1' => '高中', '2' => '初中', '3' => '小学', '4' => '综合'];
+    protected $cat2 = ['1' => '高中', '2' => '初中', '3' => '小学', '4' => '综合',
+                        '7' => '初一',
+                        '8' => '初二',
+                        '9' => '初三',
+                        '10' => '高一',
+                        '11' => '高二',
+                        '12' => '高三'
+                        ];
+
+    protected $cat3 = ['ma' => '数学', 'en' => '英语', 'cn' => '语文', 'ph' => '物理', 'ch' => '化学', 'bi' => '生物'];
 
     public function __construct() {
         if (_ACTION == 'show') {
@@ -44,8 +53,10 @@ class WapStudymaterialController extends WapBaseController
         $model = D('WxyStudyMaterial');
         $cat1 = I('cat1');
         $cat2 = I('cat2');
+        $cat3 = I('cat3');
         $cat1 == '' || $map['type'] = $this->cat1[$cat1];
         $cat2 == '' || $map['stage'] = $this->cat2[$cat2];
+        $cat3 == '' || $map['subject'] = $this->cat3[$cat3];
         $data = $model->where($map)->order('id desc')->limit(0,10)->select();
         foreach($data as $key=>$vo) {
             if ((intval($vo['image_id']) == 0) && intval($vo['image_material'])) {
@@ -57,9 +68,14 @@ class WapStudymaterialController extends WapBaseController
                 $data[$key]['image_id'] = 934; //logo
             }
         }
-
+        $title = '【'. $this->school . '】题库';
+        $cat1 == '' || $title = $title . '：' . $this->cat1[$cat1];
+        $cat2 == '' || $title = $title . '：' . $this->cat2[$cat2];
+        $cat3 == '' || $title = $title . '：' . $this->cat3[$cat3];
+        $this->assign('page_title', $title);
         $this->assign('cat1', $cat1);
         $this->assign('cat2', $cat2);
+        $this->assign('cat3', $cat3);
         $this->assign('data', $data);
         //dump($data);
         $this->display();
@@ -72,10 +88,13 @@ class WapStudymaterialController extends WapBaseController
             $page = intval(I('post.page'));
             $cat1 = I('post.cat1');
             $cat2 = I('post.cat2');
+            $cat3 = I('post.cat3');
 
             $map['token'] = $this->token;
             $cat1 == '' || $map['type'] = $this->cat1[$cat1];
             $cat2 == '' || $map['stage'] = $this->cat2[$cat2];
+            $cat3 == '' || $map['subject'] = $this->cat3[$cat3];
+
             $row = isset ( $_REQUEST ['list_row'] ) ? intval ( $_REQUEST ['list_row'] ) : 12;
             $data = $model->where($map)->order('id desc')->page ( $page, $row )->select();
             foreach($data as $key=>$vo) {
@@ -96,8 +115,16 @@ class WapStudymaterialController extends WapBaseController
             $page = I('page');
             $cat1 = I('cat1');
             $cat2 = I('cat2');
+            $cat3 = I('cat3');
+
+            $title = '【'. $this->school . '】题库列表';
+            $cat1 == '' || $title = $title . "：" . $this->cat1[$cat1];
+            $cat2 == '' || $title = $title . "：" . $this->cat2[$cat2];
+            $cat3 == '' || $title = $title . "：" . $this->cat3[$cat3];
+            $this->assign('page_title', $title);
             $this->assign('cat1', $cat1);
             $this->assign('cat2', $cat2);
+            $this->assign('cat3', $cat3);
             $this->display('lists');
         }
 
@@ -130,6 +157,7 @@ class WapStudymaterialController extends WapBaseController
             $this->assign('docid', $map['id']);
             $this->assign('data', $data);
             $this->assign('user', $user);
+            $this->assign('page_title', $data['title']);
             $this->display();
         }
     }

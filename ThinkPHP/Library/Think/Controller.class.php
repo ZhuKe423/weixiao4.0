@@ -959,7 +959,7 @@ abstract class Controller {
 			$db_field = $fields;
 		}
 		$data = M ( $name )->field ( $db_field )->where ( $map )->order ( $order )->page ( $page, $row )->select ();
-		// dump ( $data );
+		//dump ( $data );
 		if ($parseData) {
 			$data = $this->parseData ( $data, $dataTable->fields, $dataTable->list_grid, $dataTable->config );
 		}

@@ -3,52 +3,52 @@
 	#refreshContainer {
 		top: 3.6rem;
 	}
+
 </style>
 
 
 <body>
 
 	<header class="mui-bar mui-bar-nav header">
-		<a class="mui-icon mui-icon-left-nav mui-pull-left" href="{:U('index')}"></a>
+		<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" href="{:U('index')}"></a>
 		<a class="mui-icon mui-icon-bars mui-pull-right" href="javascript:;" id="menu-btn"></a>
 		<h1 class="mui-title"><a href=""><img src="{:ADDON_PUBLIC_PATH}/MUI/images/haha_logo_t.png"/></a></h1>
 	</header>
 	<!--显示下拉-->
 	<div id="menu-wrapper" class="menu-wrapper hidden">
-		<div id="menu" class="menu">
-			<a class="current" href="{:U('lists?cat2=1&cat1='.$cat1)}">高中</a>
-			<a href="{:U('lists?cat2=2&cat1='.$cat1)}">初中</a>
-			<!--<a href="{:U('lists?cat2=1')}">小学</a>
-			<a href="{:U('lists?cat2=1')}">综合</a>-->
-		</div>
+		<!--<div id="menu" class="menu">
+			<a class="current" href="index.html">首页</a>
+			<a href="evaluation.html">测评</a>
+			<a href="special.html">专题</a>
+			<a href="ranking.html">排行榜</a>
+			<a href="category.html">类别</a>
+		</div>-->
 	</div>
 	<div id="menu-backdrop" class="menu-backdrop"></div>
 
 
 	<div class="mui-content">
-
 		<div class="classify">
 			<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
-				<div class="mui-scroll"  id="item_select">
-					<a href="{:U('index?cat1=1')}" class="item"  id="item_1">
-						<img src="{:ADDON_PUBLIC_PATH}/MUI/images/zhentibaodian1.jpg" />
+				<div class="mui-scroll">
+					<a href="{:U('lists?cat1=1')}" class="item">
+						<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx4.png" />
 						<p>真题宝典</p>
 					</a>
-					<a href="{:U('index?cat1=2')}" class="item" id="item_2">
-						<img src="{:ADDON_PUBLIC_PATH}/MUI/images/qiaosimiaojie1.jpg" />
+					<a href="{:U('lists?cat1=2')}" class="item">
+						<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx2.jpg" />
 						<p>巧思妙解</p>
 					</a>
-					<a href="{:U('index?cat1=3')}" class="item" id="item_3">
-						<img src="{:ADDON_PUBLIC_PATH}/MUI/images/meizhouyibo1.jpg" />
+					<a href="{:U('lists?cat1=3')}" class="item">
+						<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx5.jpg" />
 						<p>每周一拨</p>
 					</a>
-					<a href="{:U('index?cat1=4')}" class="item" id="item_4">
-						<img src="{:ADDON_PUBLIC_PATH}/MUI/images/dengnilaihai1.jpg" />
+					<a href="{:U('lists?cat1=4')}" class="item">
+						<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx6.png" />
 						<p>等你来嗨</p>
 					</a>
 					<input type="hidden" name="cat1" value="{$cat1}" class="mui-input-clear">
 					<input type="hidden" name="cat2" value="{$cat2}" class="mui-input-clear">
-					<input type="hidden" name="cat3" value="{$cat3}" class="mui-input-clear">
 				</div>
 			</div>
 		</div>
@@ -138,17 +138,11 @@
         var page = 1;
         var cat1 = $('input[name="cat1"]').val();
         var cat2 = $('input[name="cat2"]').val();
-        var cat3 = $('input[name="cat3"]').val();
 
-		function pullfresh(res) {
+            function pullfresh(res) {
             var url = "{:U('WeiXiao/WapStudymaterial/lists')}";
-            $.post(url, {cat1: cat1, cat2: cat2, cat3: cat3, page: page}, function(res) {
-                if (res != false)
-                    page++;
-                else
-                    if (page == 1) mui.alert('资料正在组织中，敬请期待!', '没有数据', function() {
-                        page = 1;
-                	});
+            $.post(url, {cat1: cat1, cat2: cat2, page: page}, function(res) {
+                if (res != false) page++;
                 /*console.log('res is: ', res);
                 console.log('PAGE IS: ', page);*/
                 setTimeout(function() {
@@ -169,7 +163,6 @@
                 }, 1500);
 			});
         }
-
 	</script>
 	
 	

@@ -2167,11 +2167,11 @@ function int_to_string(&$data, $map = array('status'=>array(1=>'正常',-1=>'删
 	}
 	return $data;
 }
-function importFormExcel($attach_id, $column, $dateColumn = array(), $start_row = 2) {
+function importFormExcel($attach_id, $column, $dateColumn = array(), $start_row = 2) { //Read Excel row by row.
 	$attach_id = intval ( $attach_id );
 	$res = array (
 			'status' => 0,
-			'data' => '' 
+			'data' => ''
 	);
 	if (empty ( $attach_id ) || ! is_numeric ( $attach_id )) {
 		$res ['data'] = '112001:上传文件ID无效！';
@@ -2180,7 +2180,6 @@ function importFormExcel($attach_id, $column, $dateColumn = array(), $start_row 
 	$file = M ( 'file' )->where ( 'id=' . $attach_id )->find ();
 	$root = C ( 'DOWNLOAD_UPLOAD.rootPath' );
 	$filename = SITE_PATH . '/Uploads/Download/' . $file ['savepath'] . $file ['savename'];
-	// dump($filename);
 	if (! file_exists ( $filename )) {
 		$res ['data'] = '112002:上传的文件失败';
 		return $res;
@@ -2190,11 +2189,11 @@ function importFormExcel($attach_id, $column, $dateColumn = array(), $start_row 
 		$res ['data'] = '112003:文件格式不对，请上传xls,xlsx格式的文件';
 		return $res;
 	}
-	
+
 	vendor ( 'PHPExcel' );
 	vendor ( 'PHPExcel.PHPExcel_IOFactory' );
 	vendor ( 'PHPExcel.Reader.Excel5' );
-	
+
 	switch (strtolower ( $extend )) {
 		case 'csv' :
 			$format = 'CSV';
@@ -2208,7 +2207,7 @@ function importFormExcel($attach_id, $column, $dateColumn = array(), $start_row 
 			$format = 'Excel2007';
 			$objReader = \PHPExcel_IOFactory::createReader ( $format );
 	}
-	
+
 	$objPHPExcel = $objReader->load ( $filename );
 	$objPHPExcel->setActiveSheetIndex ( 0 );
 	$sheet = $objPHPExcel->getSheet ( 0 );
@@ -2228,12 +2227,12 @@ function importFormExcel($attach_id, $column, $dateColumn = array(), $start_row 
 				$addData [$v] = trim ( ( string ) $objPHPExcel->getActiveSheet ()->getCell ( $k . $j )->getValue () );
 			}
 		}
-		
+
 		$isempty = true;
 		foreach ( $column as $v ) {
 			$isempty && $isempty = empty ( $addData [$v] );
 		}
-		
+
 		if (! $isempty)
 			$result [$j] = $addData;
 		else
@@ -2242,6 +2241,109 @@ function importFormExcel($attach_id, $column, $dateColumn = array(), $start_row 
 	$res ['status'] = 1;
 	$res ['data'] = $result;
 	return $res;
+}
+function importFormExcel_Column($attach_id, $row, $dateRow = array(), $start_column = 'A') { //Read Excel column by column.
+    if (strlen($start_column) > 1) {
+        $res['status'] = 0;
+        $res ['data'] = null;
+        return $res;
+    }
+    $attach_id = intval ( $attach_id );
+    $res = array (
+        'status' => 0,
+        'data' => ''
+    );
+    if (empty ( $attach_id ) || ! is_numeric ( $attach_id )) {
+        $res ['data'] = '112001:上传文件ID无效！';
+        return $res;
+    }
+    $file = M ( 'file' )->where ( 'id=' . $attach_id )->find ();
+    $root = C ( 'DOWNLOAD_UPLOAD.rootPath' );
+    $filename = SITE_PATH . '/Uploads/Download/' . $file ['savepath'] . $file ['savename'];
+    // dump($filename);
+    if (! file_exists ( $filename )) {
+        $res ['data'] = '112002:上传的文件失败';
+        return $res;
+    }
+    $extend = $file ['ext'];
+    if (! ($extend == 'xls' || $extend == 'xlsx' || $extend == 'csv')) {
+        $res ['data'] = '112003:文件格式不对，请上传xls,xlsx格式的文件';
+        return $res;
+    }
+
+    vendor ( 'PHPExcel' );
+    vendor ( 'PHPExcel.PHPExcel_IOFactory' );
+    vendor ( 'PHPExcel.Reader.Excel5' );
+
+    switch (strtolower ( $extend )) {
+        case 'csv' :
+            $format = 'CSV';
+            $objReader = \PHPExcel_IOFactory::createReader ( $format )->setDelimiter ( ',' )->setInputEncoding ( 'GBK' )->setEnclosure ( '"' )->setLineEnding ( "\r\n" )->setSheetIndex ( 0 );
+            break;
+        case 'xls' :
+            $format = 'Excel5';
+            $objReader = \PHPExcel_IOFactory::createReader ( $format );
+            break;
+        default :
+            $format = 'Excel2007';
+            $objReader = \PHPExcel_IOFactory::createReader ( $format );
+    }
+
+    $objPHPExcel = $objReader->load ( $filename );
+    $objPHPExcel->setActiveSheetIndex ( 0 );
+    $sheet = $objPHPExcel->getSheet ( 0 );
+    //$highestRow = $sheet->getHighestRow (); // 取得总行数
+    $highestColumn = $sheet->getHighestDataColumn(); //取得总列数
+    $start_no = ord($start_column);
+    $max_colum = 0;
+    $len = strlen($highestColumn);
+    if (strlen($highestColumn) > 2) { //目前算法暂时处理到ZZ列以内的表格。过大的表格不予读取！
+        $res['status'] = 0;
+        $res ['data'] = null;
+        return $res;
+    }
+    for ($i = 0; $i < $len; $i++) {
+        $max_colum += (ord($highestColumn{$i}) - 64) * pow(26,$len - $i - 1);
+    }
+    $base = '';
+    $l = 0;
+    $m = 65;
+
+    for($j = 0; $j < $max_colum; $j ++) {
+        $char = chr(ord($start_column) + $l++);
+        $column = $base . $char;
+        if ($char == 'Z') {
+            $l = 0;
+            $base = chr($m++);
+        }
+        $addData = array ();
+        foreach ( $row as $k => $v ) {
+            if ($dateRow) {
+                foreach ( $dateRow as $d ) {
+                    if ($k == $d) {
+                        $addData [$v] = gmdate ( "Y-m-d H:i:s", PHPExcel_Shared_Date::ExcelToPHP ( $objPHPExcel->getActiveSheet ()->getCell ( "$column$k" )->getValue () ) );
+                    } else {
+                        $addData [$v] = trim ( ( string ) $objPHPExcel->getActiveSheet ()->getCell ( $column . $k )->getValue () ); //A1 ~ZZxxxx
+                    }
+                }
+            } else {
+                $addData [$v] = trim ( ( string ) $objPHPExcel->getActiveSheet ()->getCell ( $column . $k )->getValue () );
+            }
+        }
+
+        $isempty = true;
+        foreach ( $row as $v ) {
+            $isempty && $isempty = empty ( $addData [$v] );
+        }
+
+        if (! $isempty)
+            $result [$j] = $addData;
+        else
+            continue;  //add this line to avoid endless circulation but the data row shall be full filed.
+    }
+    $res ['status'] = 1;
+    $res ['data'] = $result;
+    return $res;
 }
 function showNewIcon($time, $day = 3) {
 	$img = '';
