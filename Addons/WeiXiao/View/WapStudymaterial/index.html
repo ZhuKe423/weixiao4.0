@@ -28,6 +28,7 @@
 		-webkit-filter: drop-shadow(5px 5px 5px #666);
 		filter: drop-shadow(5px 5px 5px #666);
 	}
+
 </style>
 <body>
 	
@@ -155,6 +156,7 @@
 							<input type="hidden" name="cat1" value="{$cat1}" class="mui-input-clear">
 							<input type="hidden" name="cat2" value="{$cat2}" class="mui-input-clear">
 							<input type="hidden" name="cat3" value="{$cat3}" class="mui-input-clear">
+							<input type="hidden" name="cat4" value="{$cat4}" class="mui-input-clear">
 						</div>
 					</div>
 				</div>
@@ -171,6 +173,11 @@
 							</li>
 							<li class="mui-col-sm-5 mui-col-xs-5">
 								<span id="subject_label">【科目】：</span>
+							</li>
+							<li id="problem_selector" class="mui-col-sm-6 mui-col-xs-6 mui-hidden">
+								<span id="problem_label">【来源】：</span>
+							</li>
+							<li class="mui-col-sm-4 mui-col-xs-4">
 							</li>
 							<li class="mui-col-sm-2 mui-col-xs-2">
 								<button type="submit" class="mui-btn mui-btn-primary btn_submit">
@@ -248,6 +255,24 @@
 							</li>
 							<li class="mui-col-sm-12 mui-col-xs-12">
 
+							</li>
+
+						</ul>
+						<ul id="selector3" class="mui-table-view mui-row mui-hidden">
+							<li class="mui-col-sm-4 mui-col-xs-4">
+								<button id="problem_1" type="button" class="mui-btn">
+									<img src="{:ADDON_PUBLIC_PATH}/MUI/images/problem_qualify.png">
+								</button>
+							</li>
+							<li class="mui-col-sm-4 mui-col-xs-4">
+								<button id="problem_2" type="button" class="mui-btn">
+									<img src="{:ADDON_PUBLIC_PATH}/MUI/images/problem_jingsai.png">
+								</button>
+							</li>
+							<li class="mui-col-sm-4 mui-col-xs-4">
+								<button id="problem_3" type="button" class="mui-btn">
+									<img src="{:ADDON_PUBLIC_PATH}/MUI/images/problem_school.png">
+								</button>
 							</li>
 						</ul>
 					</div>
@@ -347,6 +372,7 @@
         var type_label =  document.getElementById("type_label");
         var grade_label = document.getElementById("grade_label");
         var subject_label = document.getElementById("subject_label");
+		var problem_label = document.getElementById("problem_label");
 
         mui("#item_select").on('tap', 'a', function (){
             var id = this.getAttribute("id");
@@ -359,10 +385,16 @@
                 $('input[name="cat1"]').attr('value', str_array[1]);
                 $('#' + id +' img').removeClass('img_shadow');
                 clicked_1 = 1;
+                if (id == "item_1") {
+                    $("#selector3").removeClass("mui-hidden");
+                    $("#problem_selector").removeClass("mui-hidden");
+                }
             }
             else {
                 class_hide.classList.add("mui-hidden");
                 $('#item_select' +' img').addClass('img_shadow');
+                $("#selector3").addClass("mui-hidden");
+                $("#problem_selector").addClass("mui-hidden");
                 clicked_1 = 0;
             }
         });
@@ -378,6 +410,22 @@
                 subject_label.innerText = "【科目】：" + document.getElementById(id).innerText;
                 $('input[name="cat3"]').attr('value', str_array[1]);
             }
+        });
+
+        mui("#selector3").on('tap', 'button', function(){
+            var id = this.getAttribute("id");
+            var str_array = id.split("_");
+            switch (str_array[1]) {
+                case '1':
+                    problem_label.innerText = "【来源】：升学真题";
+                    break;
+                case '2':
+                    problem_label.innerText = "【来源】：竞赛真题";
+                    break;
+                default:
+                    problem_label.innerText = "【来源】：名校真题";
+			}
+			$('input[name="cat4"]').attr('value', str_array[1]);
         });
 
 	</script>

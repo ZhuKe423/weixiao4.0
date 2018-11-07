@@ -1,0 +1,471 @@
+<include file="Home@Public/mobile_head_mui"/>
+<link rel="stylesheet" type="text/css" href="{:ADDON_PUBLIC_PATH}/MUI/css/bundle-e16ae3856f2fe021fa6c.css?v={:SITE_VERSION}">
+
+		<style>
+			@media screen and (min-width: 320px) {
+				html {
+					font-size: 50px;
+				}
+			}
+			
+			@media screen and (min-width: 360px) {
+				html {
+					font-size: 56.25px;
+				}
+			}
+			
+			@media screen and (min-width: 375px) {
+				html {
+					font-size: 58.59375px;
+				}
+			}
+			
+			@media screen and (min-width: 400px) {
+				html {
+					font-size: 62.5px;
+				}
+			}
+			
+			@media screen and (min-width: 414px) {
+				html {
+					font-size: 64.6875px;
+				}
+			}
+			
+			@media screen and (min-width: 440px) {
+				html {
+					font-size: 68.75px;
+				}
+			}
+			
+			@media screen and (min-width: 480px) {
+				html {
+					font-size: 75px;
+				}
+			}
+			
+			@media screen and (min-width: 520px) {
+				html {
+					font-size: 81.25px;
+				}
+			}
+			
+			@media screen and (min-width: 560px) {
+				html {
+					font-size: 87.5px;
+				}
+			}
+			
+			@media screen and (min-width: 600px) {
+				html {
+					font-size: 93.75px;
+				}
+			}
+			
+			@media screen and (min-width: 640px) {
+				html {
+					font-size: 100px;
+				}
+			}
+			
+			@media screen and (min-width: 680px) {
+				html {
+					font-size: 106.25px;
+				}
+			}
+			
+			@media screen and (min-width: 720px) {
+				html {
+					font-size: 112.5px;
+				}
+			}
+			
+			@media screen and (min-width: 760px) {
+				html {
+					font-size: 118.75px;
+				}
+			}
+			
+			@media screen and (min-width: 800px) {
+				html {
+					font-size: 125px;
+				}
+			}
+			
+			@media screen and (min-width: 960px) {
+				html {
+					font-size: 150px;
+				}
+			}
+			
+			input,
+			button,
+			.mui-btn {
+				margin-top: 10px;
+				margin-bottom: 10px;
+				margin-left: 50px;
+			}
+			
+			.filter_row {
+				width: 100%;
+			}
+			
+			.btn_submit {
+				margin-bottom: 0px;
+				margin-top: -5px;
+			}
+			
+			.img_invert {
+				filter: drop-shadow(5px 5px 5px #666);
+			}
+			
+			.news .news-pic {
+				width: 1.8rem;
+				height: 2.26rem;
+				float: left;
+			}
+			
+			ul .mui-scroll {
+				position: relative;
+			}
+			
+			.ul_scroll {
+				position: relative;
+			}
+			
+			.hot_magazine_box .league_title {
+				display: block;
+				margin-top: 5px;
+				width: 78px;
+				height: 36px;
+				font-size: 13px;
+				line-height: 18px;
+				overflow: hidden;
+			}
+			
+			.double11 .entry.inlineCon {
+				background-color: transparent;
+				background-position: bottom;
+				background-repeat: no-repeat;
+				background-size: 100% auto;
+				margin-bottom: 0;
+				padding-top: .9rem;
+				height: 5.055rem;
+				position: absolute;
+				z-index: 2;
+				top: 2.4rem;
+			}
+			
+			.buld-wrapper .btn-consult {
+				margin-top: .3733rem;
+				margin-left: .16rem;
+				background: url({:ADDON_PUBLIC_PATH}/MUI/images/consult.png) no-repeat;
+				background-size: contain;
+				width: 1.2267rem;
+				height: 1.2267rem;
+				display: block;
+				z-index: 9999;
+			}
+			
+			.buld-wrapper {
+				position: fixed;
+				bottom: 2.4rem;
+				right: .4267rem;
+				z-index: 9999;
+			}
+
+			.mui-slider .mui-slider-group .mui-slider-item img {
+				width: 100%;
+				height: 156px;
+			}
+
+
+		</style>
+	</head>
+
+	<body>
+
+		<!-- 主界面不动、菜单移动 -->
+		<!-- 侧滑导航根容器 -->
+		<div id="offCanvasWrapper" class="mui-off-canvas-wrap mui-draggable">
+			<!-- 菜单容器 -->
+			<aside class="mui-off-canvas-left" id="offCanvasSide">
+				<div id="offCanvasSideScroll" class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+
+						<div id="menu-backdrop" class="menu-backdrop"></div>
+					</div>
+				</div>
+			</aside>
+			<!-- 主页面容器 -->
+			<div class="mui-inner-wrap">
+				<!-- 主页面标题 -->
+				<header class="mui-bar mui-bar-nav header">
+					<a class="mui-icon mui-action-menu mui-icon-bars mui-pull-left" href="#offCanvasSide"></a>
+					<h1 class="mui-title"><a href=""><img src="{:ADDON_PUBLIC_PATH}/MUI/images/haha_logo.png"/></a></h1>
+					<!--<a class="mui-icon mui-icon-search mui-pull-right" href="search.html"></a>-->
+				</header>
+
+
+				<div id="offCanvasContentScroll" class="mui-content mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<!-- 主界面具体展示内容 -->
+						<div class="mui-content">
+							<!--图片轮播-->
+							<div id="slider" class="mui-slider">
+								<div class="mui-slider-group mui-slider-loop">
+									<div class="mui-slider-item mui-slider-item-duplicate">
+										<a href="{$slides[$slides_count]['url']}">
+											<img src="{$slides[$slides_count]['img']|get_cover_url}">
+										</a>
+									</div>
+									<volist name="slides" id="vo">
+										<div class="mui-slider-item">
+											<a href="{$vo.url}">
+												<img src="{$vo.img|get_cover_url}">
+											</a>
+										</div>
+									</volist>
+									<div class="mui-slider-item mui-slider-item-duplicate">
+										<a href="{$slides['0']['url']}">
+											<img src="{$slides['0']['img']|get_cover_url}">
+										</a>
+									</div>
+								</div>
+								<div class="mui-slider-indicator">
+									<div class="mui-indicator mui-active"></div>
+									<div class="mui-indicator"></div>
+									<div class="mui-indicator"></div>
+									<div class="mui-indicator"></div>
+								</div>
+							</div>
+							<!--导航-->
+							<ul class="nav">
+								<li>
+									<a href="">
+										<img src="{:ADDON_PUBLIC_PATH}/MUI/images/english.png" />
+										<p>初中课程</p>
+									</a>
+								</li>
+								<li>
+									<a href="">
+										<img src="{:ADDON_PUBLIC_PATH}/MUI/images/chemical.png" />
+										<p>高中课程</p>
+									</a>
+								</li>
+								<li>
+									<a href="">
+										<img src="{:ADDON_PUBLIC_PATH}/MUI/images/gonglue.png" />
+										<p>提分计划</p>
+									</a>
+								</li>
+								<li>
+									<a href="{:addons_url('Forms://Wap/index', array('forms_id' => '5'))}">
+										<img src="{:ADDON_PUBLIC_PATH}/MUI/images/strategy.png" />
+										<p>我要报名</p>
+									</a>
+								</li>
+							</ul>
+
+							<!--
+			        	作者：flexpad2011@gmail.com
+			        	时间：2017-06-04
+			        	描述：中考新闻-->
+
+							<!-------------------------->
+
+							<div class="hot_leagues_box hot_magazine_box" id="maghotLeagues">
+								<h3>
+ 									精品推荐
+								</h3>
+								<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+									<ul class="mui-scroll over_slide bindedEvent ul_scroll" style="width: 976px;">
+										<volist name="top_course" id="top_vo">
+											<li>
+												<a href="{:U('detail')}?id={$top_vo.id}">
+													<img src="{$top_vo.img_url}">
+													<i class="icon-jing-pin"></i>
+													<div class="book_root"></div>
+													<span class="league_title">{$top_vo.name}</span>
+												</a>
+											</li>
+										</volist>
+									</ul>
+								</div>
+							</div>
+
+							<!--++++++++++++++++++++++-->
+							<div class="hot_leagues_box hot_magazine_box">
+								<h3>
+			 						专题培训
+			 						<a href="" class="more_magazine">更多</a>
+								</h3>
+								<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+									<ul class="mui-scroll magazine-zt over_slide bindedEvent ul_scroll" style="width: 1224px;">
+										<volist name="typical_slides" id="vo">
+											<if condition="empty($vo['courseid']) neq true">
+												<li class="magazine-zt-li">
+													<a href="{:U('detail')}?id={$vo['courseid']}">
+														<img class="magazine-zt-img" src="{$vo.img|get_cover_url}">
+														<p class="magazine-zt-title">{$vo.title}</p>
+													</a>
+												</li>
+											</if>
+										</volist>
+									</ul>
+								</div>
+							</div>
+
+							<volist name="course_data" id="vo">
+								<div class="hot_leagues_box hot_magazine_box">
+									<h3>
+										{$vo.title}
+										<a href="{:U('list')}" class="more_magazine">更多</a>
+									</h3>
+									<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+										<ul class="mui-scroll over_slide ul_scroll bindedEvent" style="width: 976px;">
+											<volist name="vo['data']" id="ivo">
+											<li>
+												<a href="{:U('detail')}?id={$ivo['id']}">
+													<if condition="$ivo['cover'] gt 0">
+														<img src="{$ivo['cover']|get_cover_url}">
+													<else/>
+														<img src="{:ADDON_PUBLIC_PATH}/MUI/images/{$ivo['img']}">
+													</if>
+
+													<div class="book_root"></div>
+													<span class="league_title">{$ivo['name']}</span>
+												</a>
+											</li>
+											</volist>
+										</ul>
+									</div>
+								</div>
+							</volist>
+
+							<div class="index-title">
+								<span>最新课程</span>
+								<a href="">显示全部<i class="mui-icon mui-icon-arrowright"></i></a>
+							</div>
+							<ul class="news">
+								<volist name="new_data" id="new_vo">
+									<li>
+										<a href="{:U('detail')}?id={$new_vo.id}">
+											<div class="news-pic"><img src="{$new_vo.img_url}"></div>
+											<div class="news-text">
+												<h2>{$new_vo.name}</h2>
+												<p>{$new_vo.breif_intro}</p>
+												<p>{$new_vo.teacher}老师 | {$new_vo.length}课</p>
+												<div class="date">
+													<label class="time">开课时间：{$new_vo.sdate|time_format='Y-m-d'}</label>
+													<label class="view"></label>
+												</div>
+											</div>
+										</a>
+									</li>
+								</volist>
+							</ul>
+
+							<!--
+			        	作者：flexpad2011@gmail.com
+			        	时间：2017-06-04
+			        	描述：中考新闻
+			        -->
+
+						</div>
+
+						<!--广告-->
+						<div class="advantage">
+							<a href=""><img src="{:ADDON_PUBLIC_PATH}/MUI/images/haha_sig3.jpg" /></a>
+						</div>
+
+					</div>
+
+				</div>
+
+				<div class="buld-wrapper" style="bottom: 2.0533rem;">
+					<a href="http://mc.hujiang.com/crm/zx?c=1&amp;jId=8&amp;tp=1004&amp;td=6&amp;utr=10000107" class="btn-consult"></a>
+				</div>
+
+			</div>
+			<div class="mui-off-canvas-backdrop"></div>
+		</div>
+		</div>
+		<script type="text/javascript" charset="utf-8">
+			mui.init();
+			//侧滑容器父节点
+			var offCanvasWrapper = mui('#offCanvasWrapper');
+
+			//主界面容器
+			var offCanvasInner = offCanvasWrapper[0].querySelector('.mui-inner-wrap');
+			//菜单容器
+			var offCanvasSide = document.getElementById("offCanvasSide");
+
+			//移动效果是否为整体移动
+			var moveTogether = false;
+			//侧滑容器的class列表，增加.mui-slide-in即可实现菜单移动、主界面不动的效果；
+			var classList = offCanvasWrapper[0].classList;
+			offCanvasWrapper.offCanvas().refresh();
+
+			//主界面和侧滑菜单界面均支持区域滚动；
+			mui('#offCanvasSideScroll').scroll();
+			mui('#offCanvasContentScroll').scroll();
+			//实现ios平台原生侧滑关闭页面；
+			if(mui.os.plus && mui.os.ios) {
+				mui.plusReady(function() { //5+ iOS暂时无法屏蔽popGesture时传递touch事件，故该demo直接屏蔽popGesture功能
+					plus.webview.currentWebview().setStyle({
+						'popGesture': 'none'
+					});
+				});
+			}
+
+
+			var clicked_1 = 0;
+			var clicked_2 = 0;
+			var clicked_3 = 0;
+			var clicked_4 = 0;
+
+			var class_hide = document.getElementById("problem_filter");
+			var type_label = document.getElementById("type_label");
+			var grade_label = document.getElementById("grade_label");
+			var subject_label = document.getElementById("subject_label");
+
+			mui("#item_select").on('tap', 'a', function() {
+				var id = this.getAttribute("id");
+				message = document.getElementById(id).innerText;
+				if(clicked_1 == 0) {
+					class_hide.classList.remove("mui-hidden");
+					type_label.innerText = message;
+					clicked_1 = 1;
+				} else {
+					class_hide.classList.add("mui-hidden");
+					clicked_1 = 0;
+				}
+			});
+
+			mui("#selector2").on('tap', 'button', function() {
+				var id = this.getAttribute("id");
+				console.log("Selector is: ", id);
+				str_array = id.split("_");
+				if(str_array[0] == 'grade') {
+					grade_label.innerText = "年级：" + document.getElementById(id).innerText;
+				} else {
+					subject_label.innerText = "科目：" + document.getElementById(id).innerText;
+				}
+			});
+		</script>
+
+		<!--
+    	作者：flexpad2011@gmail.com
+    	时间：2017-06-04
+    	描述：侧滑菜单
+    -->
+		<!--显示下拉-->
+
+		<script type="text/javascript" src="__STATIC__/jquery-2.0.3.min.js?v={:SITE_VERSION}"></script>
+		<!--<script type="text/javascript" src="js/mui.js"></script>-->
+		<script type="text/javascript" src="{:ADDON_PUBLIC_PATH}/MUI/js/app.js?v={:SITE_VERSION}"></script>
+		<!--<script type="text/javascript" scr="school/js/basic.js"></script>-->
+	</body>
+
+</html>

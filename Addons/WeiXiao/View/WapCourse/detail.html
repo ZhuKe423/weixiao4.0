@@ -1,0 +1,41 @@
+<include file="Home@Public/mobile_head"/>
+<link href="__ROOT__/{:CUSTOM_TEMPLATE_PATH}Detail/V2/detail.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+
+<body id="weisite">
+<div class="container">
+    <div class="detail">
+        <h6 class="title">{$course.name}</h6>
+        <p class="info"><span class="colorless">适合年级：{$grade}年级，        上课老师：{$course.teacher}老师</span></p>
+        <p class="info"><span class="colorless">开课时间：{$course.sdate|time_format='Y-m-d'}，   课时数：{$course.length}</span></p>
+
+        <section class="content">
+            <notempty name="course.cover"><p><img src="{$course.cover|get_cover_url}"/></p></notempty>
+            {$course.intro|htmlspecialchars_decode}
+            <p class="info"><span class="colorless"><a href=""><img src="{:ADDON_PUBLIC_PATH}/MUI/images/haha_sig3.jpg" /></a></span></p>
+        </section>
+
+    </div>
+</div>
+<!-- 底部导航 -->
+{$footer_html}
+<!-- 统计代码 -->
+<notempty name="config.code">
+    <p class="hide bdtongji">
+        {$config.code}
+    </p>
+    <else />
+    <p class="hide bdtongji">
+        {$tongji_code}
+    </p>
+</notempty>
+</body>
+<script type="text/javascript">
+    $('.container').css('min-height',$(window).height());
+    $.WeiPHP.initWxShare({
+            title:"{$course.name}",
+            imgUrl:"{$cover_img}",
+            desc:"{$brief_intro}",
+            link:window.location.href
+    })
+</script>
+</html>

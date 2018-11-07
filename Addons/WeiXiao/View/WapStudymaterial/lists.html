@@ -49,6 +49,7 @@
 					<input type="hidden" name="cat1" value="{$cat1}" class="mui-input-clear">
 					<input type="hidden" name="cat2" value="{$cat2}" class="mui-input-clear">
 					<input type="hidden" name="cat3" value="{$cat3}" class="mui-input-clear">
+					<input type="hidden" name="cat4" value="{$cat4}" class="mui-input-clear">
 				</div>
 			</div>
 		</div>
@@ -139,10 +140,11 @@
         var cat1 = $('input[name="cat1"]').val();
         var cat2 = $('input[name="cat2"]').val();
         var cat3 = $('input[name="cat3"]').val();
+        var cat4 = $('input[name="cat4"]').val();
 
 		function pullfresh(res) {
             var url = "{:U('WeiXiao/WapStudymaterial/lists')}";
-            $.post(url, {cat1: cat1, cat2: cat2, cat3: cat3, page: page}, function(res) {
+            $.post(url, {cat1: cat1, cat2: cat2, cat3: cat3, cat4: cat4, page: page}, function(res) {
                 if (res != false)
                     page++;
                 else

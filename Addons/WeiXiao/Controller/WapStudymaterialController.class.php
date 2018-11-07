@@ -32,6 +32,10 @@ class WapStudymaterialController extends WapBaseController
 
     protected $cat3 = ['ma' => '数学', 'en' => '英语', 'cn' => '语文', 'ph' => '物理', 'ch' => '化学', 'bi' => '生物'];
 
+    protected $cat4;
+
+    protected $config;
+
     public function __construct() {
         if (_ACTION == 'show') {
             $GLOBALS ['is_wap'] = true;
@@ -40,6 +44,8 @@ class WapStudymaterialController extends WapBaseController
         $this->model = $this->getModel('WxyStudyMaterial'); //getModelByName ( $_REQUEST ['_controller'] );
         $this->token = get_token();
         $this->school = D('Common/Apps')->getInfoByToken($this->token, 'public_name');
+        $this->config = getAddonConfig ( 'WeiXiao' );
+        $this->cat4 = $this->config['problem_type'];
         /*var_dump($this->model);
         var_dump($_REQUEST ['_controller']);
 
@@ -89,12 +95,12 @@ class WapStudymaterialController extends WapBaseController
             $cat1 = I('post.cat1');
             $cat2 = I('post.cat2');
             $cat3 = I('post.cat3');
-
+            intval($cat1) == 1 && $cat4 = I('post.cat4');
             $map['token'] = $this->token;
             $cat1 == '' || $map['type'] = $this->cat1[$cat1];
             $cat2 == '' || $map['stage'] = $this->cat2[$cat2];
             $cat3 == '' || $map['subject'] = $this->cat3[$cat3];
-
+            $cat4 == '' || $map['problem_type'] = $this->cat4[$cat4];
             $row = isset ( $_REQUEST ['list_row'] ) ? intval ( $_REQUEST ['list_row'] ) : 12;
             $data = $model->where($map)->order('id desc')->page ( $page, $row )->select();
             foreach($data as $key=>$vo) {
@@ -116,15 +122,20 @@ class WapStudymaterialController extends WapBaseController
             $cat1 = I('cat1');
             $cat2 = I('cat2');
             $cat3 = I('cat3');
+            intval($cat1) == '1' && $cat4 = I('cat4');
 
             $title = '【'. $this->school . '】题库列表';
             $cat1 == '' || $title = $title . "：" . $this->cat1[$cat1];
             $cat2 == '' || $title = $title . "：" . $this->cat2[$cat2];
             $cat3 == '' || $title = $title . "：" . $this->cat3[$cat3];
+            $cat4 == '' || $title = $title . "：" . $this->cat4[$cat4];
+
+            //dump($this->cat4[$cat4]);
             $this->assign('page_title', $title);
             $this->assign('cat1', $cat1);
             $this->assign('cat2', $cat2);
             $this->assign('cat3', $cat3);
+            $this->assign('cat4', $cat4);
             $this->display('lists');
         }
 
