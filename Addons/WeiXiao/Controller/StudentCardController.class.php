@@ -231,6 +231,7 @@ class StudentCardController extends ManageBaseController
             if (!intval($data['file'])) $this->error("数据文件未上传！");
             $import_model = M('WxyModelImport');
             $import_model->add($data);
+//            $this->import_student_data_from_excel($data['file']);
             if ($this->import_student_data_from_excel($data['file'])) //import student data from uploaded Excel file.
                 $this->success('保存成功！', U('lists'/*'import?model=' . $this->model ['name'], $this->get_param */), 600);
             else
@@ -317,13 +318,14 @@ class StudentCardController extends ManageBaseController
     private function import_student_data_from_excel($file_id) {
         $data = array();
         $column = array (
-            'A' => 'studentno',  //姓名
+            'A' => 'studentno',
             'B'=>'grade',
             'C'=>'name',
-            'D'=>'school',
-            'E'=>'phone',
-            'F'=>'phone_bck',
-            'L'=>'pay_status',
+            'D'=>'gender',
+            'E'=>'school',
+            'F'=>'phone',
+            'G'=>'phone_bck',
+            'M'=>'pay_status',
         );
         $data = importFormExcel($file_id, $column, array(), 4); //read excel file from start_row!
         //var_dump($data);
@@ -336,11 +338,23 @@ class StudentCardController extends ManageBaseController
                 $row['uid'] = $this->uid;
                 $row['phone'] = strval($row['phone']);
                 $row['phone_bck'] = strval($row['phone_bck']);
+
                 $row['pay_status'] = strval($row['pay_status']);
                 $row['gender'] = ($row['gender'] == '男') ? 1 : 0;
                 if ($row['gender'] == '女') $row['gender'] = 2;
+                $map['token'] =$row['token'];
+                $map['studentno'] =$row['studentno'];
+                $map['grade'] =$row['grade'];
 
-                $student_model->addStudent($row);
+                if(empty($student_model->where($map)->find())){
+                    //                   // dump(123);
+                    $student_model->addStudent($row);
+                }
+                else{
+//                    echo(123);
+//                    dump($row);
+                    $student_model->where($map)->save($row);
+                }
             }
 
             return true;

@@ -37,8 +37,8 @@ class WapUcenterController extends WapBaseController
             $this->error("请微信中打开！");
             return;
         } else {
-            $bind_count = $this->get_bind_count($user['mobile']);
-            $student = $this->get_bind_students($user['mobile']);
+            $bind_count = $this->get_bind_count($follow['mobile']);
+            $student = $this->get_bind_students($follow['mobile']);
             $user['has_subscribe'] = $follow['has_subscribe'];
             $this->assign('user', $user);
             $this->assign('bind_count', $bind_count);
@@ -164,6 +164,7 @@ class WapUcenterController extends WapBaseController
         foreach ($data1 as $key=>$vo) {
             array_push($data0, $vo);
         }
+
         return $data0;
     }
 }

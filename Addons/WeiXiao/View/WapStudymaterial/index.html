@@ -5,7 +5,7 @@
 	.mui-btn {
 		margin-top: 10px;
 		margin-bottom: 10px;
-		margin-left: 50px;
+		margin-left: 20px;
 	}
 
 	.filter_row {
@@ -14,7 +14,6 @@
 
 	.btn_submit {
 		margin-bottom: 0px;
-		margin-top: -5px;
 		margin-left: 2px;
 	}
 	.title_li {
@@ -138,19 +137,19 @@
 					<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
 						<div class="mui-scroll"  id="item_select">
 							<a href="#" class="item"  id="item_1">
-								<img class="img_shadow" src="{:ADDON_PUBLIC_PATH}/MUI/images/zhentibaodian1.jpg" />
+								<img id="item_1_img" class="img_shadow img_blank" src="{:ADDON_PUBLIC_PATH}/MUI/images/zhentibaodian1.jpg" />
 								<p>真题宝典</p>
 							</a>
 							<a href="#" class="item" id="item_2">
-								<img class="img_shadow" src="{:ADDON_PUBLIC_PATH}/MUI/images/qiaosimiaojie1.jpg" />
+								<img id="item_2_img" class="img_shadow img_blank" src="{:ADDON_PUBLIC_PATH}/MUI/images/qiaosimiaojie1.jpg" />
 								<p>巧思妙解</p>
 							</a>
 							<a href="#" class="item" id="item_3">
-								<img class="img_shadow" src="{:ADDON_PUBLIC_PATH}/MUI/images/meizhouyibo1.jpg" />
+								<img id="item_3_img" class="img_shadow img_blank" src="{:ADDON_PUBLIC_PATH}/MUI/images/meizhouyibo1.jpg" />
 								<p>每周一拨</p>
 							</a>
 							<a href="#" class="item" id="item_4">
-								<img class="img_shadow" src="{:ADDON_PUBLIC_PATH}/MUI/images/dengnilaihai1.jpg" />
+								<img id="item_4_img" class="img_shadow img_blank" src="{:ADDON_PUBLIC_PATH}/MUI/images/dengnilaihai1.jpg" />
 								<p>等你来嗨</p>
 							</a>
 							<input type="hidden" name="cat1" value="{$cat1}" class="mui-input-clear">
@@ -165,8 +164,13 @@
 				<div id="problem_filter" class="mui-card mui-hidden">
 					<div class="mui-card-header">
 						<ul class="mui-table-view mui-row filter_row">
-							<li class="mui-col-sm-12 mui-col-xs-12 title_li">
+							<li class="mui-col-sm-10 mui-col-xs-10 title_li">
 								<span id="type_label"></span>
+							</li>
+							<li class="mui-col-sm-2 mui-col-xs-2">
+								<button type="submit" class="mui-btn mui-btn-primary btn_submit">
+									Go!
+								</button>
 							</li>
 							<li class="mui-col-sm-5 mui-col-xs-5">
 								<span id="grade_label">【年级】：</span>
@@ -179,75 +183,71 @@
 							</li>
 							<li class="mui-col-sm-4 mui-col-xs-4">
 							</li>
-							<li class="mui-col-sm-2 mui-col-xs-2">
-								<button type="submit" class="mui-btn mui-btn-primary btn_submit">
-									Go!
-								</button>
-							</li>
+
 						</ul>
 					</div>
 					<div class="mui-card-content">
 						<ul id="selector2" class="mui-table-view mui-row">
 							<li class="mui-table-view-cell">
-								<span class="header"><img src="{:ADDON_PUBLIC_PATH}/MUI/images/grade.jpg"></span>
+								<span class="header"><img src="{:ADDON_PUBLIC_PATH}/MUI/images/grade.png"></span>
 							</li>
 							<li class="mui-col-sm-4 mui-col-xs-4">
-								<button id="grade_7" type="button" class="mui-btn mui-btn-primary mui-btn-outlined">
+								<button id="grade_7" type="button" class="mui-btn">
 									初一
 								</button>
 							</li>
 							<li class="mui-col-sm-4 mui-col-xs-4">
-								<button id="grade_8" type="button" class="mui-btn mui-btn-primary mui-btn-outlined">
+								<button id="grade_8" type="button" class="mui-btn">
 									初二
 								</button>
 							</li>
 							<li class="mui-col-sm-4 mui-col-xs-4">
-								<button id="grade_9" type="button" class="mui-btn mui-btn-primary mui-btn-outlined">
+								<button id="grade_9" type="button" class="mui-btn">
 									初三
 								</button>
 							</li>
 
 							<li class="mui-col-sm-4 mui-col-xs-4">
-								<button id="grade_10" type="button" class="mui-btn mui-btn-primary mui-btn-outlined">
+								<button id="grade_10" type="button" class="mui-btn">
 									高一
 								</button>
 							</li>
 							<li class="mui-col-sm-4 mui-col-xs-4">
-								<button id="grade_11" type="button" class="mui-btn mui-btn-primary mui-btn-outlined">
+								<button id="grade_11" type="button" class="mui-btn">
 									高二
 								</button>
 							</li>
 							<li class="mui-col-sm-4 mui-col-xs-4">
-								<button id="grade_12" type="button" class="mui-btn mui-btn-primary mui-btn-outlined">
+								<button id="grade_12" type="button" class="mui-btn">
 									高三
 								</button>
 							</li>
 							<li class="mui-table-view-cell">
-								<span class="header"><img src="{:ADDON_PUBLIC_PATH}/MUI/images/subject.jpg"></span>
+								<span class="header"><img src="{:ADDON_PUBLIC_PATH}/MUI/images/subject.png"></span>
 							</li>
 							<li class="mui-col-sm-4 mui-col-xs-4">
-								<button id="subject_ma" type="button" class="mui-btn mui-btn-primary mui-btn-outlined">
+								<button id="subject_ma" type="button" class="mui-btn">
 									数学
 								</button>
 							</li>
 							<li class="mui-col-sm-4 mui-col-xs-4">
-								<button id="subject_en" type="button" class="mui-btn mui-btn-primary mui-btn-outlined">
+								<button id="subject_en" type="button" class="mui-btn">
 									英语
 								</button>
 							</li>
 							<li class="mui-col-sm-4 mui-col-xs-4">
-								<button id="subject_cn" type="button" class="mui-btn mui-btn-primary mui-btn-outlined">
+								<button id="subject_cn" type="button" class="mui-btn">
 									语文
 								</button>
 							</li>
 
 							<li class="mui-col-sm-4 mui-col-xs-4">
-								<button id="subject_ph" type="button" class="mui-btn mui-btn-primary mui-btn-outlined">
+								<button id="subject_ph" type="button" class="mui-btn">
 									物理
 								</button>
 							</li>
 							<li class="mui-col-sm-4 mui-col-xs-4">
-								<button id="subject_ch" type="button" class="mui-btn mui-btn-primary mui-btn-outlined">
+								<button id="subject_ch" type="button" class="mui-btn">
 									化学
 								</button>
 							</li>
@@ -256,22 +256,22 @@
 							<li class="mui-col-sm-12 mui-col-xs-12">
 
 							</li>
-
-						</ul>
-						<ul id="selector3" class="mui-table-view mui-row mui-hidden">
-							<li class="mui-col-sm-4 mui-col-xs-4">
+							<li class="mui-table-view-cell selector3">
+								<span class="header"><img src="{:ADDON_PUBLIC_PATH}/MUI/images/source.png"></span>
+							</li>
+							<li class="mui-col-sm-4 mui-col-xs-4 selector3">
 								<button id="problem_1" type="button" class="mui-btn">
-									<img src="{:ADDON_PUBLIC_PATH}/MUI/images/problem_qualify.png">
+									升学真题
 								</button>
 							</li>
-							<li class="mui-col-sm-4 mui-col-xs-4">
+							<li class="mui-col-sm-4 mui-col-xs-4 selector3">
 								<button id="problem_2" type="button" class="mui-btn">
-									<img src="{:ADDON_PUBLIC_PATH}/MUI/images/problem_jingsai.png">
+									竞赛真题
 								</button>
 							</li>
-							<li class="mui-col-sm-4 mui-col-xs-4">
+							<li class="mui-col-sm-4 mui-col-xs-4 selector3">
 								<button id="problem_3" type="button" class="mui-btn">
-									<img src="{:ADDON_PUBLIC_PATH}/MUI/images/problem_school.png">
+									名校真题
 								</button>
 							</li>
 						</ul>
@@ -367,6 +367,7 @@
         var clicked_2 = 0;
         var clicked_3 = 0;
         var clicked_4 = 0;
+        var selected = "";
 
         var class_hide =  document.getElementById("problem_filter");
         var type_label =  document.getElementById("type_label");
@@ -378,25 +379,32 @@
             var id = this.getAttribute("id");
             message = document.getElementById(id).innerText;
 
-            if (clicked_1 == 0) {
+			if ((selected == id) && (clicked_1)) {
+                class_hide.classList.add("mui-hidden");
+                document.getElementById(id + "_img").classList.add('img_shadow');
+                $(".selector3").hide();
+                $("#problem_selector").addClass("mui-hidden");
+                selected = "";
+                clicked_1 = 0;
+            } else {
+			    if (selected != "") document.getElementById(selected + "_img").classList.add('img_shadow');
                 class_hide.classList.remove("mui-hidden");
                 type_label.innerText = message;
                 var str_array = id.split("_");
                 $('input[name="cat1"]').attr('value', str_array[1]);
-                $('#' + id +' img').removeClass('img_shadow');
-                clicked_1 = 1;
+                document.getElementById(id + "_img").classList.remove('img_shadow');
+
                 if (id == "item_1") {
-                    $("#selector3").removeClass("mui-hidden");
+                    $(".selector3").show();
                     $("#problem_selector").removeClass("mui-hidden");
                 }
-            }
-            else {
-                class_hide.classList.add("mui-hidden");
-                $('#item_select' +' img').addClass('img_shadow');
-                $("#selector3").addClass("mui-hidden");
-                $("#problem_selector").addClass("mui-hidden");
-                clicked_1 = 0;
-            }
+                else {
+                    $(".selector3").hide();
+                    $("#problem_selector").addClass("mui-hidden");
+				}
+                selected = id;
+                clicked_1 = 1;
+			}
         });
 
         mui("#selector2").on('tap', 'button', function(){
@@ -407,27 +415,24 @@
                 $('input[name="cat2"]').attr('value', str_array[1]);
             }
             else {
-                subject_label.innerText = "【科目】：" + document.getElementById(id).innerText;
-                $('input[name="cat3"]').attr('value', str_array[1]);
+                if (str_array[0] == 'problem') {
+                    switch (str_array[1]) {
+                        case '1':
+                            problem_label.innerText = "【来源】：升学真题";
+                            break;
+                        case '2':
+                            problem_label.innerText = "【来源】：竞赛真题";
+                            break;
+                        default:
+                            problem_label.innerText = "【来源】：名校真题";
+                    }
+                    $('input[name="cat4"]').attr('value', str_array[1]);
+				} else {
+                    subject_label.innerText = "【科目】：" + document.getElementById(id).innerText;
+                    $('input[name="cat3"]').attr('value', str_array[1]);
+				}
             }
         });
-
-        mui("#selector3").on('tap', 'button', function(){
-            var id = this.getAttribute("id");
-            var str_array = id.split("_");
-            switch (str_array[1]) {
-                case '1':
-                    problem_label.innerText = "【来源】：升学真题";
-                    break;
-                case '2':
-                    problem_label.innerText = "【来源】：竞赛真题";
-                    break;
-                default:
-                    problem_label.innerText = "【来源】：名校真题";
-			}
-			$('input[name="cat4"]').attr('value', str_array[1]);
-        });
-
 	</script>
 	
 	

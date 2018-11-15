@@ -33,11 +33,7 @@ class CourseController extends ManageBaseController
         $this->config = getAddonConfig ( 'WeiXiao' );
 
         $this->assign('model', $this->model);
-
-
     }
-
-
     function _initialize()
     {
         parent::_initialize();
@@ -68,17 +64,42 @@ class CourseController extends ManageBaseController
     /**
      * 显示指定模型列表数据
      */
+    private function addLesson($cid, $lessonMoel){
+        $courseDao = D('WxyCourse');
+        $map['id'] = $cid;
+        $coursedata = $courseDao->where($map)->find();
+        $mLesson['courseid'] = $cid;
+        $mLesson['classlen'] = '110';
+        $mLesson['site'] = $coursedata['site'];
+        $length = $coursedata['length'];
+        for($seq = 1; $seq <= $length; $seq++){
+            $mLesson['sequence'] = $seq;
+            $mLesson['classdate'] = date('y-m-d',strtotime('+'.strval( 7*($seq-1)).'days',$coursedata['sdate']));;
+            $lessonMoel->addCourseLesson($mLesson);
+        }
+    }
     public function lessonList()
     {
+        session('g_lesson_url', $_SERVER["REQUEST_URI"]);
+
         $seach_key = '';
         ((I('cid') == '') || (I('cid') == null)) || $seach_key = I('cid');
+        $lessonDao = D('WxyCourseLesson');
+
+        $map['courseid'] = $seach_key;
+        $searchLesson = $lessonDao->where($map)->find();
+        if(empty($searchLesson)){
+            $this->addLesson($seach_key, $lessonDao);
+        }
         $lessonModel = $this->getModel('WxyCourseLesson');
         $courseModel = $this->getModel('WxyCourse');
-        //$list_data = $this->_get_model_list($lessonModel);//_list_grid($this->model);
+//        $list_data = $this->_get_model_list($lessonModel);//_list_grid($this->model);
+//        dump($list_data);
         $list_lesson_grid_data = $this->_list_grid ( $lessonModel );
         $list_course_grid_data = $this->_list_grid ( $courseModel );
 
         $gridsLesson = $list_lesson_grid_data ['list_grids'];
+
         $gridsCourse = $list_course_grid_data ['list_grids'];
         $grids =array();
         $grids['classdate'] = $gridsLesson['classdate'];
@@ -89,8 +110,10 @@ class CourseController extends ManageBaseController
         $grids['room'] = $gridsLesson['room'];
         $grids['site'] = $gridsLesson['site'];
         $grids['sequence'] = $gridsLesson['sequence'];
+        $grids['urls'] = $gridsLesson['urls'];
 
-        $lessonDao = D('WxyCourseLesson');
+//dump($grids['urls']);
+
         $db_prefix = C ( 'DB_PREFIX' );
 
         $page = I ( 'p', 1, 'intval' );
@@ -98,12 +121,12 @@ class CourseController extends ManageBaseController
         $map ['token'] = get_token();
         if (!empty($seach_key))
         {
-            $list_data = $lessonDao->table($db_prefix.'wxy_course_lesson cols, '.$db_prefix.'wxy_course co')->where('cols.courseid = co.id' . ' and cols.courseid = ' . $seach_key)->field('cols.classdate as classdate, cols.classlen as classlen, co.name as name, co.teacher as teacher, co.grade as grade, cols.room as room, cols.site as site, cols.sequence as sequence')->order('cols.id asc')->page ( $page, $row )->select();
+            $list_data = $lessonDao->table($db_prefix.'wxy_course_lesson cols, '.$db_prefix.'wxy_course co')->where('cols.courseid = co.id' . ' and cols.courseid = ' . $seach_key)->field('cols.id as id, cols.classdate as classdate, cols.classlen as classlen, co.name as name, co.teacher as teacher, co.grade as grade, cols.room as room, cols.site as site, cols.sequence as sequence')->order('cols.id asc')->page ( $page, $row )->select();
             $count = $lessonDao->table($db_prefix.'wxy_course_lesson cols, '.$db_prefix.'wxy_course co')->where('cols.courseid = co.id' . ' and cols.courseid = ' . $seach_key)->count();
 
         }
         else{
-            $list_data = $lessonDao->table($db_prefix.'wxy_course_lesson cols, '.$db_prefix.'wxy_course co')->where('cols.courseid = co.id')->field('cols.classdate as classdate, cols.classlen as classlen, co.name as name, co.teacher as teacher, co.grade as grade, cols.room as room, cols.site as site, cols.sequence as sequence')->order('cols.id asc')->page ( $page, $row )->select();
+            $list_data = $lessonDao->table($db_prefix.'wxy_course_lesson cols, '.$db_prefix.'wxy_course co')->where('cols.courseid = co.id')->field('cols.id as id, cols.classdate as classdate, cols.classlen as classlen, co.name as name, co.teacher as teacher, co.grade as grade, cols.room as room, cols.site as site, cols.sequence as sequence')->order('cols.id asc')->page ( $page, $row )->select();
             $count = $lessonDao->table($db_prefix.'wxy_course_lesson cols, '.$db_prefix.'wxy_course co')->where('cols.courseid = co.id')->count();
 
         }
@@ -115,70 +138,20 @@ class CourseController extends ManageBaseController
         foreach($list_data as &$row){
             $row['grade']= $this->config['grade_value'][$row['grade']];
          }
+        $dataTable = D ( 'Common/Model' )->getFileInfo ( $lessonModel );
+//        dump($dataTable);
+        $list_data = $this->parseData ( $list_data, $dataTable->fields, $dataTable->list_grid, $dataTable->config );
         $this->assign('list_grids', $grids);
         $this->assign('list_data', $list_data);
         $this->assign('search_key', 'name');
         $this->meta_title = $this->model ['title'] . '列表1';
+
         $this->display('lists');
     }
 
     public function lists()
     {
         parent::common_lists($this->model);
-//        $page = I('p', 1, 'intval'); // 默认显示第一页数据
-//
-//        // 解析列表规则
-//        $list_data = $this->_get_model_list($this->model);//_list_grid($this->model);
-//        $grids = $list_data ['list_grids'];
-//        $fields = $list_data ['fields'];
-//
-//        // 关键字搜索
-//        $map ['token'] = get_token();
-//        $key = $this->model ['search_key'] ? $this->model ['search_key'] : 'title';
-//        if (isset ($_REQUEST [$key])) {
-//            $map [$key] = array(
-//                'like',
-//                '%' . htmlspecialchars($_REQUEST [$key]) . '%'
-//            );
-//            unset ($_REQUEST [$key]);
-//        }
-//        // 条件搜索
-//        foreach ($_REQUEST as $name => $val) {
-//            if (in_array($name, $fields)) {
-//                $map [$name] = $val;
-//            }
-//        }
-//
-//        $row = empty ($this->model ['list_row']) ? 20 : $this->model ['list_row'];
-//
-//        // 读取模型数据列表
-//
-//        empty ($fields) || in_array('id', $fields) || array_push($fields, 'id');
-//        $name = parse_name(get_table_name($this->model ['id']), true);
-//        //var_dump($name);
-//        //exit();
-//        $data = M($name)->field(empty ($fields) ? true : $fields)->where($map)->order('id')->page($page, $row)->select();
-//
-//        /* 查询记录总数 */
-//        $count = M($name)->where($map)->count();
-//
-//        //var_dump($list_data);
-//        //var_dump($data);
-//        //var_dump($name);
-//        //var_dump($grids);
-//        //var_dump($this->model);
-//        //exit();
-//        // 分页
-//        if ($count > $row) {
-//            $page = new \Think\Page ($count, $row);
-//            $page->setConfig('theme', '%FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END% %HEADER%');
-//            $this->assign('_page', $page->show());
-//        }
-//        $this->assign('list_grids', $grids);
-//        $this->assign('list_data', $data);
-//        $this->meta_title = $this->model ['title'] . '列表';
-//
-//        $this->display();
     }
 
     public function add()
@@ -235,20 +208,52 @@ class CourseController extends ManageBaseController
         if ($count) $this->success("更新成功，已设置此课为精品！");
         else $this->error("未更新数据！");
     }
+    public function lesson_edit($model = null, $id = 0, $templateFile = '') {
+        is_array ( $model ) || $model = $this->getModel ( $model );
+        $id || $id = I ( 'id' );
 
+        // 获取数据
+        $data = M ( get_table_name ( $model ['id'] ) )->find ( $id );
+        $data || $this->error ( '100004:数据不存在！' );
+
+        $token = get_token ();
+        if (isset ( $data ['token'] ) && $token != $data ['token'] && defined ( 'ADDON_PUBLIC_PATH' )) {
+            $this->error ( '100005:非法访问！' );
+        }
+
+        if (IS_POST) {
+            $Model = D ( parse_name ( get_table_name ( $model ['id'] ), 1 ) );
+            // 获取模型的字段信息
+            $Model = $this->checkAttr ( $Model, $model ['id'] );
+            if ($Model->create () && false !== $Model->save ()) {
+                $this->_saveKeyword ( $model, $id );
+
+                // 清空缓存
+                method_exists ( $Model, 'clear' ) && $Model->clear ( $id, 'edit' );
+
+               $this->success ( '保存' . $model ['title'] . '成功！',$_SERVER["HTTP_ORIGIN"].session('g_lesson_url'));
+            } else {
+                $this->error ( '100006:' . $Model->getError () );
+            }
+        } else {
+
+            $fields = get_model_attribute ( $model ['id'] );
+            $this->assign ( 'fields', $fields );
+            $this->assign ( 'data', $data );
+
+            $this->display ( $templateFile );
+        }
+    }
     public function edit()
     {
-        //var_dump($this);
-        //$data['teacher'] = '任老师';
-        //$data['sdate'] = '2017-01-12';
-        //$this->assign('data', $data);
-        parent::common_edit($this->model);
-        /*$map['id'] = I('id');
-        $model = M('WxyCourse');
-        $data = $model->where($map)->find();
-        $this->assign('id', $map['id']);
-        $this->assign('data', $data);
-        $this->display('add');*/
+        if((I('model') == 'wxy_course_lesson')||(!empty(I('courseid')))){
+            $model = $this->getModel('WxyCourseLesson');
+            $this->lesson_edit($model);
+        }
+        else{
+            parent::common_edit($this->model);
+        }
+
     }
 
     public function import()
@@ -331,8 +336,9 @@ class CourseController extends ManageBaseController
             /*$data['termid'] = $res;
             $data['subject'] = $course_obj[1];*/
 
-            if ($this->import_course_lesson_from_excel($data['file']))
-                $this->success('保存成功！', U('lists'/*'import?model=' . $this->model ['name'], $this->get_param */), 600);
+            if ($this->import_course_lesson_from_excel($data['file'])) {
+               // $this->success('保存成功！', U('lists'/*'import?model=' . $this->model ['name'], $this->get_param */), 600);
+            }
             else
                 $this->error('请检查文件格式');
         } else {
@@ -365,19 +371,24 @@ class CourseController extends ManageBaseController
             '3' => 'grade',    //年级
             '4' => 'course_1',   //课程
             '5' => 'teacher_1',  //教师
-            '6' => 'room_1',     //教室
-            '7' => 'course_2',   //课程
-            '8' => 'teacher_2',  //教师
-            '9' => 'room_2',     //教室
-            '10' => 'course_3',   //课程
-            '11' => 'teacher_3',  //教师
-            '12' => 'room_3',     //教室
-            '13' => 'course_4',   //课程
-            '14' => 'teacher_4',  //教师
-            '15' => 'room_4',     //教室
-            '16' => 'course_5',   //课程
-            '17' => 'teacher_5',  //教师
-            '18' => 'room_5',     //教室
+            '6' => 'subject_1',  //科目
+            '7' => 'room_1',     //教室
+            '8' => 'course_2',   //课程
+            '9' => 'teacher_2',  //教师
+            '10' => 'subject_2',  //科目
+            '11' => 'room_2',     //教室
+            '12' => 'course_3',   //课程
+            '13' => 'teacher_3',  //教师
+            '14' => 'subject_3',  //科目
+            '15' => 'room_3',     //教室
+            '16' => 'course_4',   //课程
+            '17' => 'teacher_4',  //教师
+            '18' => 'subject_4',  //科目
+            '19' => 'room_4',     //教室
+            '20' => 'course_5',   //课程
+            '21' => 'teacher_5',  //教师
+            '22' => 'subject_5',  //科目
+            '23' => 'room_5',     //教室
         );
         $data0 = importFormExcel_Column($file_id, $row, array(), 'A'); //read excel file from start_column!
         $grade = '';
@@ -404,30 +415,23 @@ class CourseController extends ManageBaseController
         $lesson_data = array();
 
         $lesson_data_raw_list = array();
-        $cdays = 6 - date("w", strtotime($sdate));
-        $osdate = date_create($sdate);
-        $courseSdate = date_format(date_add($osdate, date_interval_create_from_date_string('+' . strval($cdays) . ' days')), "Y-m-d");
-        $oedate = date_create($sdate);
-        $courseEdate = date_format(date_add($oedate, date_interval_create_from_date_string('+' . strval($cdays + 7*($length-1)) . ' days')),"Y-m-d");
-        //dump($courseEdate);
         //处理课程，导入数据库，已经调试OK！
         foreach ($excel_data as $key => $vo) {
             if (strpos($vo['grade'], '年级') !== false) {
                 $schedule = $vo;
             } else {
-                $day = $vo['day'];
+                $day = trim($vo['day'],'[]');
+                $mDays = explode(',', $day);
                 $course_data['grade'] = strval(array_search($vo['grade'], $this->config['grade_value']));
                 $course_data['token'] = $this->token;
                 $course_data['site'] = $site;
-                $course_data['length'] = $length;
-                $course_data['sdate'] = strtotime($courseSdate);
-                $course_data['edate'] = strtotime($courseEdate);
-                //dump($course_data['sdate']);
-
+                $course_data['length'] = count($mDays);
+                $course_data['sdate'] = strtotime(current($mDays));
+                $course_data['edate'] = strtotime(end($mDays));
                 $lesson_data['grade'] = strval(array_search($vo['grade'], $this->config['grade_value'])); //$vo['grade'];
                 $lesson_data['site'] = $site;
                 $lesson_data['token'] = $this->token;
-                $lesson_data['day'] = $vo['day'];
+                $lesson_data['day'] = $mDays;
 
                 for ($i = 1; $i <= 5; $i++) {
                     $start_end = explode('--', $schedule['course_' . $i]);
@@ -435,6 +439,7 @@ class CourseController extends ManageBaseController
                     $course_data['teacher'] = $vo['teacher_' . $i];
                     $course_id = $course_model->addCourse($course_data);
                     $lesson_data['courseid_' . $i] = $course_id;
+
                     $lesson_data['room_' . $i] = $vo['room_' . $i];
                     $lesson_data['start_time_' . $i] = $start_end[0];
                 }
@@ -443,59 +448,25 @@ class CourseController extends ManageBaseController
         }
 
         //处理课表，导入数据库
-//        $cdays = 6 - date("w", strtotime($sdate));
-//        $osdate = date_create($sdate);
-
-        for ($seq = 0; $seq < $length; $seq++) {
-            foreach ($lesson_data_raw_list as $lesson) {
-                for ($i = 1; $i <= 5; $i++) {
-                    if (!isset($lesson['courseid_' . $i]))
-                        continue;
-
-                    $mLesson['token'] = $lesson['token'];
-                    $mLesson['courseid'] = $lesson['courseid_' . $i];
-                    $mLesson['sequence'] = strval($seq + 1);
-                    $osdate = date_create($sdate);
-                    if ($lesson['day'] == '周六') {
-                        $dsdate = date_add($osdate, date_interval_create_from_date_string('+' . strval($cdays + $seq * 7) . ' days'));
-                    } else {
-                        $dsdate = date_add($osdate, date_interval_create_from_date_string('+' . strval($cdays + $seq * 7 + 1) . ' days'));
-                    }
-                    $dstime = date('y-m-d h:i:s', strtotime(date_format($dsdate, "Y-m-d") . " " . $lesson['start_time_' . $i]));
+        foreach ($lesson_data_raw_list as $lesson) {
+            for ($i = 1; $i <= 5; $i++) {
+                if (!isset($lesson['courseid_' . $i]))
+                    continue;
+                $mLesson['token'] = $lesson['token'];
+                $mLesson['courseid'] = $lesson['courseid_' . $i];
+                $mLesson['classlen'] = '110';
+                $mLesson['site'] = $site;
+                $mLesson['room'] = $lesson['room_' . $i];
+                $mLesson['sequence'] = 1;
+                foreach ($lesson['day'] as $sDay) {
+                    $dstime = date('y-m-d h:i:s', strtotime($sDay . " " . $lesson['start_time_' . $i]));
                     $mLesson['classdate'] = $dstime;
-                    $mLesson['classlen'] = '110';
-                    $mLesson['site'] = $site;
-                    $mLesson['room'] = $lesson['room_' . $i];
-                    //dump($mLesson);
                     $course_lesson_model->addCourseLesson($mLesson);
+                    $mLesson['sequence']++;
                 }
             }
         }
         return true;
-//        foreach($excel_data as $key => $vo) {
-//            if(strpos($vo['grade'],'年级') !== false ) {
-//                $schedule = $vo;
-//            }
-//            else {
-//                $lesson_data['grade'] = $vo['grade'];
-//                $lesson_data['aite'] = $site;
-//                $lesson_data['token'] = $this->token;
-//
-//                for ($i = 1; $i <= 5; $i++) {
-//                    /*($vo['course_'.$i] == '') ||*/
-//                    $lesson_data['course_' . $i] = $vo['course_' . $i];
-//                    /*($vo['teacher_'.$i] =='') ||*/
-//                    $lesson_data['teacher_' . $i] = $vo['teacher_' . $i];
-//                    /*($vo['room_'.$i] =='') ||*/
-//                    $lesson_data['room_' . $i] = $vo['room_' . $i];
-//                    $lesson_data['start_time_' . $i] = $start_end[0];
-//                    $map['token'] = $this->token;
-//                    $map['name'] = $this->token;
-//
-//                }
-//
-//            }
-//        }
     }
 
     public function comment()

@@ -22,7 +22,7 @@ class WxyStudentCardTable {
 					'title' => '学号',
 					'come_from' => 0,
 					'width' => '',
-					'is_sort' => 0,
+					'is_sort' => 1,
 					'name' => 'studentno',
 					'function' => '',
 					'href' => [ ]
@@ -96,10 +96,13 @@ class WxyStudentCardTable {
 	public $fields = [
 			'token' => [
 					'title' => '机构Token',
-					'field' => 'varchar(100) NOT NULL',
 					'type' => 'string',
-					'is_must' => 1,
-					'placeholder' => '请输入内容'
+					'field' => 'varchar(100) NULL',
+					'is_show' => 0,
+					'is_must' => 0,
+					'auto_type' => 'function',
+					'auto_rule' => 'get_token',
+					'auto_time' => 3
 			],
 			'studentno' => [
 					'title' => '学号',
@@ -122,8 +125,7 @@ class WxyStudentCardTable {
 					'extra' => '男
 女',
 					'value' => 1,
-					'is_show' => 1,
-					'is_must' => 0
+					'placeholder' => '请输入内容'
 			],
 			'school' => [
 					'title' => '学校',
@@ -146,8 +148,14 @@ class WxyStudentCardTable {
 			],
 			'grade' => [
 					'title' => '年级',
-					'type' => 'string',
+					'type' => 'select',
 					'field' => 'varchar(20) NULL',
+					'extra' => '7:初一
+8:初二
+9:初三
+10:高一
+11:高二
+12:高三',
 					'is_show' => 1,
 					'placeholder' => '请输入内容'
 			],
@@ -201,8 +209,11 @@ class WxyStudentCardTable {
 			],
 			'pay_status' => [
 					'title' => '缴费情况',
-					'type' => 'string',
+					'type' => 'radio',
 					'field' => 'varchar(100) NULL',
+					'extra' => '已缴
+未缴
+部分未缴',
 					'remark' => '缴费情况（已缴、未缴）',
 					'is_show' => 1,
 					'placeholder' => '请输入内容'

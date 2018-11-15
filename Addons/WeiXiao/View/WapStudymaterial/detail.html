@@ -1,4 +1,10 @@
 	<include file="Home@Public/mobile_head_mui"/>
+	<style>
+		.special .item {
+			width: 3.3rem;
+			height: 1.6rem;
+		}
+	</style>
 	<body>
 		<header class="mui-bar mui-bar-nav header">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" href="{:U('index')}"></a>
@@ -20,7 +26,7 @@
 			<h2 class="article-title">{$data['title']}</h2>
 			<div class="article-text">
 				试题来源：<a href="">{$data['type']}</a>
-				<label class="time">上传时间</label>
+				<label class="time">适合阶段：{$data['stage']}</label>
 				<!--<label class="view">2</label>-->
 			</div>
 			<div class="evaluating">
@@ -38,31 +44,20 @@
 			</div>
 			<!--每日精选-->
 			<div class="index-title">
-				<span>订阅、下载</span>
+				<span>邮件订阅或直接下载
+				</span>
 				<!--<a href="">显示全部<i class="mui-icon mui-icon-arrowright"></i></a>-->
 			</div>
-			<div class="classify">
+			<div class="special">
 				<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
 					<div class="mui-scroll">
 						<a href="#popover" id="openPopover" class="item">
-							<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx6.png" />
+							<img src="{:ADDON_PUBLIC_PATH}/MUI/images/email_haha.jpg" />
 							<p>邮件订阅</p>
 						</a>
 						<a href="{$data['fileid']|get_file_url}" class="item">
-							<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx1.PNG" />
-							<p>下载</p>
-						</a>
-						<a href="" class="item">
-							<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx4.png" />
-							<p>解题方法</p>
-						</a>
-						<a href="" class="item">
-							<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx2.jpg" />
-							<p>书签</p>
-						</a>
-						<a href="" class="item">
-							<img src="{:ADDON_PUBLIC_PATH}/MUI/images/jx5.jpg" />
-							<p>每日练</p>
+							<img src="{:ADDON_PUBLIC_PATH}/MUI/images/download_haha.jpg" />
+							<p>预览或下载</p>
 						</a>
 					</div>
 				</div>
@@ -115,7 +110,15 @@
 					</form>
 				</empty>
 			</if>
-		</div>
+			</div>
+			<div class="index-title">
+				<span>
+				温馨提示：
+				<p>1.安卓手机：安装QQ浏览器即可预览并下载资料；</p>
+				<p>2.苹果手机：直接预览，下载资料请点击“邮件订阅”</p>
+				</span>
+			</div>
+
 			<!--广告位-->
 			<div class="guanggao">
 			<h2>

@@ -36,6 +36,7 @@ class LessonController extends ManageBaseController
      */
     public function lists()
     {
+        dump("11111");
         $seach_key = '';
         ((I('name') == '') || (I('name') == null)) || $seach_key = I('name');
 
@@ -63,7 +64,7 @@ class LessonController extends ManageBaseController
         $page = I ( 'p', 1, 'intval' );
         $row = empty ($lessonModel) ? 20 : $lessonModel ['list_row'];
         $map ['token'] = get_token();
-
+        dump($seach_key);
         if (!empty($seach_key)) $list_data = $lessonDao->table($db_prefix.'wxy_course_lesson cols, '.$db_prefix.'wxy_course co')->where('cols.courseid = co.id' . ' and co.name = ' . $seach_key)->field('cols.classdate as classdate, cols.classlen as classlen, co.name as name, co.teacher as teacher, co.grade as grade, cols.room as room, cols.site as site, cols.sequence as sequence')->order('cols.id asc')->page ( $page, $row )->select();
         else
             $list_data = $lessonDao->table($db_prefix.'wxy_course_lesson cols, '.$db_prefix.'wxy_course co')->where('cols.courseid = co.id')->field('cols.classdate as classdate, cols.classlen as classlen, co.name as name, co.teacher as teacher, co.grade as grade, cols.room as room, cols.site as site, cols.sequence as sequence')->order('cols.id asc')->page ( $page, $row )->select();

@@ -17,7 +17,60 @@ class WxyCourseLessonTable {
 	];
 	
 	// 列表定义
-	public $list_grid = [ ];
+	public $list_grid = [
+			'sequence' => [
+					'title' => '课程序号',
+					'come_from' => 0,
+					'width' => '',
+					'is_sort' => 0
+			],
+			'classdate' => [
+					'title' => '上课时间',
+					'come_from' => 0,
+					'width' => '',
+					'is_sort' => 0
+			],
+			'classlen' => [
+					'title' => '课时长度',
+					'come_from' => 0,
+					'width' => '',
+					'is_sort' => 0
+			],
+			'site' => [
+					'title' => '校区',
+					'come_from' => 0,
+					'width' => '',
+					'is_sort' => 0
+			],
+			'room' => [
+					'title' => '教室',
+					'come_from' => 0,
+					'width' => '',
+					'is_sort' => 0
+			],
+			'courseid' => [
+					'title' => '课程ID',
+					'come_from' => 0,
+					'width' => '',
+					'is_sort' => 0
+			],
+			'urls' => [
+					'title' => '操作',
+					'come_from' => 1,
+					'width' => '',
+					'is_sort' => 0,
+					'href' => [
+							'0' => [
+									'title' => '编辑',
+									'url' => '[EDIT]&id=[id]'
+							],
+							'1' => [
+									'title' => '删除',
+									'url' => '[DELETE]'
+							]
+					]
+			]
+	];
 	
 	// 字段定义
 	public $fields = [
@@ -42,7 +95,7 @@ class WxyCourseLessonTable {
 					'field' => 'int(10) NULL',
 					'remark' => '课程序号',
 					'is_show' => 1,
-					'is_must' => 0
+					'placeholder' => '请输入内容'
 			],
 			'classdate' => [
 					'title' => '上课时间',
@@ -60,14 +113,14 @@ class WxyCourseLessonTable {
 					'is_show' => 1,
 					'placeholder' => '请输入内容'
 			],
-            'check_pos' => [
-                'title' => '机位',
-                'field' => 'varchar(50) NULL',
-                'type' => 'string',
-                'remark' => '考勤机位置',
-                'is_show' => 1,
-                'placeholder' => '请输入内容'
-            ],
+			'check_pos' => [
+					'title' => '机位',
+					'field' => 'varchar(50) NULL',
+					'type' => 'string',
+					'remark' => '考勤机位置',
+					'is_show' => 1,
+					'placeholder' => '请输入内容'
+			],
 			'site' => [
 					'title' => '校区',
 					'type' => 'string',

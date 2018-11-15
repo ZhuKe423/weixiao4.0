@@ -52,6 +52,14 @@ class WxyModelImportTable {
 					'is_show' => 1,
 					'placeholder' => '请输入内容'
 			],
+			'title' => [
+					'title' => '标题',
+					'type' => 'string',
+					'field' => 'varchar(200) NULL',
+					'remark' => '标题',
+					'is_show' => 1,
+					'placeholder' => '请输入内容'
+			],
 			'comment' => [
 					'title' => '描述',
 					'type' => 'string',
@@ -74,7 +82,7 @@ class WxyModelImportTable {
 					'field' => 'varchar(200) NULL',
 					'remark' => '模型名称',
 					'is_show' => 1,
-					'is_must' => 0
+					'placeholder' => '请输入内容'
 			]
 	];
 }	

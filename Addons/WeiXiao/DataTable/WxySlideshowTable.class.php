@@ -64,7 +64,7 @@ class WxySlideshowTable {
 					'href' => [ ]
 			],
 			'urls' => [
-					'title' => '标题',
+					'title' => '操作',
 					'come_from' => 1,
 					'width' => '',
 					'is_sort' => 0,
@@ -137,8 +137,17 @@ class WxySlideshowTable {
 					'title' => '所属目录',
 					'type' => 'string',
 					'field' => 'varchar(120) NULL',
-					'value' => 0,
-					'is_show' => 0,
+					'placeholder' => '请输入内容'
+			],
+			'module' => [
+					'title' => '所属模块',
+					'type' => 'select',
+					'field' => 'char(50) NULL',
+					'extra' => '课程幻灯片
+课程专题培训
+',
+					'remark' => '所属模块',
+					'is_show' => 1,
 					'is_must' => 0
 			]
 	];
