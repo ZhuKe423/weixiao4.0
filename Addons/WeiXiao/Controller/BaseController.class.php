@@ -38,4 +38,5 @@ class BaseController extends ManageBaseController {
 
         define ( 'CUSTOM_TEMPLATE_PATH', ONETHINK_ADDON_PATH . 'WeiSite/View/Template' );
     }
+
 }

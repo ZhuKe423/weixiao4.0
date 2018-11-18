@@ -81,6 +81,10 @@ class WxyCourseTable {
 							'3' => [
 									'title' => '精品',
 									'url' => 'set_top&cid=[id]'
+							],
+							'4' => [
+									'title' => '导入',
+									'url' => 'courseStudentsImport&cid=[id]'
 							]
 					]
 			]
@@ -101,6 +105,8 @@ class WxyCourseTable {
 					'title' => '课程名称',
 					'type' => 'string',
 					'field' => 'varchar(200) NULL',
+					'value' => 'NULL',
+					'remark' => '课程名称',
 					'is_show' => 1,
 					'placeholder' => '请输入内容'
 			],

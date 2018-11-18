@@ -22,46 +22,31 @@ class WxySlideshowTable {
 					'title' => '标题',
 					'come_from' => 0,
 					'width' => '',
-					'is_sort' => 0,
-					'name' => 'title',
-					'function' => '',
-					'href' => [ ]
+					'is_sort' => 0
 			],
 			'img' => [
 					'title' => '图片',
 					'come_from' => 0,
 					'width' => '',
-					'is_sort' => 0,
-					'name' => 'img',
-					'function' => '',
-					'href' => [ ]
+					'is_sort' => 0
 			],
 			'url' => [
 					'title' => '链接地址',
 					'come_from' => 0,
 					'width' => '',
-					'is_sort' => 0,
-					'name' => 'url',
-					'function' => '',
-					'href' => [ ]
+					'is_sort' => 0
 			],
 			'is_show' => [
 					'title' => '是否显示',
 					'come_from' => 0,
 					'width' => '',
-					'is_sort' => 0,
-					'name' => 'is_show',
-					'function' => '',
-					'href' => [ ]
+					'is_sort' => 0
 			],
-			'sort' => [
-					'title' => '排序',
+			'module' => [
+					'title' => '所属模块',
 					'come_from' => 0,
 					'width' => '',
-					'is_sort' => 0,
-					'name' => 'sort',
-					'function' => '',
-					'href' => [ ]
+					'is_sort' => 0
 			],
 			'urls' => [
 					'title' => '操作',
@@ -77,9 +62,7 @@ class WxySlideshowTable {
 									'title' => '删除',
 									'url' => '[DELETE]'
 							]
-					],
-					'name' => 'urls',
-					'function' => ''
+					]
 			]
 	];
 	
@@ -121,7 +104,6 @@ class WxySlideshowTable {
 					'title' => '排序',
 					'type' => 'num',
 					'field' => 'int(10) NULL',
-					'is_show' => 1,
 					'placeholder' => '请输入内容'
 			],
 			'token' => [
@@ -148,7 +130,7 @@ class WxySlideshowTable {
 ',
 					'remark' => '所属模块',
 					'is_show' => 1,
-					'is_must' => 0
+					'placeholder' => '请输入内容'
 			]
 	];
 }	

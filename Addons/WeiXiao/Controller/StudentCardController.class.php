@@ -108,6 +108,7 @@ class StudentCardController extends ManageBaseController
     }
 
     public function add(){
+        dump($this->model);
         parent::common_add($this->model);
     }
     public function del(){
