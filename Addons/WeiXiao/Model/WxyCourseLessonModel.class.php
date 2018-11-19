@@ -17,6 +17,7 @@ class WxyCourseLessonModel extends Model
         $map['courseid'] = $data['courseid'];
         $map['classdate'] = $data['classdate'];
         $map['site'] = $data['site'];
+        $map['bat'] = $data['bat'];
         $result = $this->where($map)->find();
         if ($data['courseid'] == '') return;
         if (!$result) {

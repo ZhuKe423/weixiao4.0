@@ -91,8 +91,16 @@ return array(
             '26' => '小学六年级'
         )
     ),
+
+    'gender_value' => array(
+      'title' => '性别',
+        'value' => array (
+            '0' => '男',
+            '1' => '女',
+        )
+    ),
     'subject_value' => array(
-        'tile'  => '科目选项',
+        'title'  => '科目选项',
         'value' => array (
             '1' => '数学',
             '2' => '英语',

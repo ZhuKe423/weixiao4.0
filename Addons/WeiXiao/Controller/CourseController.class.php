@@ -152,7 +152,7 @@ class CourseController extends ManageBaseController
         $this->assign('list_data', $list_data);
         $this->assign('search_key', 'name');
         $this->meta_title = $this->model ['title'] . '列表1';
-
+       // $list_data = $this->_get_model_list($lessonModel);
         $this->display('lists');
     }
 
@@ -317,49 +317,81 @@ class CourseController extends ManageBaseController
 
     public function courseStudentsImport()
     {
+        $id = I('cid');
+        $model = M('WxyCourse');
         $uid = $this->uid;
         $token = $this->token;
-        $id = I('id');
-        $model = M('WxyCourse');
-
         if (IS_POST) {
-//            $data['file'] = I('post.file');
-//            $data['courseid'] = ltrim(strstr(I('post.course'), '.', true));
-//            $data['classdate'] = I('post.classdate');
-//            $data['comment'] = I('post.comment');
-//            $data['token'] = $this->token;
 
             $data['uid'] = $uid;
             $data['token'] = $token;
             $data['file'] = I('post.file_id');
-            $data['sdate'] = I('post.sdate');
-            $data['length'] = I('post.length');
             $data['comment'] = I('post.comment');
             $data['model_id'] = $this->model['id'];
             $data['model_name'] = $this->model['name'];
-            $data['title'] = I('post.title');
-            $site = I('post.site');
+            $data['title'] = I('post.file_id');
 
-//            if (!intval($data['file'])) $this->error("数据文件未上传！");
             $import_model = M('WxyModelImport');
             $import_model->add($data);
-            /*$data['termid'] = $res;
-            $data['subject'] = $course_obj[1];*/
 
-            if ($this->import_course_lesson_from_excel($data['file'], $data['sdate'], $data['length'], $site)) //import student data from uploaded Excel file.
+            $data['courseid'] = trim(I('post.course'),'.');
+
+            if ($this->import_course_students_from_excel($data['file'], $data['courseid'])) //import student data from uploaded Excel file.
                 $this->success('保存成功！', U('lists'/*'import?model=' . $this->model ['name'], $this->get_param */), 600);
             else
                 $this->error('请检查文件格式');
         } else {
-            if ($id)
-                $map['id'] = $id;
+            if ($id) $map['id'] = $id;
             $map['token'] = $this->token;
             $data = $model->where($map)->select();
-            $this->assign('data', $data[0]);
+            $this->assign('lists', $data);
             $this->assign('id', $id);
-            $this->display();
+            $this->display('CourseStudentsImport');
         }
     }
+    //This function was modified for full time school under Weixiao addon.
+    private function import_course_students_from_excel($file_id,$cid)
+    {
+
+        $column = array(
+            'A' => 'studentno',
+            'B' => 'studentname',
+            'D' => 'comment',
+            'E' => 'stime',
+            'F' => 'room',
+            'G' => 'site'
+        );
+        $dateColumns = array('E');
+        $data = importFormExcel($file_id, $column, $dateColumns,5);
+
+        $map['token'] = $this->token;
+
+        $slModel = D('WxyStudentCourse');
+        if ($data['status']) {
+            foreach ($data['data'] as $row) {
+                $drow['token'] = $this->token;
+                $drow['courseid'] = $cid;
+                $drow['status'] = 0;
+                $drow['opcode'] = 0;
+                $drow['timestamp'] = time();
+                $drow['studentno'] = $row['studentno'];
+                $row['studentno'];
+                $map['studentno'] = $row['studentno'];
+                $map['name'] = $row['studentname'];
+
+                $drow['sid'] = M('WxyStudentCard')->where($map)->getField('id');
+
+                if (empty($drow['sid']))
+                    continue;
+                $clmap['courseid'] = $cid;
+                $clmap['classdate'] = $row['stime'];
+                $drow['bat_no'] = M('WxyCourseLesson')->where($clmap)->getField('bat');
+                $slModel->addStudentCourse($drow);
+            }
+            return true;
+        } else return false;
+    }
+
 
     public function scoreimport()
     {
@@ -492,7 +524,8 @@ class CourseController extends ManageBaseController
         }
 
         //处理课表，导入数据库
-        foreach ($lesson_data_raw_list as $lesson) {
+        $lot = 1;
+        foreach ($lesson_data_raw_list as $key => $lesson) {
             for ($i = 1; $i <= 5; $i++) {
                 if (!isset($lesson['courseid_' . $i]))
                     continue;
@@ -502,6 +535,8 @@ class CourseController extends ManageBaseController
                 $mLesson['site'] = $site;
                 $mLesson['room'] = $lesson['room_' . $i];
                 $mLesson['sequence'] = 1;
+                $mLesson['bat'] = $lot++;
+
                 foreach ($lesson['day'] as $sDay) {
                     $dstime = date('y-m-d H:i:s', strtotime($sDay . " " . $lesson['start_time_' . $i]));
                     $mLesson['classdate'] = $dstime;
@@ -808,5 +843,39 @@ class CourseController extends ManageBaseController
         curl_close($httph);
 
         return $rst;
+    }
+
+    public function csLists()
+    {
+        $csModel = $this->getModel('WxyStudentCourse');
+        parent::common_lists($csModel,0,'lists');
+//        $cid = I('cid');
+//        if(empty($cid)){
+//            parent::common_lists($csModel,0,'lists');
+//            return;
+//        }
+//        $csDao = D('WxyStudentCourse');
+//        $map['courseid'] =$cid;
+//        $keys = $csModel ['search_key'];
+//        if($keys)
+//        array_push($keys, 'cid');
+//        //$list_data = $csDao->where($map)->select();
+//        $list_data = $this->_get_model_list ( $model, $page, $order );
+//        array_push($csModel ['search_key'],'cid');
+//        //$this->assign('search_key',array('cid'));
+//dump($csModel ['search_key']);
+//        dump($_REQUEST);
+////        $list_data = $this->_get_model_list($csModel);
+////        $this->assign ( $list_data );
+////        //dump($list_data);
+////        $map['courseid'] = $cid;
+////        //$list_data = $this->_get_model_list($csModel);
+////         $list_grid =  $this->_list_grid($csModel);
+////         $_search_map = $this->_search_map($csModel);
+////        $this->assign('list_data', $list_data);
+////        $this->assign('list_grids', $list_grid['list_grids']);
+////        $this->assign('search_key', $_search_map);
+////        $this->meta_title = $this->model ['title'] . '列表1';
+////        $this->display('lists');
     }
 }

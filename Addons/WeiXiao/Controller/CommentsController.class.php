@@ -113,7 +113,7 @@ class CommentsController extends BaseController
             $map['status'] = array('lt',3); //上架或即将上架课程
             $data = $model->where($map)->select();
             foreach ($data as $key => $vo) {
-                $data[$key]['grade'] = $this->config[grade_value][$vo['grade']];
+                $data[$key]['grade'] = $this->config['grade_value'][$vo['grade']];
             }
             $this->assign('lists', $data);
             $this->assign('id', $id);
