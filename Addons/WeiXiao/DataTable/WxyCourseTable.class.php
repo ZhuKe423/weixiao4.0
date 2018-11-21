@@ -85,6 +85,10 @@ class WxyCourseTable {
 							'4' => [
 									'title' => '导入',
 									'url' => 'courseStudentsImport&cid=[id]'
+							],
+							'5' => [
+									'title' => '学员',
+									'url' => 'csLists&courseid=[id]'
 							]
 					]
 			]

@@ -22,10 +22,10 @@ class WxyCourseCommentsModel extends Model{
         $map ['sid'] = $student['id'];
         $map ['name'] = $student['name'];*/
 
-        $data['timestamp'] = date("Y-m-d");
+        $data['timestamp'] = date("Y-m-d H:i:s");
         $data['name'] = $student['name'];
         $data['sid'] = $student['id'];
-        $data['weixinmsgsend'] = '0';
+        //$data['weixinmsgsend'] = '0';
         $res = $this->add ( $data );
         return $res;
     }

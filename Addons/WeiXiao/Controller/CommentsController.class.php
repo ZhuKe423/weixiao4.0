@@ -121,7 +121,7 @@ class CommentsController extends BaseController
         }
     }
 
-   private function import_comments_from_excel($file_id, $courseid = NULL, $lesson_id = 0, $classdate = NULL, $is_send = false)
+   private function import_comments_from_excel($file_id, $courseid = NULL, $lesson_id = 0, $classdate = NULL, $sendflag = false)
     {
         if ($courseid == NULL) return false;
         $data = array();
@@ -142,10 +142,11 @@ class CommentsController extends BaseController
                 $row['token'] = $this->token;
                 $row['courseid'] = $courseid;
                 $row['lesson_id'] = $lesson_id;
+                $row['weixinmsgsend'] = $sendflag?"已发送":"未发送";
                 $model->addComments($row);
                 $info = $model->verify($row);
-                if ($is_send && ($info != false) && ($info != NULL)) {
-                    //$this->send_comment_msg($info);
+                if ($sendflag && ($info != false) && ($info != NULL)) {
+                    $this->send_comment_msg($info);
                 }
             }
             return true;
@@ -166,7 +167,7 @@ class CommentsController extends BaseController
         $data['teacher'] = $course_data['teacher'];
         $data['token'] = $info['token'];
         $data['stuname'] = $info['name'];
-        $data['comment'] = $info['comments_txt'];
+        $data['comment'] = $info['comment_txt'];  //3.0 is comments_txt, be careful.
         $data['date'] = $info['timestamp'];
 
         $map1['studentno'] = $info['studentno'];
@@ -209,6 +210,4 @@ class CommentsController extends BaseController
             return true;
         } else return false;
     }
-
-
 }

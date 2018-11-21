@@ -7,6 +7,7 @@ use Think\Model;
  * Student_Card模型
  */
 class WxyStudentCardModel extends Model{
+
     public function addStudent($data){
         $map ['token'] = $data['token'];
         $map ['studentno'] = $data['studentno'];
@@ -20,7 +21,7 @@ class WxyStudentCardModel extends Model{
         }           
     }
     
-    public function verify($map) {
+    public function verify($map) {  //注意：$map中只保存一个电话号码：$map['phone']。
         $data = $this->where($map)->find();
         if ($data != NULL) {
             return $data;

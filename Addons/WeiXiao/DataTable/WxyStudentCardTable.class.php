@@ -7,7 +7,7 @@ class WxyStudentCardTable {
 	public $config = [
 			'name' => 'wxy_student_card',
 			'title' => '学员卡',
-			'search_key' => '',
+			'search_key' => 'studentno',
 			'add_button' => 1,
 			'del_button' => 1,
 			'search_button' => 1,
@@ -22,55 +22,37 @@ class WxyStudentCardTable {
 					'title' => '学号',
 					'come_from' => 0,
 					'width' => '',
-					'is_sort' => 1,
-					'name' => 'studentno',
-					'function' => '',
-					'href' => [ ]
+					'is_sort' => 1
 			],
 			'name' => [
 					'title' => '姓名',
 					'come_from' => 0,
 					'width' => '',
-					'is_sort' => 0,
-					'name' => 'name',
-					'function' => '',
-					'href' => [ ]
+					'is_sort' => 0
 			],
 			'grade' => [
 					'title' => '年级',
 					'come_from' => 0,
 					'width' => '',
-					'is_sort' => 0,
-					'name' => 'grade',
-					'function' => '',
-					'href' => [ ]
+					'is_sort' => 0
 			],
 			'phone' => [
 					'title' => '联系电话',
 					'come_from' => 0,
 					'width' => '',
-					'is_sort' => 0,
-					'name' => 'phone',
-					'function' => '',
-					'href' => [ ]
+					'is_sort' => 0
 			],
 			'phone_bck' => [
 					'title' => '备用电话',
 					'come_from' => 0,
 					'width' => '',
-					'is_sort' => 0,
-					'name' => 'phone_bck',
-					'function' => '',
-					'href' => [ ]
+					'is_sort' => 0
 			],
 			'pay_status' => [
 					'title' => '缴费情况',
 					'come_from' => 0,
 					'width' => '',
-					'is_sort' => 0,
-					'name' => 'pay_status',
-					'function' => '',
-					'href' => [ ]
+					'is_sort' => 0
 			],
 			'urls' => [
 					'title' => '操作',
@@ -79,16 +61,18 @@ class WxyStudentCardTable {
 					'is_sort' => 0,
 					'href' => [
 							'0' => [
+									'title' => '选课',
+									'url' => 'register&studentno=[studentno]'
+							],
+							'1' => [
 									'title' => '编辑',
 									'url' => '[EDIT]'
 							],
-							'1' => [
+							'2' => [
 									'title' => '删除',
 									'url' => '[DELETE]'
 							]
-					],
-					'name' => 'urls',
-					'function' => ''
+					]
 			]
 	];
 	
@@ -98,11 +82,10 @@ class WxyStudentCardTable {
 					'title' => '机构Token',
 					'type' => 'string',
 					'field' => 'varchar(100) NULL',
-					'is_show' => 0,
-					'is_must' => 0,
 					'auto_type' => 'function',
 					'auto_rule' => 'get_token',
-					'auto_time' => 3
+					'auto_time' => 3,
+					'placeholder' => '请输入内容'
 			],
 			'studentno' => [
 					'title' => '学号',
@@ -125,6 +108,7 @@ class WxyStudentCardTable {
 					'extra' => '男
 女',
 					'value' => 1,
+					'is_show' => 1,
 					'placeholder' => '请输入内容'
 			],
 			'school' => [
@@ -161,14 +145,16 @@ class WxyStudentCardTable {
 			],
 			'phone' => [
 					'title' => '联系电话',
-					'field' => 'varchar(40) NULL',
 					'type' => 'string',
+					'field' => 'varchar(40) NULL',
+					'is_show' => 1,
 					'placeholder' => '请输入内容'
 			],
 			'phone_bck' => [
 					'title' => '备用电话',
-					'field' => 'varchar(40) NULL',
 					'type' => 'string',
+					'field' => 'varchar(40) NULL',
+					'is_show' => 1,
 					'placeholder' => '请输入内容'
 			],
 			'enrolled' => [

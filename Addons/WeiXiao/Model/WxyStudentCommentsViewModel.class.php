@@ -21,9 +21,10 @@ class WxyStudentCommentsViewModel extends ViewModel {
 
         'WxyCourseComments' => array(
             'courseid' => 'courseid',
-            'comments_txt' => 'comments_txt',
-            'comments_voice' => 'comments_voice',
+            'comment_txt' => 'comments_txt',
+            'comment_voice' => 'comments_voice',
             'timestamp' => 'timestamp',
+            'lesson_id',
             '_on' => 'WxyStudentCard.id = WxyCourseComments.sid AND WxyStudentCard.token = WxyCourseComments.token'
         ),
 
@@ -33,15 +34,5 @@ class WxyStudentCommentsViewModel extends ViewModel {
             'sdate' => 'classdate',
             '_on' => 'WxyCourseComments.courseid = WxyCourse.id'
         ),
-        /*
-        'WxyDailyTime' => array(
-            'arriveTime' => 'arriveTime',
-            'leaveTime' => 'leaveTime',
-            'state' => 'state',
-            'description' => 'description',
-            '_on' => 'WxyStudentCard.studentno = WxyDailyTime.studentID'
-        )
-        */
-
     );
 }

@@ -59,7 +59,7 @@
                 <img class="ucenter-li-icon" src="{:ADDON_PUBLIC_PATH}/MUI/images/rcm.png">
             </li>
             <li class="mui-table-view-cell mui-col-sm-2 mui-col-xs-2">
-                <p>推荐</p>
+                <a href="{:addons_url('WeiXiao://WapCourse/index')}"><p>推荐</p></a>
             </li>
         </ul>
 
@@ -87,15 +87,15 @@
                     考勤记录
                 </a>
             </li>
-            <li class="mui-table-view-cell mui-collapse"><a class="mui-navigate-right" href="#">上课记录</a>
-                <ul class="mui-table-view mui-table-view-chevron">
+            <li class="mui-table-view-cell"><a class="mui-navigate-right" href="{:U('WeiXiao/WapPerformance/infor')}">上课表现（点击查看：评语和成绩）</a>
+                <!--<ul class="mui-table-view mui-table-view-chevron">
                     <li class="mui-table-view-cell"><a class="mui-navigate-right" href="#">数学秋季班</a>
                     </li>
                     <li class="mui-table-view-cell"><a class="mui-navigate-right" href="#">语文春季班</a>
                     </li>
                     <li class="mui-table-view-cell"><a class="mui-navigate-right" href="#">英语暑假班</a>
                     </li>
-                </ul>
+                </ul>-->
             </li>
         </ul>
         <div class="mui-card">
@@ -163,11 +163,15 @@
     </div>
 </div>
 
-<script type="text/javascript " src="__STATIC__/jquery-2.0.3.min.js?v={:SITE_VERSION}"></script>
-
 <script type="text/javascript " src="{:ADDON_PUBLIC_PATH}/MUI/js/app.js?v={:SITE_VERSION}"></script>
 <script type="text/javascript ">
     mui.init()
+    $.WeiPHP.initWxShare({
+        title:"{$page_title}",
+        imgUrl:"{:SITE_URL}/Public/static/face/default_head.png",
+        desc:"{$user['nickname']}",
+        link:window.location.href
+    })
 </script>
 </body>
 

@@ -58,6 +58,7 @@ class WapUcenterController extends WapBaseController
                 $this->error($check ['msg']);
                 return;
             }
+            $map['token'] = $this->token;
             $map ['mobile'] = I ( 'mobile' );
             $token = get_token();
             $openid = get_openid();
@@ -115,7 +116,82 @@ class WapUcenterController extends WapBaseController
                 $url = U ( 'index' );
             }
             $url = addons_url("WeiXiao://WapUcenter/index");
-            $this->success ( '绑定成功', $url );
+            if ($this->token == NULL || $openid == NULL)
+                $this->error("请在微信中打开！");
+
+            $s_model = M('WxyStudentCard');
+            $s_map['token'] = $this->token;
+            $s_map['phone'] = $map['mobile'];
+            $s_data = $s_model->where($s_map)->select();
+            unset($s_map['phone']);
+            $s_map['phone_bck'] = $map['mobile'];
+            $s_data = array_merge($s_data, $s_model->where($s_map)->select()); //主用、备用电话学员均采集入数组
+
+            $studentcare_model = D('WxyStudentCare');
+            $studentcard_model = D('WxyStudentCard');
+
+            $follow_data = array();
+            $studentcare = array();
+            $phone = trim(I('post.mobile'));
+
+            $map['openid'] = $user['openid'] = $openid;
+            $user['uid'] = $this->uid;
+
+            $follow_model = M('apps_follow');
+            $data = $follow_model->where($map)->find();
+
+            $access_token = get_access_token ($this->token);
+            $suburl = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token=' . $access_token . '&openid=' . $user ['openid'] . '&lang=zh_CN';
+            $userdata = file_get_contents ( $suburl );
+            $userdata = json_decode ( $userdata, true );
+            //var_dump($userdata);
+            //exit();
+            if ($data == NULL && $userdata['subscribe'] == 1) {  //追加关注用户
+                $follow_data['uid'] = 0;
+                $follow_data['openid'] = $map['openid'];
+                $follow_data['token'] = $this->token;
+                $follow_data['has_subscribe'] = 1;
+                $follow_data['syc_status'] = 0;
+                $follow_data['remark'] = 'added by student bind';
+                $follow_model->add($follow_data); //Add a record for new follower.
+                //Need add user data here also TBD.
+            }
+            else if ($data == NULL && $userdata['subscribe'] == 0)
+                $this->error("请关注我们的微信公号后再绑定学生！！！", U('bind'));
+            else if ($data != NULL) {
+                $data['has_subscribe'] = $userdata['subscribe'];
+                if ($userdata['subscribe'] == 0) {
+                    $follow_model->where($map)->save($data);
+                    $this->error("请关注我们的微信公号后再绑定学生！！！", U('bind'));
+                }
+                else {
+                    $follow_model->where($map)->save($data);
+                    $new_bind = 0;
+                    $old_bind = 0;
+                    //dump($s_data);
+                    foreach ($s_data as $key =>$vo) {
+                        $student['studentno'] = $vo['studentno'];
+                        $student['name'] = $vo['name'];
+                        $student['phone'] = $vo['phone'];
+                        $student['token'] = $this->token;
+                        //$student = $studentcard_model->verify($student);
+                        $res = $studentcare_model->approve($student, $user, $this->token);
+                        if ($res == 2) $new_bind++;
+                        if ($res == 1) $old_bind++;
+                    }
+
+                    if ((!$new_bind)&&(!$old_bind)) {
+                        $this->error("学生信息有误，或你没有孩子在我校就读！");
+                    }
+                    else {
+                        $str = '';
+                        if ($old_bind) $str = $str . "已绑定过" . $old_bind . "名学生";
+                        if ($new_bind) $str = $str . "新绑定完成" . $new_bind . "名学生";
+                        $this->success("你" . $str . "！", U('index'));
+                    }
+                }
+            }
+            //$this->error("学生信息有误，请返回重新输入！");
         } else {
             $map['uid'] = $this->uid;
             $map['token'] = $this->token;
@@ -130,8 +206,8 @@ class WapUcenterController extends WapBaseController
                 $this->error("请微信中打开！");
                 return;
             } else {
-                $bind_count = $this->get_bind_count($user['mobile']);
-                $student = $this->get_bind_students($user['mobile']);
+                $bind_count = $this->get_bind_count_by_uid($this->uid);
+                $student = $this->get_bind_students_by_uid($this->uid);
                 $user['has_subscribe'] = $follow['has_subscribe'];
                 $this->assign('user', $user);
                 $this->assign('bind_count', $bind_count);
@@ -141,8 +217,23 @@ class WapUcenterController extends WapBaseController
                 $this->assign('page_title', '【'. $this->school . '】：手机验证');
                 $this->display ('bind_phone');
             }
-           ;
         }
+    }
+
+    function get_bind_count_by_uid ($uid = 0) {
+        if (($uid == 0) || ($uid == null)) return 0;
+        $map0['token'] = $this->token;
+        $map0['uid'] = $uid;
+        $count0 = D('WxyStudentCareView')->where($map0)->count();
+        return $count0;
+    }
+
+    function get_bind_students_by_uid ($uid = 0) {
+        if (($uid== '') || ($uid == null)) return 0;
+        $map0['token'] = $this->token;
+        $map0['uid'] = $uid;
+        $data0 = D('WxyStudentCareView')->where($map0)->select();
+        return $data0;
     }
 
     function get_bind_count ($phone = '') {
