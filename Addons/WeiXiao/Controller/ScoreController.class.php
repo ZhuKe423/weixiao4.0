@@ -4,6 +4,7 @@ namespace Addons\WeiXiao\Controller;
 use Addons\WeiXiao\Controller\BaseController;
 
 class ScoreController extends BaseController{
+
     protected $model;
     protected $token;
     protected $school;
@@ -15,12 +16,14 @@ class ScoreController extends BaseController{
         }
 
         parent::__construct ();
-        $this->model = $this->getModel('WxyScore'); //getModelByName ( $_REQUEST ['_controller'] );
+        $this->model = $this->getModel('WxyCourseComments'); //getModelByName ( $_REQUEST ['_controller'] );
         $this->token = get_token();
         $this->school = D('Common/Apps')->getInfoByToken($this->token, 'public_name');
         $this->schooltype = D('Common/Apps')->getInfoByToken($this->token, 'public_type');
         $this->public_id = D('Common/Apps')->getInfoByToken($this->token, 'id');
+        $this->config = getAddonConfig ( 'WeiXiao' );
     }
+
     function _initialize()
     {
         parent::_initialize();
@@ -43,6 +46,16 @@ class ScoreController extends BaseController{
         $this->assign('nav', $nav);
     }
 
+    public function get_lesson() {
+        if (IS_POST ||IS_AJAX) {
+            $map["courseid"] = I("course_id");
+            $map["token"] = $this->token;
+            $model = D("WxyCourseLessonView");
+            $data = $model->where($map)->select();
+            //$json_data = json_encode($data);
+            $this->ajaxReturn($data);
+        }
+    }
 
     /**
      * 显示指定模型列表数据

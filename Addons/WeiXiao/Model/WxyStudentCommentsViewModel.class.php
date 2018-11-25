@@ -29,6 +29,7 @@ class WxyStudentCommentsViewModel extends ViewModel {
         ),
 
         'WxyCourse' => array (
+            'site' => 'site',
             'name' => 'course_name',
             'teacher' => 'teacher',
             'sdate' => 'classdate',

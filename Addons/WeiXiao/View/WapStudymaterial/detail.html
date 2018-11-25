@@ -4,6 +4,10 @@
 			width: 3.3rem;
 			height: 1.6rem;
 		}
+
+		.note_label{
+			margin-top: 6px;
+		}
 	</style>
 	<body>
 		<header class="mui-bar mui-bar-nav header">
@@ -52,11 +56,11 @@
 				<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
 					<div class="mui-scroll">
 						<a href="#popover" id="openPopover" class="item">
-							<img src="{:ADDON_PUBLIC_PATH}/MUI/images/email_haha.jpg" />
+							<img src="{:ADDON_PUBLIC_PATH}/MUI/images/email_1.png" />
 							<p>邮件订阅</p>
 						</a>
 						<a href="{$data['fileid']|get_file_url}" class="item">
-							<img src="{:ADDON_PUBLIC_PATH}/MUI/images/download_haha.jpg" />
+							<img src="{:ADDON_PUBLIC_PATH}/MUI/images/download_1.png" />
 							<p>预览或下载</p>
 						</a>
 					</div>
@@ -114,8 +118,8 @@
 			<div class="index-title">
 				<span>
 				温馨提示：
-				<p>1.安卓手机：安装QQ浏览器即可预览并下载资料；</p>
-				<p>2.苹果手机：直接预览，下载资料请点击“邮件订阅”</p>
+				<p><span class="mui-badge note_label">1.安卓手机</span>安装QQ浏览器即可预览并下载资料；</p>
+				<p><span class="mui-badge note_label">2.苹果手机</span>直接预览，获取资料请点击“邮件订阅”</p>
 				</span>
 			</div>
 
@@ -183,8 +187,6 @@
             }
 
 		</script>
-		<!--<script type="text/javascript" src="{:ADDON_PUBLIC_PATH}/MUI/js/jquery-1.10.1.min.js?v={:SITE_VERSION}" ></script>-->
-		<!--<script type="text/javascript" src="{:ADDON_PUBLIC_PATH}/MUI/js/mui.min.js?v={:SITE_VERSION}"></script>-->
-	    <script type="text/javascript" src="{:ADDON_PUBLIC_PATH}/MUI/js/app.js?v={:SITE_VERSION}" ></script>
+		<script type="text/javascript" src="{:ADDON_PUBLIC_PATH}/MUI/js/app.js?v={:SITE_VERSION}" ></script>
 	</body>
 </html>

@@ -289,6 +289,8 @@ class CourseController extends ManageBaseController
             $data['model_id'] = $this->model['id'];
             $data['model_name'] = $this->model['name'];
             $data['title'] = I('post.title');
+            $season = I('post.season_id');
+            $course_status = I('post.course_status');
             $site = I('post.site');
 
 //            if (!intval($data['file'])) $this->error("数据文件未上传！");
@@ -297,13 +299,17 @@ class CourseController extends ManageBaseController
             /*$data['termid'] = $res;
             $data['subject'] = $course_obj[1];*/
 
-            if ($this->import_course_lesson_from_excel($data['file'], $data['sdate'], $data['length'], $site)) //import student data from uploaded Excel file.
+            if ($this->import_course_lesson_from_excel($data['file'], $data['sdate'], $data['length'], $site, $season, $course_status)) //import student data from uploaded Excel file.
                 $this->success('保存成功！', U('lists'/*'import?model=' . $this->model ['name'], $this->get_param */), 600);
             else
                 $this->error('请检查文件格式');
         } else {
-            if ($id) $map['id'] = $id;
+            //$this->import_course_lesson_from_excel(493, date('Y-M-D' ), 20, '少城校区', 2, 0);
+            //if ($id) $map['id'] = $id;
             $map['token'] = $this->token;
+            $season_list = M('wxy_course_season')->where($map)->select();
+            $this->assign('season_list', $season_list);
+
             $data = $model->where($map)->select();
             $this->assign('data', $data[0]);
             $this->assign('id', $id);
@@ -436,32 +442,42 @@ class CourseController extends ManageBaseController
      * @param $length
      * @param $site
      */
-    private function import_course_lesson_from_excel($file_id, $sdate, $length, $site)
+    private function import_course_lesson_from_excel($file_id, $sdate, $length, $site, $season, $course_status = 0)
     {
         $data = array();
         $row = array(
             '2' => 'day',
             '3' => 'grade',    //年级
+
             '4' => 'course_1',   //课程
             '5' => 'teacher_1',  //教师
             '6' => 'subject_1',  //科目
             '7' => 'room_1',     //教室
-            '8' => 'course_2',   //课程
-            '9' => 'teacher_2',  //教师
-            '10' => 'subject_2',  //科目
-            '11' => 'room_2',     //教室
-            '12' => 'course_3',   //课程
-            '13' => 'teacher_3',  //教师
-            '14' => 'subject_3',  //科目
-            '15' => 'room_3',     //教室
-            '16' => 'course_4',   //课程
-            '17' => 'teacher_4',  //教师
-            '18' => 'subject_4',  //科目
-            '19' => 'room_4',     //教室
-            '20' => 'course_5',   //课程
-            '21' => 'teacher_5',  //教师
-            '22' => 'subject_5',  //科目
-            '23' => 'room_5',     //教室
+            '8' => 'bat_1',        //课时编号
+
+            '9' => 'course_2',   //课程
+            '10' => 'teacher_2',  //教师
+            '11' => 'subject_2',  //科目
+            '12' => 'room_2',     //教室
+            '13' => 'bat_2',        //课时编号
+
+            '14' => 'course_3',   //课程
+            '15' => 'teacher_3',  //教师
+            '16' => 'subject_3',  //科目
+            '17' => 'room_3',     //教室
+            '18' => 'bat_3',        //课时编号
+
+            '19' => 'course_4',   //课程
+            '20' => 'teacher_4',  //教师
+            '21' => 'subject_4',  //科目
+            '22' => 'room_4',     //教室
+            '23' => 'bat_4',        //课时编号
+
+            '24' => 'course_5',   //课程
+            '25' => 'teacher_5',  //教师
+            '26' => 'subject_5',  //科目
+            '27' => 'room_5',     //教室
+            '28' => 'bat_5',        //课时编号
         );
         $data0 = importFormExcel_Column($file_id, $row, array(), 'A'); //read excel file from start_column!
         $grade = '';
@@ -495,27 +511,31 @@ class CourseController extends ManageBaseController
             } else {
                 $day = trim($vo['day'], '[]');
                 $mDays = explode(',', $day);
-                $course_data['grade'] = strval(array_search($vo['grade'], $this->config['grade_value']));
+                $course_data['grade'] = strval(array_search(str_replace(' ', '', $vo['grade']), $this->config['grade_value']));
                 $course_data['token'] = $this->token;
                 $course_data['site'] = $site;
+                $course_data['season'] = $season;
                 $course_data['timestamp'] = time();
-                $course_data['length'] = count($mDays);
-                $course_data['sdate'] = strtotime(current($mDays));
+                $course_data['length'] = $length;
+                $course_data['sdate'] = $sdate;// strtotime(current($mDays));
                 $course_data['edate'] = strtotime(end($mDays));
                 $lesson_data['grade'] = strval(array_search($vo['grade'], $this->config['grade_value'])); //$vo['grade'];
                 $lesson_data['site'] = $site;
                 $lesson_data['token'] = $this->token;
                 $lesson_data['day'] = $mDays;
+                //dump($mDays);
 
                 for ($i = 1; $i <= 5; $i++) {
                     $start_end = explode('--', $schedule['course_' . $i]);
                     $course_data['name'] = $vo['course_' . $i];
                     $course_data['teacher'] = $vo['teacher_' . $i];
                     $course_data['subject'] = strval(array_search($vo['subject_' . $i], $this->config['subject_value']));
-                    $course_data['status'] = 1;
+                    $course_data['status'] = strval($course_status);
+                    $course_data['bat'] = $vo['bat_' . $i];
                     $course_id = $course_model->addCourse($course_data);
-                    $lesson_data['courseid_' . $i] = $course_id;
 
+                    $lesson_data['bat_'. $i] = $vo['bat_' . $i];
+                    $lesson_data['courseid_' . $i] = $course_id;
                     $lesson_data['room_' . $i] = $vo['room_' . $i];
                     $lesson_data['start_time_' . $i] = $start_end[0];
                 }
@@ -535,7 +555,7 @@ class CourseController extends ManageBaseController
                 $mLesson['site'] = $site;
                 $mLesson['room'] = $lesson['room_' . $i];
                 $mLesson['sequence'] = 1;
-                $mLesson['bat'] = $lot++;
+                $mLesson['bat'] = $lesson['bat_'. $i];//$lot++;
 
                 foreach ($lesson['day'] as $sDay) {
                     $dstime = date('y-m-d H:i:s', strtotime($sDay . " " . $lesson['start_time_' . $i]));

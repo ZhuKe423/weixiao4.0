@@ -105,7 +105,7 @@
         <if condition="($vo.courseid neq $courseid)">
             <li class="am-panel" id="ap_{$vo.courseid}">
                 <a data-am-collapse="{parent: '#collapase-nav-1', target: '#c-nav{$vo.courseid}'}">
-                    <span class="omit_show">{$vo.grade}{$vo.course_name} {$vo.teacher}老师</span><i class="am-icon-angle-right am-fr am-margin-right"></i>
+                    <span class="omit_show">{$vo.site}{$vo.grade}{$vo.course_name} {$vo.teacher}老师</span><i class="am-icon-angle-right am-fr am-margin-right"></i>
                 </a>
             <ul class="am-list am-collapse admin-sidebar-sub" id="c-nav{$vo.courseid}">
         </if>

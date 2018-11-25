@@ -18,6 +18,7 @@ class WxyCourseModel extends Model
         $map['grade'] = $data['grade'];
         $map['teacher'] = $data['teacher'];
         $map['site'] = $data['site'];
+        $map['season'] = $data['season'];
         if ($data['name'] == '') return;
         $result = $this->where($map)->find();
 
@@ -27,6 +28,7 @@ class WxyCourseModel extends Model
             return $this->add($data);
         }
         else{
+            $this->where($map)->save($data);
             return $result['id'];
         }
     }
