@@ -86,7 +86,7 @@ class WapCourseController extends WapBaseController
 
         unset($course_map);
         $course_map['token'] = $this->token;
-        $course_map['status'] = array('lt',3);
+        $course_map['status'] = array('lt',1);
         $course_map['top'] = '1';
         $data = D('wxy_course')->where($course_map)->order('id desc')->limit(0,16)->select();
         foreach ($data as $key => $vo) {
@@ -95,7 +95,7 @@ class WapCourseController extends WapBaseController
         }
         $this->assign('top_course', $data);
 
-        $map['status'] = array('lt',3); //查询即将开课或进行中的课程！
+        $map['status'] = array('lt',1); //查询即将开课课程！
         $course_data = array();
         $data = D('wxy_course')->where($map)->order('id desc')->limit(0,6)->select();
         foreach ($data as $key => $vo) {
@@ -134,6 +134,10 @@ class WapCourseController extends WapBaseController
             $course_data[$key]['data'] = $data;
         };
         //dump($course_data);
+
+        $cover = $this->get_img_url($data['cover'], $slides['0']['img']);
+        $this->assign('brief_intro', '【'.$this->school . '】：近期课程汇总');
+        $this->assign('cover_img', $cover);
         $this->assign('course_data', $course_data);
         $this->display();
     }

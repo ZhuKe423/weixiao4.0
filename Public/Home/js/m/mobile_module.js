@@ -289,7 +289,7 @@ var WeiPHP_RAND_COLOR = ["#ff6600","#ff9900","#99cc00","#33cc00","#0099cc","#339
 		})
 	}
 	//利用微信接口上传图片
-	function wxChooseImg(_this,num,name,callback,token=''){
+	function wxChooseImg(_this,num,name,callback,token){
 		wx.chooseImage({
 			count: num, // 默认9
 			sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
@@ -306,7 +306,7 @@ var WeiPHP_RAND_COLOR = ["#ff6600","#ff9900","#99cc00","#33cc00","#0099cc","#339
 		
     }
 	//利用微信接口上传图片到微信服务器
-	function wxUploadImg(localIds,name,target,token=''){
+	function wxUploadImg(localIds,name,target,token){
 		var localId = localIds.pop();
 		$.Dialog.loading();
 		wx.uploadImage({

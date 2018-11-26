@@ -25,19 +25,12 @@
   <!-- 标签页导航 -->
   <div class="span9 page_message">
     <section id="contents">
-      <ul class="tab-nav nav">
-          <li class=""><a href="{:U('lists')}">学生列表</a></li>
-          <!--<li class=""><a href="{:U('edit', array('id'=>I('request.id')))}">编辑学生资料</a></li>
-          <li class=""><a href="{:U('comment', array('id'=>I('request.id')))}">学生评语录入</a></li>-->
-          <li class="current"><a href="{:U('import', array('id'=>I('request.id')))}">学生资料导入<b class="arrow fa fa-sort"></b></a></li>
-          <!--<li class=""><a href="{:U('comments_import', array('id'=>I('request.id')))}">学生评语导入</a></li>-->
-
-      </ul>
+        <include file="Home@Addons/_nav" />
       <div class="tab-content"> 
         <!-- 表单 -->
         <form id="form" action="{:U('import?model='.$model['id'])}" method="post" class="form-horizontal">
             <div class="form-item cf">
-                <label class="item-label"><span class="need_flag">*</span>关键词<span class="check-tips"></span></label>
+                <label class="item-label">关键词<span class="check-tips"></span></label>
                 <div class="controls">
                   <input type="text" class="text input-large" name="keyword" value="{$data.keyword}">
                 </div>
@@ -47,18 +40,17 @@
                 <div class="controls">
                   <input type="text" class="text input-large" name="title" value="{$data.title}">
                 </div>
-              </div>
-            <!--<div class="form-item cf">
-                    <label class="item-label"><span class="need_flag">*</span>学生资料Excel文件上传<span class="check-tips">请选择符合格式的.xls或.xlsx文件</span></label>
-                    <div class="controls upload_file" rel="file" data-max="1" title="点击上传文件">
-                        <input type="file" id="upload_file_file">
-                        <input type="hidden" name="file" value="{$data.file}"/>
-                        <div class="upload-img-box"><present name="data[$field['name']]">
-                            <div class="upload-pre-file"><span class="upload_icon_all"></span>{$data[$field['name']]|get_table_field=###,'id','name','File'}</div>
-                        </present>
-                        </div>
-                    </div>
-            </div>-->
+            </div>
+            <div class="form-item cf">
+                <label class="item-label"><span class="need_flag">*</span>此学员信息表对应的培训季<span class="check-tips">（务必选择相应季节，切莫留空）</span></label>
+                <div class="controls">
+                    <select name="season_id" placeholder="选择此课表对应的培训季">
+                        <volist name="season_list" id="vo">
+                            <option value='{$vo.id}'>{$vo.id}. {$vo.season_name}</option>
+                        </volist>
+                    </select>
+                </div>
+            </div>
 
             <div class="form-item cf">
                 <label class="item-label"><span class="need_flag">*</span>资料文件<span class="check-tips">文件大小控制在5M以内</span></label>
@@ -73,7 +65,7 @@
 
 
             <div class="form-item cf">
-                <label class="item-label"><span class="need_flag">*</span>描述<span class="check-tips">导入学生数据说明，控制在100汉字以内</span></label>
+                <label class="item-label">描述<span class="check-tips">导入学生数据说明，控制在100汉字以内</span></label>
                 <div class="controls">
                   <label class="textarea input-large">
                   <textarea class="text input-large" name="comment" >{$data.comment}</textarea>

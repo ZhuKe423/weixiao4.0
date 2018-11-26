@@ -402,6 +402,27 @@ class IndexController extends HomeController {
     function sendMsg() {
 	    if (IS_POST) {
 	        $mobile = I('post.mobile');
+	        $verify_ticket = I('post.verify_ticket');
+            $verify_randstr = I('post.verify_randstr');
+	        $ip = get_client_ip();
+            $url = 'https://ssl.captcha.qq.com/ticket/verify';
+
+            $url = "https://ssl.captcha.qq.com/ticket/verify";
+            $params = array(
+                "aid" => '2088073676',
+                "AppSecretKey" => '0twAZp74GQKrbqR18vWLfAQ**',
+                "Ticket" => $verify_ticket,
+                "Randstr" => $verify_randstr,
+                "UserIP" => $ip
+            );
+            $paramstring = http_build_query($params);
+            $content = $this->txcurl($url,$paramstring);
+            $data = json_decode ( $content, true );
+
+            if ($data['response'] !== '1') {
+                $this->ajaxReturn('拼图验证错误！', 'JSON');
+                return;
+            }
             $res = D ( 'Addons://Sms/Sms' )->sendSms ( $mobile, 'card' );
             $this->ajaxReturn ( $res, 'JSON' );
         }
@@ -410,5 +431,41 @@ class IndexController extends HomeController {
             dump($res);*/
 	        $this->ajaxReturn('Should be running in post method only!');
         }
+    }
+
+    //URL请求函数，来自腾讯官方示例
+    private function txcurl($url,$params=false,$ispost=0){
+        $httpInfo = array();
+        $ch = curl_init();
+
+        curl_setopt( $ch, CURLOPT_HTTP_VERSION , CURL_HTTP_VERSION_1_1 );
+        curl_setopt( $ch, CURLOPT_USERAGENT , 'JuheData' );
+        curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT , 60 );
+        curl_setopt( $ch, CURLOPT_TIMEOUT , 60);
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER , true );
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        if( $ispost )
+        {
+            curl_setopt( $ch , CURLOPT_POST , true );
+            curl_setopt( $ch , CURLOPT_POSTFIELDS , $params );
+            curl_setopt( $ch , CURLOPT_URL , $url );
+        }
+        else
+        {
+            if($params){
+                curl_setopt( $ch , CURLOPT_URL , $url.'?'.$params );
+            }else{
+                curl_setopt( $ch , CURLOPT_URL , $url);
+            }
+        }
+        $response = curl_exec( $ch );
+        if ($response === FALSE) {
+            //echo "cURL Error: " . curl_error($ch);
+            return false;
+        }
+        $httpCode = curl_getinfo( $ch , CURLINFO_HTTP_CODE );
+        $httpInfo = array_merge( $httpInfo , curl_getinfo( $ch ) );
+        curl_close( $ch );
+        return $response;
     }
 }

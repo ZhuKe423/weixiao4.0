@@ -283,7 +283,7 @@ class CourseController extends ManageBaseController
             $data['uid'] = $uid;
             $data['token'] = $token;
             $data['file'] = I('post.file_id');
-            $data['sdate'] = I('post.sdate');
+            $data['sdate'] = strtotime(I('post.sdate'));
             $data['length'] = I('post.length');
             $data['comment'] = I('post.comment');
             $data['model_id'] = $this->model['id'];

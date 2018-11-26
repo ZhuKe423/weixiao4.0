@@ -132,6 +132,14 @@ return array(
             '3' => '名校题库'
         )
     ),
+    'pay_status' => array(
+        'title' => '缴款状态',
+        'value' => array (
+            '0' => '已缴',
+            '1' => '未缴',
+            '2' => '部分未缴',
+        )
+    ),
 
     'course_status' => array(
         'title' => '课程状态',

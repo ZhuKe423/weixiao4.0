@@ -53,6 +53,8 @@ class WapUcenterController extends WapBaseController
     public function bind_phone() {
         if (IS_POST) {
             // 验证码判断
+            $verify_ticket = I('post.verify_ticket');
+
             $check = D('Addons://Sms/Sms')->checkSms(I ( 'mobile' ), I('code'));
             if ($check ['result'] == 0) {
                 $this->error($check ['msg']);

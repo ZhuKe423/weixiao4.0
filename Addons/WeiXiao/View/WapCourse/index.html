@@ -454,6 +454,15 @@
 				}
 			});
 		</script>
+		<script type="text/javascript">
+            $('.container').css('min-height',$(window).height());
+            $.WeiPHP.initWxShare({
+                title:"课程汇总",
+                imgUrl:"{$cover_img}",
+                desc:"{$brief_intro}",
+                link:window.location.href
+            })
+		</script>
 
 		<!--
     	作者：flexpad2011@gmail.com
@@ -461,9 +470,7 @@
     	描述：侧滑菜单
     -->
 		<!--显示下拉-->
-
-		<script type="text/javascript" src="__STATIC__/jquery-2.0.3.min.js?v={:SITE_VERSION}"></script>
-		<!--<script type="text/javascript" src="js/mui.js"></script>-->
+<!--<script type="text/javascript" src="js/mui.js"></script>-->
 		<script type="text/javascript" src="{:ADDON_PUBLIC_PATH}/MUI/js/app.js?v={:SITE_VERSION}"></script>
 		<!--<script type="text/javascript" scr="school/js/basic.js"></script>-->
 	</body>

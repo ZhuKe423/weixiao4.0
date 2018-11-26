@@ -1,4 +1,5 @@
 	<include file="Home@Public/mobile_head_mui"/>
+	<script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
 	<style>
 		.mui-row .mui-btn {
 			margin-top: 3px;
@@ -7,6 +8,18 @@
 		.ucenter-btn {
 			margin-top: 3px;
 		}
+
+		#send_btn {
+			display: none;
+		}
+
+		#code_input {
+			display: none;
+		}
+		#captha_label {
+			display: none;
+		}
+
 	</style>
 
 	<body style="background: #efeff4;">
@@ -58,9 +71,27 @@
 						<div class="mui-input-row">
 							<input id="mobile" name="mobile" type="text" placeholder="手机号码" value="{$user['mobile']}">
 						</div>
+						<div id="captha_input" class="mui-input-row mui-row">
+							<div class="mui-col-sm-6 mui-col-xs-6">
+								<input type="text" value="" name="captha" class="mui-input-clear" placeholder="拼图验证" disabled>
+							</div>
+							<div class="mui-col-sm-5 mui-col-xs-5">
+								<button id="TencentCaptcha"
+										data-appid="2088073676"
+										data-cbfn="captcha_cb" type="button"
+										class="mui-btn mui-btn-primary mui-btn-outlined mui-text-center">拼图验证</button>
+							</div>
+							<div class="mui-col-sm-1 mui-col-xs-1">
+							</div>
+						</div>
+						<div id="captha_label" class="mui-input-row mui-row">
+							<div class="mui-col-sm-12 mui-col-xs-12">
+								<input type="text" value="" name="captha_OK" class="mui-input-clear" placeholder="图案验证通过，请继续手机验证码验证：" disabled>
+							</div>
+						</div>
 						<div class="mui-input-row mui-row">
 							<div class="mui-col-sm-6 mui-col-xs-6">
-								<input type="text" value="" name="code" class="mui-input-clear" placeholder="验证码">
+								<input id="code_input" type="text" value="" name="code" class="mui-input-clear" placeholder="手机验证码">
 							</div>
 							<div class="mui-col-sm-5 mui-col-xs-5">
 								<button id="send_btn" type="button" class="mui-btn mui-btn-primary mui-btn-outlined mui-text-center" onclick="sendmsg()">获取验证码
@@ -72,6 +103,8 @@
 						<div class="mui-button-row">
 						</div>
 						<div class="mui-button-row">
+							<input value="" name="verify_ticket" type="hidden">
+							<input value="" name="verify_randstr" type="hidden">
 							<button type="submit" class="mui-btn mui-btn-primary">确认</button>&nbsp;&nbsp;
 							<button type="button" class="mui-btn mui-btn-danger" >取消</button>
 						</div>
@@ -146,9 +179,25 @@
 			</div>
 		</div>
 
-		<script type="text/javascript " src="__STATIC__/jquery-2.0.3.min.js "></script>
 		<script type="text/javascript " src="{:ADDON_PUBLIC_PATH}/MUI/js/app.js "></script>
 		<script type="text/javascript ">
+			var verify_res;
+            window.captcha_cb = function(res){
+                console.log(res)
+                // res（未通过验证）= {ret: 1, ticket: null}
+                // res（验证成功） = {ret: 0, ticket: "String", randstr: "String"}
+                if(res.ret === 0){
+                    //alert(res.ticket);   // 票据
+					$('input[name="verify_ticket"]').attr("value", res.ticket);
+                    $('input[name="verify_randstr"]').attr("value", res.randstr);
+                    verify_res = res;
+					$('input[name="code"]').show();
+                    $('#send_btn').show();
+                    $('#captha_label').show();
+                    $('#captha_input').hide();
+                }
+            }
+
 			mui.init();
 
             var reSentTime = 60;
@@ -170,13 +219,16 @@
                 }
                 var mobile = $('#mobile').val();
                 var url = "{:U('Home/Index/sendMsg')}";
+                //var verify_ticket = $('input[name="verify_ticket"]').val();
+                //var verify_randstr = $('input[name="verify_randstr"]').val();
 
-                $.post(url,{mobile:mobile, __hash__: hash},function(res){
-                    return;
-                    //TODO
+				$.post(url,{mobile:mobile, __hash__:hash, verify_ticket:verify_res.ticket, verify_randstr:verify_res.randstr},function(res){
+					return;
+					//TODO
 					/*console.log("HASH is: ", hash);
 					 console.log("Return is: ", res);*/
-                });
+				});
+
             }
             function show_time(){
                 if(reSentTime > 0){

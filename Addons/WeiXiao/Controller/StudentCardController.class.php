@@ -62,7 +62,7 @@ class StudentCardController extends ManageBaseController
         $res ['class'] = $act == 'register' ? 'current' : '';
         $nav [] = $res;
 
-        $res ['title'] = '学员资料导入';
+        $res ['title'] = '学员信息导入';
         $res ['url'] = U('import');
         $res ['class'] = $act == 'import' ? 'current' : '';
         $nav [] = $res;
@@ -129,7 +129,7 @@ class StudentCardController extends ManageBaseController
 
         $cmap['token'] = $this->token;
         $cmap['status'] = array('lt',3); //上架或即将上架课程
-        $course_data = M('WxyCourse')->where($cmap)->select();
+        $course_data = M('WxyCourse')->where($cmap)->order('season desc, grade desc')->select();
         foreach ($course_data as $key => $vo) {
             $course_data[$key]['grade'] = $this->config['grade_value'][$vo['grade']];
         }
@@ -357,16 +357,20 @@ class StudentCardController extends ManageBaseController
             $data['comment'] = I('post.comment');
             $data['model_id'] = $this->model['id'];
             $data['model_name'] = $this->model['name'];
+            $season = I('post.season_id');
             if (!intval($data['file'])) $this->error("数据文件未上传！");
             $import_model = M('WxyModelImport');
             $import_model->add($data);
 //            $this->import_student_data_from_excel($data['file']);
-            if ($this->import_student_data_from_excel($data['file'])) //import student data from uploaded Excel file.
+            if ($this->import_student_data_from_excel($data['file'], $season)) //import student data from uploaded Excel file.
                 $this->success('保存成功！', U('lists'/*'import?model=' . $this->model ['name'], $this->get_param */), 600);
             else
                 $this->error('请检查文件格式');
         }
         else {
+            $map['token'] = $this->token;
+            $season_list = M('wxy_course_season')->where($map)->select();
+            $this->assign('season_list', $season_list);
             $this->display();
         }
     }
@@ -418,7 +422,15 @@ class StudentCardController extends ManageBaseController
     }
 
     //This function was modified for full time school under Weixiao addon.
-    private function import_student_data_from_excel($file_id) {
+    private function import_student_data_from_excel($file_id, $season) {
+        $subject = array(
+            'H' => 'chinese',
+            'I' => 'math',
+            'J' => 'english',
+            'K' => 'chemistry',
+            'L' => 'physics',
+            'M' => 'biology',
+        );
         $data = array();
         $column = array (
             'A' => 'studentno',
@@ -428,9 +440,23 @@ class StudentCardController extends ManageBaseController
             'E'=>'school',
             'F'=>'phone',
             'G'=>'phone_bck',
-            'M'=>'pay_status',
+            'H' => 'chinese',
+            'I' => 'math',
+            'J' => 'english',
+            'K' => 'chemistry',
+            'L' => 'physics',
+            'M' => 'biology',
+            'N' => 'pay_status',
         );
-        $data = importFormExcel($file_id, $column, array(), 4); //read excel file from start_row!
+        $l_map['season'] = $season;
+        $l_map['token'] = $this->token;
+        $data = D('WxyCourseLessonView')->where($l_map)->order('bat asc')->select();
+        $lesson = array(); //course bat info stored in this variable.
+        foreach ($data as $key => $vo) {
+            $lesson[$vo['bat']] = $vo['courseid'];
+        }
+
+        $data = importFormExcel($file_id, $column, array(), 3); //read excel file from start_row!
         //var_dump($data);
         //exit();
         $student_model = D('WxyStudentCard');
@@ -441,25 +467,37 @@ class StudentCardController extends ManageBaseController
                 $row['uid'] = $this->uid;
                 $row['phone'] = strval($row['phone']);
                 $row['phone_bck'] = strval($row['phone_bck']);
+                $row['pay_status'] = strval(array_search($row['pay_status'], $this->config['pay_status']));
+                $row['gender'] == '女' && $row['gender'] = 1;
+                $row['gender'] == '男' && $row['gender'] = 0;
 
-                $row['pay_status'] = strval($row['pay_status']);
-                $row['gender'] = ($row['gender'] == '男') ? 1 : 0;
-                if ($row['gender'] == '女') $row['gender'] = 2;
                 $map['token'] =$row['token'];
-                $map['studentno'] =$row['studentno'];
+                $map['studentno'] = $row['studentno'];
                 $map['grade'] =$row['grade'];
-
-                if(empty($student_model->where($map)->find())){
-                    //                   // dump(123);
+                $student = $student_model->where($map)->find();
+                if(empty($student)){
                     $student_model->addStudent($row);
                 }
                 else{
-//                    echo(123);
-//                    dump($row);
+                    $sid = $student['id'];
                     $student_model->where($map)->save($row);
                 }
+                $row1['season'] = $season;
+                $row1['token'] = $this->token;
+                $row1['studentno'] = $row['studentno'];
+                $row1['sid'] = $sid;
+                $student_course_model = M('WxyStudentCourse');
+                foreach ($subject as $key => $vo) {
+                    $row1['bat_no'] = $row[$vo];
+                    if (!empty($row1['bat_no'])) {
+                        if (empty($student_course_model->where($row1)->find())) {
+                            $row1['courseid'] = $lesson[$row1['bat_no']];
+                            $row1['timestamp'] = time();
+                            $student_course_model->add($row1);
+                        }
+                    }
+                }
             }
-
             return true;
         }
         else return false;

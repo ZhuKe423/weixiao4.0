@@ -18,6 +18,7 @@ class WxyCourseLessonViewModel extends ViewModel
             'site' => 'site',
             'teacher' => 'teacher',
             'grade' => 'grade',
+            'season' => 'season',
             '_on'=>'WxyCourseLesson.courseid = WxyCourse.id'),
     );
 }
