@@ -169,7 +169,7 @@ class StudentCardController extends ManageBaseController
                 $item['bat'] = $vo['bat'];
                 $item['course_item'] = $vo['courseid'] . '.'. $vo['site']. ' '. $this->config['grade_value'][$vo['grade']]. ' '. $vo['course_name'] . ' '. $vo['teacher'] . '老师';
                 $item['course_value'] = $vo['courseid'];
-                $item['lesson_item'] = "第" . $vo['sequence'] . "次时段：" . $vo['classdate'] . "--教室：" . $vo['room'];
+                $item['lesson_item'] = $vo['bat_no'] . "课时第" . $vo['sequence'] . "次时段：" . $vo['classdate'] . "--教室：" . $vo['room'];
                 $item['lesson_value'] = $vo['bat_no'];
                 array_push($student_course, $item);
             }
@@ -185,8 +185,94 @@ class StudentCardController extends ManageBaseController
 
             $this->display ("register");
         }
-
     }
+
+    public function lesson_reschedule ()
+    {
+        $model = $this->model;
+        $studentno = I ( 'studentno' );
+        $map['token'] = $this->token;
+        $season_list = M('wxy_course_season')->where($map)->select();
+        $this->assign('season_list', $season_list);  //get course_season data.
+
+        $map['studentno'] = $studentno;
+
+        // 获取数据
+        $data = M ( get_table_name ( $model ['id'] ) )->where($map)->find ();
+
+        //dump($studentno);
+        $data || $is_new = true;
+        $data && $studentno = $data['studentno'];
+
+        $token = get_token ();
+        if (isset ( $data ['token'] ) && $token != $data ['token'] && defined ( 'ADDON_PUBLIC_PATH' )) {
+            $this->error ( '100005:非法访问！' );
+        }
+
+        $cmap['token'] = $this->token;
+        $cmap['status'] = array('lt',3); //上架或即将上架课程
+        $course_data = D('WxyCourse')->where($cmap)->order('season desc, grade asc')->select();
+        $this->assign('course_list', $course_data);
+
+        $cmap['studentno'] = $studentno; //学生选课记录
+        $course_data = D('WxyStudentCourseView')->where($cmap)->order('season desc, status asc')->select();
+        $this->assign('student_course_list', $course_data);
+        foreach ($course_data as $key => $vo) {
+            $course_data[$key]['grade'] = $this->config['grade_value'][$vo['grade']];
+        }
+
+        if (IS_POST) {
+            $Model = D ( parse_name ( get_table_name ( $model ['id'] ), 1 ) );
+            // 获取模型的字段信息
+            $Model = $this->checkAttr ( $Model, $model ['id'] );
+            if ($is_new) {
+                if ($Model->create () && false !== $Model->add ()) {
+                    $this->_saveKeyword ( $model, $studentno );
+                    // 清空缓存
+                    method_exists ( $Model, 'clear' ) && $Model->clear ( $studentno, 'edit' );
+                    $this->success ( '保存' . $model ['title'] . '成功！', U('register?studentno='. I('post.studentno')));
+                } else {
+                    $this->error ( '100006:' . $Model->getError () );
+                }
+            }
+            else {
+                if ($Model->create () && false !== $Model->save ()) {
+                    $this->_saveKeyword ( $model, $studentno );
+                    // 清空缓存
+                    method_exists ( $Model, 'clear' ) && $Model->clear ( $studentno, 'edit' );
+                    $this->success ( '保存' . $model ['title'] . '成功！' );
+                } else {
+                    $this->error ( '100006:' . $Model->getError () );
+                }
+            }
+
+        } else {
+
+            $view_data = D('WxyStudentCourseView')->where($map)->select();
+            $student_course = array();
+            foreach($view_data as $key => $vo) {
+                $item['id'] = $key;
+                $item['c_id'] = $vo['courseid'];
+                $item['bat'] = $vo['bat'];
+                $item['course_item'] = $vo['courseid'] . '.'. $vo['site']. ' '. $this->config['grade_value'][$vo['grade']]. ' '. $vo['course_name'] . ' '. $vo['teacher'] . '老师';
+                $item['course_value'] = $vo['courseid'];
+                $item['lesson_item'] = $vo['bat_no'] . "课时第" . $vo['sequence'] . "次时段：" . $vo['classdate'] . "--教室：" . $vo['room'];
+                $item['lesson_value'] = $vo['bat_no'];
+                array_push($student_course, $item);
+            }
+
+            $fields = get_model_attribute ( $model ['id'] );
+            $this->assign ( 'fields', $fields );
+            $this->assign ( 'data', $data );
+            $is_new ? $this->assign('is_new', 1): $this->assign('is_new', 0);
+            $this->assign ( 'studentno', $studentno );
+            $this->assign('submit_name', '添加、修改学员信息点确认');
+            $this->assign('student_course', $student_course);
+
+            $this->display ("lesson_reschedule");
+        }
+    }
+
 
     public function course_reg() {
         $_post = I('post.');
@@ -507,36 +593,87 @@ class StudentCardController extends ManageBaseController
         if (IS_POST ||IS_AJAX) {
             $map["courseid"] = I("course_id");
             $map["token"] = $this->token;
+            $map["sequence"] = 1;
             $model = D("WxyCourseLessonView");
             $data = $model->where($map)->select();
-            $lesson_one = array();
+            /*$lesson_one = array();
             $bat = 0;
             foreach ($data as $key => $vo) {
                if(intval($vo['bat']) !=$bat ) {
                    $lesson_one[] = $vo;
                    $bat = intval($vo['bat']);
                }
-            }
+            }*/
             //$json_data = json_encode($data);
-            $this->ajaxReturn($lesson_one);
+            $this->ajaxReturn($data);
+        }
+        else {
+            $map["courseid"] = I("course_id");
+            $map["token"] = $this->token;
+            $map["sequence"] = 1;
+            $model = D("WxyCourseLessonView");
+            $data = $model->where($map)->select();
+            $this->ajaxReturn($data);
+        }
+    }
+
+    public function get_course_lesson() {
+        if (IS_POST ||IS_AJAX) {
+            $map["courseid"] = I("course_id");
+            $map["token"] = $this->token;
+            $model = D("WxyCourseLessonView");
+            $data = $model->where($map)->order('sequence asc')->select();
+            $this->ajaxReturn($data);
         }
         else {
             $map["courseid"] = I("course_id");
             $map["token"] = $this->token;
             $model = D("WxyCourseLessonView");
-            $data = $model->where($map)->select();
-            $lesson_one = array();
-            $bat = 0;
-            foreach ($data as $key => $vo) {
-                if(intval($vo['bat']) !=$bat ) {
-                    $lesson_one[] = $vo;
-                    $bat = intval($vo['bat']);
-                }
-            }
-            //$json_data = json_encode($data);
-            $this->ajaxReturn($lesson_one);
+            $data = $model->where($map)->order('sequence asc')->select();
+            $this->ajaxReturn($data);
         }
     }
+
+    public function get_student_lesson() {
+        if (IS_POST ||IS_AJAX) {
+            $map["courseid"] = I("course_id");
+            $map["studentno"] = I("studentno");
+            $map["token"] = $this->token;
+            $model = D("WxyStudentLessonView");
+            $data = $model->where($map)->order('sequence asc')->select();
+            $this->ajaxReturn($data);
+        }
+        else {
+            $map["courseid"] = I("course_id");
+            $map["studentno"] = I("studentno");
+            $map["token"] = $this->token;
+            $model = D("WxyStudentLessonView");
+            $data = $model->where($map)->order('sequence asc')->select();
+            $this->ajaxReturn($data);
+        }
+    }
+
+    public function get_student_course() {
+        if (IS_POST ||IS_AJAX) {
+            $map["season"] = I("season");
+            $map["studentno"] = I("studentno");
+            $map["token"] = $this->token;
+            $map["sequence"] = 1;
+            $model = D("WxyStudentLessonView");
+            $data = $model->where($map)->order('sequence asc')->select();
+            $this->ajaxReturn($data);
+        }
+        else {
+            $map["season"] = I("season");
+            $map["studentno"] = I("studentno");
+            $map["token"] = $this->token;
+            $map["sequence"] = 1;
+            $model = D("WxyStudentLessonView");
+            $data = $model->where($map)->order('sequence asc')->select();
+            $this->ajaxReturn($data);
+        }
+    }
+
 
     function get_student_info() {
         if (IS_POST ||IS_AJAX) {

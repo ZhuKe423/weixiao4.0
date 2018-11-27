@@ -22,37 +22,55 @@ class WxyCourseLessonTable {
 					'title' => '课程序号',
 					'come_from' => 0,
 					'width' => '',
-					'is_sort' => 0
+					'is_sort' => 0,
+					'name' => 'sequence',
+					'function' => '',
+					'href' => [ ]
 			],
 			'classdate' => [
 					'title' => '上课时间',
 					'come_from' => 0,
 					'width' => '',
-					'is_sort' => 0
+					'is_sort' => 0,
+					'name' => 'classdate',
+					'function' => '',
+					'href' => [ ]
 			],
 			'classlen' => [
 					'title' => '课时长度',
 					'come_from' => 0,
 					'width' => '',
-					'is_sort' => 0
+					'is_sort' => 0,
+					'name' => 'classlen',
+					'function' => '',
+					'href' => [ ]
 			],
 			'site' => [
 					'title' => '校区',
 					'come_from' => 0,
 					'width' => '',
-					'is_sort' => 0
+					'is_sort' => 0,
+					'name' => 'site',
+					'function' => '',
+					'href' => [ ]
 			],
 			'room' => [
 					'title' => '教室',
 					'come_from' => 0,
 					'width' => '',
-					'is_sort' => 0
+					'is_sort' => 0,
+					'name' => 'room',
+					'function' => '',
+					'href' => [ ]
 			],
 			'courseid' => [
 					'title' => '课程ID',
 					'come_from' => 0,
 					'width' => '',
-					'is_sort' => 0
+					'is_sort' => 0,
+					'name' => 'courseid',
+					'function' => '',
+					'href' => [ ]
 			],
 			'urls' => [
 					'title' => '操作',
@@ -68,7 +86,9 @@ class WxyCourseLessonTable {
 									'title' => '删除',
 									'url' => '[DELETE]'
 							]
-					]
+					],
+					'name' => 'urls',
+					'function' => ''
 			]
 	];
 	
@@ -86,6 +106,14 @@ class WxyCourseLessonTable {
 					'type' => 'string',
 					'field' => 'int(10) NOT NULL',
 					'remark' => '课程ID',
+					'is_show' => 1,
+					'placeholder' => '请输入内容'
+			],
+			'bat' => [
+					'title' => '课程批次',
+					'type' => 'num',
+					'field' => 'int(10) NULL',
+					'remark' => '课程批次（一个课程可能在不同时间进行多个批次）',
 					'is_show' => 1,
 					'placeholder' => '请输入内容'
 			],

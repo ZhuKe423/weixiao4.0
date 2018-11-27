@@ -22,43 +22,64 @@ class WxyCourseTable {
 					'title' => 'ID主键',
 					'come_from' => 0,
 					'width' => '',
-					'is_sort' => 0
+					'is_sort' => 0,
+					'name' => 'id',
+					'function' => '',
+					'href' => [ ]
 			],
 			'name' => [
 					'title' => '课程名称',
 					'come_from' => 0,
 					'width' => '',
-					'is_sort' => 0
+					'is_sort' => 0,
+					'name' => 'name',
+					'function' => '',
+					'href' => [ ]
 			],
 			'site' => [
 					'title' => '校区',
 					'come_from' => 0,
 					'width' => '',
-					'is_sort' => 0
+					'is_sort' => 0,
+					'name' => 'site',
+					'function' => '',
+					'href' => [ ]
 			],
 			'subject' => [
 					'title' => '科目',
 					'come_from' => 0,
 					'width' => '',
-					'is_sort' => 0
+					'is_sort' => 0,
+					'name' => 'subject',
+					'function' => '',
+					'href' => [ ]
 			],
 			'teacher' => [
 					'title' => '任课教师',
 					'come_from' => 0,
 					'width' => '',
-					'is_sort' => 0
+					'is_sort' => 0,
+					'name' => 'teacher',
+					'function' => '',
+					'href' => [ ]
 			],
 			'grade' => [
 					'title' => '年级',
 					'come_from' => 0,
 					'width' => '',
-					'is_sort' => 0
+					'is_sort' => 0,
+					'name' => 'grade',
+					'function' => '',
+					'href' => [ ]
 			],
 			'length' => [
 					'title' => '课时数',
 					'come_from' => 0,
 					'width' => '',
-					'is_sort' => 0
+					'is_sort' => 0,
+					'name' => 'length',
+					'function' => '',
+					'href' => [ ]
 			],
 			'urls' => [
 					'title' => '操作',
@@ -90,7 +111,9 @@ class WxyCourseTable {
 									'title' => '学员',
 									'url' => 'csLists&courseid=[id]'
 							]
-					]
+					],
+					'name' => 'urls',
+					'function' => ''
 			]
 	];
 	
@@ -207,7 +230,7 @@ class WxyCourseTable {
 11:高二
 12:高三',
 					'is_show' => 1,
-					'placeholder' => '请输入内容'
+					'is_must' => 0
 			],
 			'status' => [
 					'title' => '状态',
@@ -218,6 +241,13 @@ class WxyCourseTable {
 结束',
 					'remark' => '课程状态',
 					'is_show' => 1,
+					'placeholder' => '请输入内容'
+			],
+			'season' => [
+					'title' => '培训季',
+					'type' => 'num',
+					'field' => 'int(10) NULL',
+					'remark' => '培训季（如：2018秋季、2019寒假）',
 					'placeholder' => '请输入内容'
 			]
 	];

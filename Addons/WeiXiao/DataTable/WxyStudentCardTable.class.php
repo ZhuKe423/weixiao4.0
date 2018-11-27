@@ -71,6 +71,10 @@ class WxyStudentCardTable {
 							'2' => [
 									'title' => '删除',
 									'url' => '[DELETE]'
+							],
+							'3' => [
+									'title' => '调课',
+									'url' => 'switchLesson&studentno=[studentno]'
 							]
 					]
 			]

@@ -8,15 +8,39 @@
             <include file="Home@Addons/_nav" />
             <div class="tab-content">
                 <!-- 表单 -->
-                <weiphp:form model="form_model" action="form_action" method="form_method" id="form_id" class="form_class"></weiphp:form>
-                <form id="form_2" action="{:U('course_reg')}" method="post" class="form-horizontal form-center">
+                <form id="form" action="{:U('register')}" method="post" class="form-horizontal form-center">
+
                     <div class="form-item cf">
-                        <label class="item-label"><span class="need_flag">*</span>选课管理</label>
+                        <label class="item-label"><span class="need_flag">*</span>学号，点击按钮获取学生信息<span class="check-tips"></span></label>
+                        <div class="controls">
+                            <input type="number" class="text" name="studentno" value="{$studentno}">
+                            <button class="btn submit-btn ajax-post" id="student_btn" type="button" target-form="form-horizontal" style="margin-left: 10px; margin-top: -10px;">获取学生信息</button>
+                        </div>
+                    </div>
+
+                    <div id="student_sec" class="form-item cf" style="display: none">学员信息<span class="check-tips" ></span></label>
+                        <div id="student_info" class="controls">
+                        </div>
+                    </div>
+
+                    <div class="form-item cf">
+                        <label class="item-label"><span class="need_flag">*</span>此学员调课所在培训季<span class="check-tips">（务必选择相应季节，切莫留空）</span></label>
+                        <div class="controls">
+                            <select name="season_id" placeholder="此学员调课所在培训季">
+                                <volist name="season_list" id="vo">
+                                    <option value='{$vo.id}'>{$vo.id}. {$vo.season_name}</option>
+                                </volist>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-item cf">
+                        <label class="item-label"><span class="need_flag">*</span>调出课时选择<span class="check-tips">（一般选择同一课程下的多次课时）</span></label>
                         <div style="margin:15px 0;" class="specTable data-table">
                             <table cellspacing="1" cellpadding="0">
                                 <thead>
                                 <tr>
-                                    <th align="center">课程选择</th>
+                                    <th align="center">学员报名所选课程</th>
                                     <th align="center">课时段选择</th>
                                     <th align="center">操作</th>
                                 </tr>
@@ -26,7 +50,7 @@
                                 <tr class="list_tr" id="btr">
                                     <td align="center">
                                         <select name="course">
-                                            <volist name="course_list" id="vo">
+                                            <volist name="student_course_list" id="vo">
                                                 <option value='{$vo.id}'>{$vo.id}. {$vo.site} {$vo.grade} {$vo.name}
                                                     {$vo.teacher}老师
                                                 </option>
@@ -47,17 +71,43 @@
                                         </volist>
                                     </td>
                                 </tr>
-                                <volist name="student_course" id="vo">
-                                    <tr class="list_tr" id="tr_{$vo.id}">
-                                        <td>
-                                            {$vo.course_item}
-                                        </td>
-                                        <td>
-                                            {$vo.lesson_item}
-                                        </td>
-                                        <td></td>
-                                    </tr>
-                                </volist>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="form-item cf">
+                        <label class="item-label"><span class="need_flag">*</span>调入课时选择<span class="check-tips">（调入课时应小于或等于调出课时，小于表示调出课时取消或转其他校区！）</span></label>
+                        <div style="margin:15px 0;" class="specTable data-table">
+                            <table cellspacing="1" cellpadding="0">
+                                <thead>
+                                <tr>
+                                    <th align="center">调入课程选择</th>
+                                    <th align="center">课时段选择</th>
+                                    <th align="center">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody id="in_list_data_tbody">
+                                <tr class="list_tr" id="in_btr">
+                                    <td align="center">
+                                        <select name="in_course">
+                                            <volist name="course_list" id="vo">
+                                                <option value='{$vo.id}'>{$vo.id}. {$vo.site} {$vo.grade} {$vo.name}
+                                                    {$vo.teacher}老师
+                                                </option>
+                                            </volist>
+                                        </select>
+                                    </td>
+                                    <td align="center">
+                                        <select name="in_lesson_id" id="in_course_lesson">
+                                        </select>
+                                    </td>
+                                    <td id="in_input_claster">
+                                        <a href="javascript:void(0);" onclick="add_in_tr()" class="move_up">选中</a>
+                                        <a href="javascript:void(0);" onclick="empty_in_tr()" class="move_up">清空</a>
+
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -89,11 +139,11 @@
             $('#form_2').submit();
         });
 
-        //增加课程
+        //跳入课程处理
         var tr_sort_id = 0;
         var id_str = $('#list_data_tbody tr:last').attr('id');
         var str_array = id_str.split("_");
-        tr_sort_id = parseInt(str_array[1]) + 1;
+        var tr_sort_id = parseInt(str_array[1]) + 1;
         function add_tr(){
             var course_item = $("select[name='course'] option:selected").text();
             var course_val = $("select[name='course'] option:selected").val();
@@ -113,32 +163,42 @@
             $("input[name^=c_]").remove();
             $("input[name^=l_]").remove();
             /*var i;
-            console.log("tr_sort_id: ",tr_sort_id);
-            for (i = 0; i <= tr_sort_id; i++) {
-                console.log("removing: ","tr_"+i);
-                $("#tr_" + i).remove();
-            }*/
+             console.log("tr_sort_id: ",tr_sort_id);
+             for (i = 0; i <= tr_sort_id; i++) {
+             console.log("removing: ","tr_"+i);
+             $("#tr_" + i).remove();
+             }*/
         }
 
         $("select[name='course']").change(function () {
-            course_id = $("select[name='course']").val();
-            $.ajax({
-                url: "{:U('get_1st_lesson')}",//提交访问的URL
-                type: 'get',//提交的方法
-                dataType: 'json',//返回的内容的类型，由于PHP文件是直接echo的，那么这里就是text
-                data: {"course_id": course_id},
-                timeout: 8000,//超时时间，单位毫秒
-                error: function(){ //如果出错，执行函数
-                    console.log('Error on Ajax return!');
-                },
-                success: function(data){
-                    $("select[name='lesson_id']").empty();
-                    $.each(data, function (index, vo) {
-                            $("select[name='lesson_id']").append("<option value=" + vo.bat + ">" + vo.bat + "课时第" + vo.sequence + "次时段：" + vo.classdate + "--教室：" + vo.room +  "</option>");
-                        }
-                    ); //如果成功，更新option项目
-                }
-            });
+            loadStudentLesson();
+        });
+
+        //调出课程处理
+        tr_sort_id = 0;
+        id_str = $('#in_list_data_tbody tr:last').attr('id');
+        str_array = id_str.split("_");
+        tr_sort_id = parseInt(str_array[1]) + 1;
+        function add_in_tr(){
+            var course_item = $("select[name='in_course'] option:selected").text();
+            var course_val = $("select[name='in_course'] option:selected").val();
+            var lesson_item = $("select[name='in_lesson_id'] option:selected").text();
+            var lesson_val = $("select[name='in_lesson_id'] option:selected").val();
+            var html_tr = '<tr class="list_tr" id="in_tr_'+ tr_sort_id + '" >' + '<td>' + course_item + '</td>'  + '<td>' + lesson_item + '</td>' + '<td></td>'+ '</tr>';
+            var html_input = '<input type="hidden" value="' + course_val + '" name="in_c_' + course_val + '"> <input type="hidden" value="' + lesson_val + '" name="in_l_' + lesson_val + '">';
+            $("#in_list_data_tbody").append(html_tr);
+            $("#in_input_claster").append(html_input);
+            tr_sort_id++;
+        }
+
+        function empty_in_tr (){
+            $("[id^=in_tr_]").remove();
+            $("input[name^=in_c_]").remove();
+            $("input[name^=in_l_]").remove();
+        }
+
+        $("select[name='in_course']").change(function () {
+            loadCourseLesson();
         });
 
         $('#student_btn').click(function() {
@@ -172,20 +232,14 @@
             });
         };
 
-        $(function(){
-            initUploadFile(function(data,name){
-                var old_title = $('#file_title').val();
-                if(old_title==''){
-                    var title = data.name.replace('.'+data.ext, '');
-                    $('#file_title').val(title);
-                }
-            });
+        function loadStudentLesson() {
             var course_id = $("select[name='course']").val();
+            var studentno = $("input[name='studentno']").val();
             $.ajax({
-                url: "{:U('get_1st_lesson')}",//提交访问的URL
+                url: "{:U('get_student_lesson')}",//提交访问的URL
                 type: 'get',//提交的方法
                 dataType: 'json',//返回的内容的类型，由于PHP文件是直接echo的，那么这里就是text
-                data: {"course_id": course_id},
+                data: {"course_id": course_id, "studentno": studentno},
                 timeout: 8000,//超时时间，单位毫秒
                 error: function(){ //如果出错，执行函数
                     console.log('Error on Ajax return!');
@@ -198,10 +252,41 @@
                     ); //如果成功，更新option项目
                 }
             });
+        }
 
-            var is_new = parseInt("{$is_new}");
-            if(!is_new) $("input[name=studentno]").attr("readonly","readonly");
+        function loadCourseLesson() {
+            var course_id = $("select[name='in_course']").val();
 
+            $.ajax({
+                url: "{:U('get_course_lesson')}",//提交访问的URL
+                type: 'get',//提交的方法
+                dataType: 'json',//返回的内容的类型，由于PHP文件是直接echo的，那么这里就是text
+                data: {"course_id": course_id},
+                timeout: 8000,//超时时间，单位毫秒
+                error: function(){ //如果出错，执行函数
+                    console.log('Error on Ajax return!');
+                },
+                success: function(data){
+                    $("select[name='in_lesson_id']").empty();
+                    $.each(data, function (index, vo) {
+                            $("select[name='in_lesson_id']").append("<option value=" + vo.bat + ">" + vo.bat + "课时第" + vo.sequence + "次时段：" + vo.classdate + "--教室：" + vo.room +  "</option>");
+                        }
+                    ); //如果成功，更新option项目
+                }
+            });
+        }
+
+        $(function(){
+            initUploadFile(function(data,name){
+                var old_title = $('#file_title').val();
+                if(old_title==''){
+                    var title = data.name.replace('.'+data.ext, '');
+                    $('#file_title').val(title);
+                }
+            });
+
+            loadStudentLesson();
+            loadCourseLesson();
 
             $('.time').datetimepicker({
                 format: 'yyyy-mm-dd hh:ii',
