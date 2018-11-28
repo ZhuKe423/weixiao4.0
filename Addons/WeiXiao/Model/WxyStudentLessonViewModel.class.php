@@ -16,8 +16,9 @@ class WxyStudentLessonViewModel extends ViewModel
         'WxyCourseLesson'=>array(
             'classdate' =>'classdate',
             'sequence' =>'sequence',
-            'room' =>'room',
-            'bat' =>'bat',
+            'room' => 'room',
+            'bat' => 'bat',
+            'id' => 'lesson_id',
             '_on' =>'WxyStudentCourse.courseid = WxyCourseLesson.courseid AND WxyStudentCourse.bat_no = WxyCourseLesson.bat'
         ),
         'WxyCourse'=>array('name' => 'course_name',

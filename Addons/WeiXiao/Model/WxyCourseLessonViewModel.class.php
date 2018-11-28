@@ -13,7 +13,8 @@ use Think\Model\ViewModel;
 class WxyCourseLessonViewModel extends ViewModel
 {
     public $viewFields = array(
-        'WxyCourseLesson'=>array('id', 'courseid', 'token', 'classdate', 'sequence', 'room', 'bat'),
+        'WxyCourseLesson'=>array('id' => 'lesson_id',
+            'courseid', 'token', 'classdate', 'sequence', 'room', 'bat'),
         'WxyCourse'=>array('name'=>'name',
             'site' => 'site',
             'teacher' => 'teacher',
