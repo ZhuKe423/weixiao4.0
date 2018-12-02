@@ -21,7 +21,8 @@ class WxyStudentLessonModel extends Model
         $s_data = D('WxyStudentCard')->where($s_map)->find();
         $sid = $s_data['id'];
         $sname = $s_data['name'];
-        foreach($data['out'] as $key =>$lesson_list) {
+        $no_student_lesson = false;
+        /*foreach($data['out'] as $key =>$lesson_list) {
             $l_map['token'] = $token;
             $l_map['courseid'] = $key;
             $l_map['studentno'] = $studentno;
@@ -31,19 +32,38 @@ class WxyStudentLessonModel extends Model
             }
             else {
                 foreach ($lesson_list as $lesson_id) {
-                    $map['lesson_id'] = $lesson_id;
+                    $l_map['lesson_id'] = $lesson_id;
                     $this->where($l_map)->delete();
                 }
+                $no_student_lesson = false;
             }
-        };
+        };*/
 
-        if ($no_student_lesson) {
-            foreach ($data['out'] as $key => $lesson_list) {
-                $l_map['token'] = $token;
-                $l_map['courseid'] = $key;
-                $l_map['studentno'] = $studentno;
+
+        foreach ($data['out'] as $key => $lesson_list) {
+            $l_map['token'] = $token;
+            $l_map['courseid'] = $key;
+            $l_map['studentno'] = $studentno;
+            $out_student_lesson = $this->where($l_map)->select(); //student_lesson not recorded.
+            if (empty($out_student_lesson)) {
+                $no_student_lesson = true;
+            }
+            else {
+                foreach ($lesson_list as $lesson_id) {
+                    $l_map['lesson_id'] = $lesson_id;
+                    $this->where($l_map)->delete();
+                }
+                unset($l_map['lesson_id']);
+                if (empty($this->where($l_map)->select()))
+                    D('WxyStudentCourse')->where($l_map)->delete();
+                $no_student_lesson = false;
+            }
+
+            if ($no_student_lesson) {
                 $student_course = D('WxyStudentCourse')->where($l_map)->find();
-                $student_course['status'] = 1;
+                $student_course['status'] = 1; //out rescheduled
+                $student_course['opcode'] = 2; //ever rescheduled
+
                 D('WxyStudentCourse')->where($l_map)->save($student_course); //update the status to changed.
                 $Model = D('WxyStudentLessonView');
                 $out_lesson_data = D('WxyStudentLessonView')->where($l_map)->select();
@@ -69,9 +89,8 @@ class WxyStudentLessonModel extends Model
                     $result = $this->where($in_lesson_data)->find();
                     if (empty($result)) $this->add($in_lesson_data);
                 }
-            };
-        }
-
+            }
+        };
 
         unset($map);
         foreach($data['in'] as $key => $lesson_list) {
@@ -98,14 +117,21 @@ class WxyStudentLessonModel extends Model
                         $student_course_new['bat_no'] = $in_lesson_data['bat'];
                         if (empty(D('WxyStudentCourse')->where($student_course_new)->find())) {
                             $student_course_new['status'] = 2; // changed by in-adj
-                            $student_course_new['opcode'] = 2; // changed by in-adj.
+                            $student_course_new['opcode'] = 2; // ever rescheduled
                             $student_course_new['timestamp'] = time();
                             M('WxyStudentCourse')->add($student_course_new);
+                        }
+                        else {
+                            $student_course_new['status'] = 2; // changed by in-adj
+                            $student_course_new['opcode'] = 2; // ever rescheduled
+                            $student_course_new['timestamp'] = time();
+                            M('WxyStudentCourse')->save($student_course_new);
                         }
                     }
                 }
             };
         }
+        return true;
     }
 
     public function get_student_lesson_by_course($studentno, $courseid, $token) {
@@ -120,4 +146,68 @@ class WxyStudentLessonModel extends Model
         }
         return $data;
     }
+
+    public function get_student_lesson_by_datetime($token, $studentno, $room, $site, $dateTime) {
+        $dateStart = date("Y-m-d 00:00:00",$dateTime);
+        $dateEnd = date("Y-m-d 23:59:59",$dateTime);
+        $map['classdate'] = array('between',array($dateStart,$dateEnd));
+        $map['token'] = $token;
+        $map['studentno'] = $studentno;
+        $map['room'] = $room;
+        $map['site'] = $site;
+        //var_dump($map);
+        $studentDateLessons = D('WxyStudentLessonView')->where($map)->select();
+
+        foreach ($studentDateLessons as $key =>$vo ) {
+            if ($vo['status'] > 0) {
+                $tmp = D('wxyStudentRawLessonView')->where($map)->find();
+                if (empty($tmp)) {
+                    unset($studentDateLessons[$key]);
+                }else{
+                    $studentDateLessons[$key] = $tmp;
+                }
+            }
+        };
+        return $studentDateLessons;
+    }
+
+    public function get_lesson_data_by_room_datetime($token, $room, $site, $dateTime) {
+        //$dateStart = date("Y-m-d 00:00:00",strtotime("$dateTime - 30 min"));  //打卡开始时间
+        //$dateEnd = date("Y-m-d 23:59:59",strtotime("$dateTime + 60 min"));  //打卡结束时间
+        $map['classdate'] = $dateTime; //array('between',array($dateStart,$dateEnd));
+        $map['token'] = $token;
+        $map['room'] = $room;
+        $map['site'] = $site;
+        $studentDateLessons = D('WxyStudentLessonView')->where($map)->select();
+
+        foreach ($studentDateLessons as $key =>$vo ) {
+            if ($vo['status'] > 0) {
+                $map['lesson_id'] = $vo['lesson_id'];
+                $tmp = D('wxyStudentRawLessonView')->where($map)->find();
+                if (empty($tmp)) {
+                    unset($studentDateLessons[$key]);
+                }else{
+                    $studentDateLessons[$key] = $tmp;
+                }
+            }
+        };
+        return $studentDateLessons;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

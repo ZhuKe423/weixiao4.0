@@ -15,7 +15,7 @@ class WxyCourseLessonViewModel extends ViewModel
     public $viewFields = array(
         'WxyCourseLesson'=>array('id' => 'lesson_id',
             'courseid', 'token', 'classdate', 'sequence', 'room', 'bat'),
-        'WxyCourse'=>array('name'=>'name',
+        'WxyCourse'=>array('name'=>'course_name',
             'site' => 'site',
             'teacher' => 'teacher',
             'grade' => 'grade',

@@ -25,4 +25,20 @@ class WxyCourseLessonModel extends Model
         }
     }
 
+    public function get_course_lesson_by_date($dateTime) {
+        $key = 'courseLesson_ON_date_'.date("Y-m-d",$dateTime);
+        $dateLessons = S ( $key );
+        if ($dateLessons === false || empty($dateLessons)) {
+            $dateStart = date("Y-m-d 00:00:00",$dateTime);
+            $dateEnd = date("Y-m-d 23:59:59",$dateTime);
+            $map['classdate'] = array('between',array($dateStart,$dateEnd));
+            $dateLessons = $this->where($map)->select();
+            for ($i = 0; $i < count($dateLessons); $i++) {
+                $timeValue = strtotime($dateLessons[$i]['classdate']);
+                $dateLessons[$i]['clocktimeRange'] = array(($timeValue - 30*60),($timeValue + 60*60));
+            }
+            S ( $key, $dateLessons, 86400 );  // 86400 = 24 * 60 * 60
+        }
+        return $dateLessons;
+    }
 }

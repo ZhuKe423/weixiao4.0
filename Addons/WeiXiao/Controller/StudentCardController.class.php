@@ -259,8 +259,10 @@ class StudentCardController extends ManageBaseController
             }
 
             //dump($post_data);
-            D('WxyStudentLesson')->reschedule($this->token, $studentno, $post_data);
-            $this->error("Just a test!");
+            if ((D('WxyStudentLesson')->reschedule($this->token, $studentno, $post_data)))
+                $this->success("课时调整成功!", U('lists'));
+            else
+                $this->error("数据有误，调入课时大于调出课时，请检查后再提交！");
             return;
 
             // 获取模型的字段信息

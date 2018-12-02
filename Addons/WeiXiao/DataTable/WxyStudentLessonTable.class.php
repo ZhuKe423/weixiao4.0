@@ -72,6 +72,14 @@ class WxyStudentLessonTable {
 调课',
 					'remark' => '课时状态',
 					'is_show' => 1,
+					'placeholder' => '请输入内容'
+			],
+			'bat' => [
+					'title' => '课时批次',
+					'type' => 'num',
+					'field' => 'int(10) NULL',
+					'remark' => '课时批次',
+					'is_show' => 1,
 					'is_must' => 0
 			]
 	];

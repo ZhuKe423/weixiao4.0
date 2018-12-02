@@ -74,7 +74,7 @@ class WxyStudentCardTable {
 							],
 							'3' => [
 									'title' => '调课',
-									'url' => 'switchLesson&studentno=[studentno]'
+									'url' => 'lesson_reschedule&studentno=[studentno]'
 							]
 					]
 			]

@@ -43,7 +43,7 @@
                                         <input type="hidden" value="{$studentno}" name="studentno_old">
                                         <volist name="student_course" id="vo">
                                             <input type="hidden" value="{$vo.course_value}" name="c_{$vo.c_id}">
-                                            <input type="hidden" value="{$vo.lesson_value}" name="l_{$vo.bat}">
+                                            <input type="hidden" value="{$vo.lesson_value}" name="l_{$vo.c_id}">
                                         </volist>
                                     </td>
                                 </tr>
@@ -102,7 +102,7 @@
             console.log("Course item is: ", course_item);
             console.log("Course value is: ", course_val);
             var html_tr = '<tr class="list_tr" id="tr_'+ tr_sort_id + '" >' + '<td>' + course_item + '</td>'  + '<td>' + lesson_item + '</td>' + '<td></td>'+ '</tr>';
-            var html_input = '<input type="hidden" value="' + course_val + '" name="c_' + course_val + '"> <input type="hidden" value="' + lesson_val + '" name="l_' + lesson_val + '">';
+            var html_input = '<input type="hidden" value="' + course_val + '" name="c_' + course_val + '"> <input type="hidden" value="' + lesson_val + '" name="l_' + course_val + '">';
             $("#list_data_tbody").append(html_tr);
             $("#input_claster").append(html_input);
             tr_sort_id++;

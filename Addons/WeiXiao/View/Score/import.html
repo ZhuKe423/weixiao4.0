@@ -31,33 +31,34 @@
     <!-- 标签页导航 -->
     <div class="span9 page_message">
         <section id="contents">
-            <ul class="tab-nav nav">
-                <volist name='nav' id='vo'>
-                    <php> isset($vo['class']) || $vo['class'] = '';isset($vo['url']) || $vo['url'] = '#'; </php>
-                    <li class="{$vo.class}"><a href="{$vo.url}">{$vo.title}</a></li>
-                </volist>
-            </ul>
+            <include file="Home@Addons/_nav" />
             <div class="tab-content">
                 <!-- 表单 -->
                 <form id="form" action="{:U('import?model='.$model['id'])}" method="post" class="form-horizontal">
                     <div class="form-item cf">
-                        <label class="item-label"><span class="need_flag">*</span>课程（仅列出正在进行和即将开课的课程）<span class="check-tips"></span></label>
+                        <label class="item-label"><span class="need_flag">*</span>课程（仅列出正在进行和即将开课的课程）<span
+                                class="check-tips"></span></label>
                         <div class="controls">
                             <select name="course">
                                 <volist name="lists" id="vo">
-                                    <option value='{$vo.id}'>{$vo.id}. {$vo.site} {$vo.grade} {$vo.name} {$vo.teacher}老师</option>
+                                    <option value='{$vo.id}'>{$vo.id}. {$vo.site} {$vo.grade} {$vo.name}
+                                        {$vo.teacher}老师
+                                    </option>
                                 </volist>
                             </select>
                         </div>
                     </div>
                     <div class="form-item cf">
-                        <label class="item-label">关联课时<span class="check-tips">选中后上传的评语会被认为是老师根据课程的某次上课情况给出的评语！</span></label>
+                        <label class="item-label">关联课时<span
+                                class="check-tips">选中后上传的评语会被认为是老师根据课程的某次上课情况给出的评语！</span></label>
                         <div class="controls">
-                            <input id ='bind_lesson' type="checkbox" name="bind_lesson" class="checkbox" placeholder="关联课时？" />
+                            <input id='bind_lesson' type="checkbox" name="bind_lesson" class="checkbox"
+                                   placeholder="关联课时？"/>
                         </div>
                     </div>
                     <div class="form-item cf" id="lesson_sel">
-                        <label class="item-label"><span class="need_flag">*</span>课时<span class="check-tips"></span></label>
+                        <label class="item-label"><span class="need_flag">*</span>课时<span
+                                class="check-tips"></span></label>
                         <div class="controls">
                             <select name="lesson_id" id="course_lesson">
 
@@ -74,8 +75,9 @@
                         <label class="item-label"><span class="need_flag">*</span>学生评语Excel文件上传<span class="check-tips">请选择符合格式的.xls或.xlsx文件</span></label>
                         <div class="controls">
                             <div class="controls upload_file">
-                                <div  id="upload_file_file_id" class="uploadrow_file"></div>
-                                <input type="hidden" name="file_id" id="file_id" value="" data-fileexts='xlsx, xls' data-maxsize='20971520'/>
+                                <div id="upload_file_file_id" class="uploadrow_file"></div>
+                                <input type="hidden" name="file_id" id="file_id" value="" data-fileexts='xlsx, xls'
+                                       data-maxsize='20971520'/>
                                 <div class="upload-img-box"></div>
                             </div>
                         </div>
@@ -85,26 +87,26 @@
                         <label class="item-label"><span class="need_flag">*</span>描述<span class="check-tips">导入评语数据的说明，控制在100汉字以内</span></label>
                         <div class="controls">
                             <label class="textarea input-large">
-                                <textarea class="text input-large" name="comment" >{$data.comment}</textarea>
+                                <textarea class="text input-large" name="comment">{$data.comment}</textarea>
                             </label>
                         </div>
                     </div>
                     <div class="form-item cf">
                         <label class="item-label"><span class="need_flag">*</span>是否发送？<span class="check-tips">选择是否同步发送微信通知消息？</span></label>
                         <div class="controls">
-                            <input id = 'msgsend' type="checkbox" name="msgsend" class="checkbox" checked="checked" placeholder="是否发送？" />
+                            <input id='msgsend' type="checkbox" name="msgsend" class="checkbox" checked="checked"
+                                   placeholder="是否发送？"/>
                         </div>
                     </div>
                     <div class="form-item form_bh">
                         <input type="hidden" name="id" value="{$data.id}">
-                        <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+                        <button class="btn submit-btn ajax-post" id="submit" type="submit"
+                                target-form="form-horizontal">确 定
+                        </button>
                     </div>
                 </form>
             </div>
-
-    </div>
-    </section>
-    </div>
+        </section>
     </div>
 </block>
 <block name="script">
@@ -139,7 +141,7 @@
                     success: function(data){
                         $("#course_lesson").empty();
                         $.each(data, function (index, vo) {
-                                $("#course_lesson").append("<option value=" + vo.id + ">" + "时段：" + vo.classdate + "--教室：" +vo.room+ "--第" + vo.sequence + "次" +  "</option>");
+                                $("#course_lesson").append("<option value=" + vo.lesson_id + ">" + "时段：" + vo.classdate + "--教室：" +vo.room+ "--第" + vo.sequence + "次" +  "</option>");
                             }
                         ); //如果成功，更新option项目
                     }

@@ -16,7 +16,7 @@ class ScoreController extends BaseController{
         }
 
         parent::__construct ();
-        $this->model = $this->getModel('WxyCourseComments'); //getModelByName ( $_REQUEST ['_controller'] );
+        $this->model = $this->getModel('WxyCourseScore'); //getModelByName ( $_REQUEST ['_controller'] );
         $this->token = get_token();
         $this->school = D('Common/Apps')->getInfoByToken($this->token, 'public_name');
         $this->schooltype = D('Common/Apps')->getInfoByToken($this->token, 'public_type');
@@ -51,7 +51,7 @@ class ScoreController extends BaseController{
             $map["courseid"] = I("course_id");
             $map["token"] = $this->token;
             $model = D("WxyCourseLessonView");
-            $data = $model->where($map)->select();
+            $data = $model->where($map)->order('bat asc, sequence asc')->select();
             //$json_data = json_encode($data);
             $this->ajaxReturn($data);
         }
@@ -108,13 +108,6 @@ class ScoreController extends BaseController{
         /* 查询记录总数 */
         $count = M($name)->where($map)->count();
 
-        //var_dump($list_data);
-        //var_dump($data);
-        //var_dump($count);
-        //var_dump($grids);
-        //var_dump($this->model);
-        //exit();
-        // 分页
         if ($count > $row) {
             $page = new \Think\Page ($count, $row);
             $page->setConfig('theme', '%FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END% %HEADER%');
@@ -152,7 +145,7 @@ class ScoreController extends BaseController{
         foreach ($score_data as $value) {
             $url = U('addon/Student/Wap/score', array('publicid'=>$this->public_id, 'studentno' => $value['studentno']));
             //var_dump($value);
-            $retdata = D('WxyScore')->send_score_to_user($value['openid'], $url, $value, $this->token, $this->school);
+            $retdata = D('WxyCourseScore')->send_score_to_user($value['openid'], $url, $value, $this->token, $this->school);
 
             $statue += ($retdata["errcode"] == 0)?0:1;
             usleep(60000);
@@ -179,29 +172,31 @@ class ScoreController extends BaseController{
 
         if ($uid == 0) redirect(U('Common/Apps'));
         if (IS_POST) {
-            $data['file'] = I('post.file');
-            $data['courseid'] = ltrim(strstr(I('post.course'), '.', true));
-            $data['classdate'] = I('post.classdate');
+
+            $data['token'] = $token;
+            $data['uid'] = $uid;
+            $data['file'] = I('post.file_id');
+            $data['courseid'] = I('post.course');
+            (I('post.bind_lesson') == 'on') ?  $data['lesson_id'] = I('post.lesson_id') : $data['lesson_id'] = 0;
+            //$data['sdate'] = I('post.sdate');
+            //$data['length'] = I('post.length');
             $data['comment'] = I('post.comment');
-            $data['token'] = $this->token;
-            /*$data['token'] = $token;
-            $course_obj = explode('.',I('post.courseid'));
-            $data['teacher'] = $course_obj[2];
-            $data['courseid'] = $course_obj[0];
-            $data['term'] = I('post.term');
-            $data['file'] = I('post.file');
-            $data['classdate'] = I('post.classdate');
-            $data['comment'] = I('post.comment');*/
+            $data['model_id'] = $this->model['id'];
+            $data['model_name'] = $this->model['name'];
 
-//            $sendflag = (I('post.msgsend') == "on")?true:false ;
-
+            $sendflag = (I('post.msgsend') == "on") ? true : false;
             if (!intval($data['file'])) $this->error("数据文件未上传！");
-            $import_model = D('WxyScoreimport');
-            $res = $import_model->addImport($data);
-            /*$data['termid'] = $res;
-            $data['subject'] = $course_obj[1];*/
+            $import_model = M('WxyModelImport');
+            $import_model->add($data);
 
-            if ($this->import_course_lesson_from_excel($data['file'])) {
+            $map['token'] = $this->token;
+            $map['courseid'] = $data['courseid'];
+            $data['lesson_id'] == 0 || $map['lesson_id'] = $data['lesson_id'];
+            $lesson_data = D('WxyCourseLessonView')->where($map)->find();
+            if (empty($lesson_data))
+                $this->error('请选择课程和课时！');
+
+            if ($this->import_student_score_from_excel($data['file'], $lesson_data, $sendflag)) {
                 // $this->success('保存成功！', U('lists'/*'import?model=' . $this->model ['name'], $this->get_param */), 600);
             }
             else
@@ -209,14 +204,11 @@ class ScoreController extends BaseController{
         } else {
             if ($id) $map['id'] = $id;
             $map['token'] = $this->token;
-            $data = $model->where($map)->select();
+            $map['status'] = array('lt',3); //上架或即将上架课程
+            $data = $model->where($map)->order('season desc, grade asc')->select();
             $this->assign('lists', $data);
             $this->assign('id', $id);
             $this->display('import');
-
-            /*$this->assign('public_id', $this->public_id);
-            $this->assign('course_valid_date',date('Y-m-d',strtotime('-1 year')));
-            $this->display('import');*/
         }
     }
 
@@ -226,24 +218,23 @@ class ScoreController extends BaseController{
         $data = array();
         $column = array(
             'A' => 'studentno',  //学生编号
-            'B' => 'score1',     //课堂表现
-            'C' => 'score2',     //出勤情况
-            'D' => 'score3',      //作业完成
-            'E' => 'score',       //总分
-            'F' => 'exmscore',    //测试分数
+            'B' => 'name',
+            'C' => 'score1',     //课堂表现
+            'D' => 'score2',     //出勤情况
+            'E' => 'score3',      //作业完成
+            'F' => 'score',       //总分
             'G' => 'comment'
         );
-        $data = importFormExcel($file_id, $column);
-        $score_model = D('WxyScore');
+        $data = importFormExcel($file_id, $column, null , 3);
+        $score_model = D('WxyCourseScore');
         if ($data['status']) {
             foreach ($data['data'] as $row) {
                 $row['token'] = $this->token;
                 //$row['termid']= $base_data['termid'];
                 $row['classdate'] = $base_data['classdate'];
                 $row['courseid'] = $base_data['courseid'];
-                //$row['subject'] = $base_data['subject'];
-                //$row['term'] = $base_data['term'];
-                //$row['score'] = '';
+                ($base_data['lesson_id'] == 0) || $row['lesson_id'] = $base_data['lesson_id'];
+
                 $map['token'] = $this->token;
                 $map['studentno'] = $row['studentno'];
                 $stu_arry = M('WxyStudentCard')->where($map)->select();
@@ -260,5 +251,41 @@ class ScoreController extends BaseController{
             }
             return true;
         } else return false;
+    }
+
+    private function wx_send_msg($score_id){
+        $map['id'] = $score_id;
+        $score_data = D('WxyScoreNotifyView')->where($map)->select();
+        //var_dump($score_data);
+
+        foreach ($score_data as $value) {
+            $url = U('addon/Student/Wap/score', array('publicid'=>$this->public_id, 'studentno' => $value['studentno']));
+            //var_dump($value);
+            $retdata = D('WxyCourseScore')->send_score_to_user($value['openid'], $url, $value, $this->token, $this->school);
+            if($retdata["errcode"] == 0)
+                usleep(30000);
+            else
+                usleep(1000);
+        };
+
+    }
+
+    function post($url, $param=array()){
+        if(!is_array($param)){
+            throw new Exception("参数必须为array");
+        }
+        $httph =curl_init($url);
+        curl_setopt($httph, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($httph, CURLOPT_SSL_VERIFYHOST, 1);
+        curl_setopt($httph,CURLOPT_RETURNTRANSFER,1);
+        curl_setopt($httph, CURLOPT_USERAGENT, "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)");
+        curl_setopt($httph, CURLOPT_POST, 1);//设置为POST方式
+        curl_setopt($httph, CURLOPT_POSTFIELDS, $param);
+        curl_setopt($httph, CURLOPT_RETURNTRANSFER,1);
+        curl_setopt($httph, CURLOPT_HEADER,1);
+        $rst=curl_exec($httph);
+        curl_close($httph);
+
+        return $rst;
     }
 }
