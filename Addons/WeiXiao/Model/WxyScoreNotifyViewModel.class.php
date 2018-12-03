@@ -11,12 +11,6 @@ use Think\Model\ViewModel;
 
 class WxyScoreNotifyViewModel extends ViewModel {
     public $viewFields = array(
-        'WxyStudentCare'=>array(
-            'token'     => 'token',
-            'openid' => 'openid',
-            'studentno' => 'studentno'
-            //'_on'    => 'WxyScore.token = WxyStudentCare.token AND WxyScore.studentno = WxyStudentCare.studentno'
-        ),
 
         'WxyScore' => array(
             'token'     => 'token',
@@ -32,12 +26,21 @@ class WxyScoreNotifyViewModel extends ViewModel {
             'classdate' =>  'classdate', 
             'comment'   =>  'comment',
             'lesson_id' => 'lesson_id',
+            'studentno' => 'studentno'
 
-            '_on' => 'WxyStudentCare.studentno = WxyScore.studentno AND WxyStudentCare.token = WxyScore.token',
-            '_type'=>'LEFT'
         ),
 
-        'WxyStudentCard'=>array('name'=>'student_name',
+        'WxyStudentCare'=>array(
+            'token'     => 'token',
+            'openid' => 'openid',
+            'studentno' => 'studentno',
+            '_on' => 'WxyScore.studentno = WxyStudentCare.studentno AND WxyScore.token  = WxyStudentCare.token',
+            //'_type'=>'LEFT'
+            //'_on'    => 'WxyScore.token = WxyStudentCare.token AND WxyScore.studentno = WxyStudentCare.studentno'
+        ),
+
+        'WxyStudentCard'=>array(
+            'name' =>'student_name',
             'name' => 'stuname',
             '_on'=>'WxyStudentCare.studentno = WxyStudentCard.studentno'
         ), // To see changed to WxyStudentCard.id
@@ -45,6 +48,8 @@ class WxyScoreNotifyViewModel extends ViewModel {
         'WxyCourse' => array (
             'name' => 'course',
             'teacher' => 'teacher',
+            'grade' => 'grade',
+            'site' => 'site',
             '_on' => 'WxyScore.courseid = WxyCourse.id'
         ),
         /*

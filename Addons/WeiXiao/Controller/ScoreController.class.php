@@ -16,7 +16,7 @@ class ScoreController extends BaseController{
         }
 
         parent::__construct ();
-        $this->model = $this->getModel('WxyCourseScore'); //getModelByName ( $_REQUEST ['_controller'] );
+        $this->model = $this->getModel('WxyScore'); //getModelByName ( $_REQUEST ['_controller'] );
         $this->token = get_token();
         $this->school = D('Common/Apps')->getInfoByToken($this->token, 'public_name');
         $this->schooltype = D('Common/Apps')->getInfoByToken($this->token, 'public_type');
@@ -61,6 +61,10 @@ class ScoreController extends BaseController{
      * 显示指定模型列表数据
      */
     public function lists()
+    {
+        parent::common_lists($this->model);
+    }
+    public function lists0()
     {
         $page = I('p', 1, 'intval'); // 默认显示第一页数据
         // 解析列表规则
@@ -197,7 +201,7 @@ class ScoreController extends BaseController{
                 $this->error('请选择课程和课时！');
 
             if ($this->import_student_score_from_excel($data['file'], $lesson_data, $sendflag)) {
-                // $this->success('保存成功！', U('lists'/*'import?model=' . $this->model ['name'], $this->get_param */), 600);
+                $this->success('成绩导入成功！');
             }
             else
                 $this->error('请检查文件格式');
@@ -225,27 +229,35 @@ class ScoreController extends BaseController{
             'F' => 'score',       //总分
             'G' => 'comment'
         );
-        $data = importFormExcel($file_id, $column, null , 3);
+        $data = importFormExcel($file_id, $column, null , 2);
         $score_model = D('WxyCourseScore');
         if ($data['status']) {
-            foreach ($data['data'] as $row) {
+            foreach ($data['data'] as $key => $row) {
+                if ($key == 2) {
+                    $label['score1'] = $row['score1'];
+                    $label['score2'] = $row['score2'];
+                    $label['score3'] = $row['score3'];
+                    $label['score'] = $row['score'];
+                    continue;
+                };
                 $row['token'] = $this->token;
                 //$row['termid']= $base_data['termid'];
                 $row['classdate'] = $base_data['classdate'];
                 $row['courseid'] = $base_data['courseid'];
+                $row['course_name'] = $base_data['course_name'];
+                $row['sequence'] = $base_data['sequence'];
                 ($base_data['lesson_id'] == 0) || $row['lesson_id'] = $base_data['lesson_id'];
 
                 $map['token'] = $this->token;
                 $map['studentno'] = $row['studentno'];
-                $stu_arry = M('WxyStudentCard')->where($map)->select();
-
-                if (count($stu_arry) != 0) $row['name'] = $stu_arry[0]['name'];
+                $stu_info = M('WxyStudentCard')->where($map)->find();
+                if (!empty($stu_info)) $row['name'] = $stu_info['name'];
                 //var_dump($map,$stu_arry,$stu_arry[0]['name'],count($stu_arry),$row);
                 $row['weixinmsgsend'] = $sendflag ? "已发送" : "未发送";
                 $it = $score_model->addScore($row);
                 if ($sendflag) {
-                    //var_dump($it);
-                    $this->wx_send_msg($it);
+                    //dump($it);
+                    $this->wx_send_msg($it, $label);
                 }
 
             }
@@ -253,17 +265,17 @@ class ScoreController extends BaseController{
         } else return false;
     }
 
-    private function wx_send_msg($score_id){
+    private function wx_send_msg($score_id, $label){
         $map['id'] = $score_id;
         $score_data = D('WxyScoreNotifyView')->where($map)->select();
-        //var_dump($score_data);
 
-        foreach ($score_data as $value) {
-            $url = U('addon/Student/Wap/score', array('publicid'=>$this->public_id, 'studentno' => $value['studentno']));
+        foreach ($score_data as $key => $value) {
+            $value['grade'] = $this->config['grade_value'][$value['grade']];
+            $url = U('WeiXiao://WapScore/index', array('publicid'=>$this->public_id, 'studentno' => $value['studentno']));
             //var_dump($value);
-            $retdata = D('WxyCourseScore')->send_score_to_user($value['openid'], $url, $value, $this->token, $this->school);
+            $retdata = D('WxyCourseScore')->send_score_to_user($value['openid'], $url, $value, $this->token, $this->school, $label);
             if($retdata["errcode"] == 0)
-                usleep(30000);
+                usleep(1000);
             else
                 usleep(1000);
         };

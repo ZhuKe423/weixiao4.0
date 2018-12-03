@@ -63,7 +63,7 @@ class WxyStudentLessonModel extends Model
                 $student_course = D('WxyStudentCourse')->where($l_map)->find();
                 $student_course['status'] = 1; //out rescheduled
                 $student_course['opcode'] = 2; //ever rescheduled
-
+                $student_course_new['timestamp'] = time();
                 D('WxyStudentCourse')->where($l_map)->save($student_course); //update the status to changed.
                 $Model = D('WxyStudentLessonView');
                 $out_lesson_data = D('WxyStudentLessonView')->where($l_map)->select();
@@ -108,6 +108,7 @@ class WxyStudentLessonModel extends Model
                     $in_lesson_data['courseid'] = $lesson_item['courseid'];
                     $in_lesson_data['lesson_id'] = $lesson_item['lesson_id'];
                     $in_lesson_data['bat'] = $lesson_item['bat'];
+                    //$in_lesson_data['timestamp'] = time();
                     if (empty($this->where($in_lesson_data)->find())) {
                         $this->add($in_lesson_data);
                         $student_course_new['token'] = $token;
@@ -148,8 +149,8 @@ class WxyStudentLessonModel extends Model
     }
 
     public function get_student_lesson_by_datetime($token, $studentno, $room, $site, $dateTime) {
-        $dateStart = date("Y-m-d 00:00:00",$dateTime);
-        $dateEnd = date("Y-m-d 23:59:59",$dateTime);
+        $dateStart = date("Y-m-d 00:00:00", $dateTime);
+        $dateEnd = date("Y-m-d 23:59:59", $dateTime);
         $map['classdate'] = array('between',array($dateStart,$dateEnd));
         $map['token'] = $token;
         $map['studentno'] = $studentno;
@@ -160,6 +161,7 @@ class WxyStudentLessonModel extends Model
 
         foreach ($studentDateLessons as $key =>$vo ) {
             if ($vo['status'] > 0) {
+                $map['lesson_id'] = $vo['lesson_id'];
                 $tmp = D('wxyStudentRawLessonView')->where($map)->find();
                 if (empty($tmp)) {
                     unset($studentDateLessons[$key]);
@@ -172,9 +174,9 @@ class WxyStudentLessonModel extends Model
     }
 
     public function get_lesson_data_by_room_datetime($token, $room, $site, $dateTime) {
-        //$dateStart = date("Y-m-d 00:00:00",strtotime("$dateTime - 30 min"));  //打卡开始时间
-        //$dateEnd = date("Y-m-d 23:59:59",strtotime("$dateTime + 60 min"));  //打卡结束时间
-        $map['classdate'] = $dateTime; //array('between',array($dateStart,$dateEnd));
+        $dateStart = date("Y-m-d 00:00:00",$dateTime);
+        $dateEnd = date("Y-m-d 23:59:59",$dateTime);
+        $map['classdate'] = array('between',array($dateStart,$dateEnd));
         $map['token'] = $token;
         $map['room'] = $room;
         $map['site'] = $site;
@@ -189,6 +191,11 @@ class WxyStudentLessonModel extends Model
                 }else{
                     $studentDateLessons[$key] = $tmp;
                 }
+                $clockRange = [
+                    strtotime($studentDateLessons[$key]['classdate']) - 30 * 60,
+                    strtotime($studentDateLessons[$key]['classdate']) + 60 * 60
+                ];
+                $studentDateLessons[$key]['clockRange'] = $clockRange;
             }
         };
         return $studentDateLessons;

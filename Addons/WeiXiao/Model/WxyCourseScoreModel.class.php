@@ -22,10 +22,12 @@ class WxyCourseScoreModel extends Model{
         $map ['lesson_id'] = $data['lesson_id'];
         //var_dump($data);
         //var_dump($this->where[$map]);
-        if ($this->where($map)->select() != NULL) {
-            return false;
+        $res = $this->where($map)->find();
+        if ($res != NULL) {
+            $this->where($map)->save($data);
+            return $res['id'];
         } else {
-            dump($data);
+            //dump($data);
             $res = $this->add ( $data );
             return $res;
         }
@@ -40,7 +42,7 @@ class WxyCourseScoreModel extends Model{
             return false;
     }
 
-    public function send_score_to_user($openId, $url, $info, $token, $public_name){
+    public function send_score_to_user($openId, $url, $info, $token, $public_name, $score_label = null){
         if ($info == NULL) return false;
         $map['token'] = $token;
         $map['msg_type'] = 'score notification';
@@ -49,9 +51,21 @@ class WxyCourseScoreModel extends Model{
         $template_id = $msg_template['msg_id'];
 
         $test_score = ($info["exmscore"]==NULL)?'':"\n                    测试成绩：".$info["exmscore"];
+        $teacher_comment = '';
+        $blank = "\n                    ";
+        $score_str = '';
+        if ($score_label == null) {
+            $score_str = $blank . "分数：". $info['score'];
+        } else {
+            empty($score_label['score1']) || $score_str .= $blank . $score_label['score1'] ."：". $info['score1'];
+            empty($score_label['score2']) || $score_str .= $blank . $score_label['score2'] ."：". $info['score2'];
+            empty($score_label['score3']) || $score_str .= $blank . $score_label['score3'] ."：". $info['score3'];
+            empty($score_label['score']) || $score_str .= $blank . $score_label['score'] ."：". $info['score'];
+        }
+        empty($info['comment']) || $teacher_comment = "老师评语：" . $info['comment'];
         $data = array(
             "first"         =>  array(
-                'value' => "亲爱的" . $info["stuname"] . "家长，" . $info["stuname"] . "同学在：\n" . $info["course"] . "课程\n学习中的成绩情况如下：",
+                'value' => "亲爱的" . $info["stuname"] . "家长，" . $info["stuname"] . "同学在：\n" . $info["site"] . $info["grade"] . $info["course"] . "课程\n学习中的成绩情况如下：",
                 'color' => '#0000ff'
             ),
 
@@ -60,7 +74,7 @@ class WxyCourseScoreModel extends Model{
                 'color' => '#0000ff'
             ),
             "keyword2"          =>  array (
-                'value' => $info['classdate'],
+                'value' => date('Y-m-d', strtotime($info['classdate'])),
                 'color' => '#0000ff'
             ),
             "keyword3"         => array(
@@ -69,11 +83,11 @@ class WxyCourseScoreModel extends Model{
             ),
 
             "keyword4"         =>  array(
-                'value' =>  "\n                    课堂表现：".$info["score1"]."\n                    作业情况：". $info["score2"]. $test_score,
+                'value' =>  $score_str,
                 'color' => '#0000ff'
             ),
             "remark"        =>  array(
-                'value' =>"老师评语：".$info['comment'],
+                'value' => $teacher_comment,
                 'color' => '#008000'
             )
         );
